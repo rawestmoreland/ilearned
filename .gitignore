@@ -77,7 +77,6 @@ $RECYCLE.BIN/
 ############################
 
 *#
-backend/db
 ssl
 .idea
 nbproject

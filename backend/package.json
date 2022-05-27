@@ -14,7 +14,6 @@
   "description": "A Strapi application",
   "scripts": {
     "develop": "strapi develop",
-    "dev": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi"
@@ -24,7 +23,7 @@
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "94c8e2c3-2272-4edf-80aa-bff75762bdac",
+    "uuid": "f7bf8526-6783-41e3-8c9d-a4168785eb40",
     "template": "@strapi/template-blog@^1.0.0",
     "starter": "@strapi/starter-next-blog"
   },
