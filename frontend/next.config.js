@@ -1,11 +1,10 @@
-/**
- * @type {import('next').NextConfig}
- */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    loader: "default",
-    domains: ["localhost"],
-  },
+	reactStrictMode: true,
+	i18n: {
+		locales: ['en', 'fr-FR'],
+		defaultLocale: 'en',
+	},
 }
 
 module.exports = nextConfig

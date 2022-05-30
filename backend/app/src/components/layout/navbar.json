@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_layout_navbars",
+  "info": {
+    "displayName": "navbar",
+    "icon": "th-list",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "link": {
+      "displayName": "links",
+      "type": "component",
+      "repeatable": true,
+      "component": "links.links"
+    }
+  }
+}
