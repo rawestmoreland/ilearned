@@ -78,6 +78,7 @@ backend/db
 ############################
 
 *#
+*.dump
 ssl
 .idea
 nbproject
@@ -108,6 +109,7 @@ coverage
 ############################
 
 .env
+.env.local
 license.txt
 exports
 *.cache
