@@ -43,41 +43,52 @@ export async function getGlobalData(locale) {
 		},
 		body: JSON.stringify({
 			query: `
-        fragment FileParts on UploadFileEntityResponse {
-          data {
-            id
-            attributes {
-              alternativeText
-              width
-              height
-              mime
-              url
-              formats
-            }
-          }
-        }
-        query GetGlobal($locale: I18NLocaleCode!) {
-          global(locale: $locale) {
-            data {
-              id
-              attributes {
-                favicon {
-                  ...FileParts
-                }
-                metadata {
-                  metaTitle
-                  metaDescription
-                  shareImage {
-                    ...FileParts
-                  }
-                  twitterCardType
-                  twitterUsername
-                }
-                metaTitleSuffix
-              }
-            }
-          }
-        }      
+			fragment FileParts on UploadFileEntityResponse {
+				data {
+					id
+					attributes {
+						alternativeText
+						width
+						height
+						mime
+						url
+						formats
+					}
+				}
+			}
+query GetGlobal($locale: I18NLocaleCode!) {
+global(locale: $locale) {
+					data {
+						id
+						attributes {
+							favicon {
+								...FileParts
+							}
+							metadata {
+								metaTitle
+								metaDescription
+								shareImage {
+									...FileParts
+								}
+								twitterCardType
+								twitterUsername
+							}
+							metaTitleSuffix
+							navbar {
+								logo {
+									...FileParts
+								}
+								link {
+									id
+									url
+									newTab
+									text
+								}
+							}
+						}
+					}
+				}
+}      
       `,
 			variables: {
 				locale,
@@ -87,5 +98,5 @@ export async function getGlobalData(locale) {
 
 	const global = await globalRes.json()
 
-	return global.data.global.data
+	return global?.data.global.data
 }
