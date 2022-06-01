@@ -4,12 +4,13 @@ import App from 'next/app'
 
 import { createContext } from 'react'
 
-import { getGlobalData } from '../utils/api'
+import { fetchAPI } from '../utils/api'
 import { getStrapiMedia } from '../utils/media'
 
 import '../styles/globals.css'
+import Router from 'next/router'
 
-const GlobalContext = createContext()
+export const GlobalContext = createContext({})
 
 function MyApp({ Component, pageProps }) {
 	const { global } = pageProps
@@ -34,8 +35,19 @@ function MyApp({ Component, pageProps }) {
 
 MyApp.getInitialProps = async (ctx) => {
 	const appProps = await App.getInitialProps(ctx)
-	const globalLocale = await getGlobalData(ctx.router.locale)
-	return { ...appProps, pageProps: { global: globalLocale } }
+	const globalLocale = await fetchAPI(
+		'/global',
+		{},
+		{
+			locale: ctx.router.locale,
+			populate: {
+				favicon: { populate: '*' },
+				metadata: { populate: '*' },
+				navbar: { populate: '*' },
+			},
+		}
+	)
+	return { ...appProps, pageProps: { global: globalLocale.data } }
 }
 
 export default MyApp

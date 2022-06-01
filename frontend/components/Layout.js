@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 
 import { useRouter } from 'next/router'
 
 import Loading from './Loading'
+import Navbar from './Navbar'
+
+import { GlobalContext } from '../pages/_app'
 
 const Layout = ({ children, ...props }) => {
+	const { navbar } = useContext(GlobalContext)
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
@@ -22,18 +26,17 @@ const Layout = ({ children, ...props }) => {
 	}, [router])
 
 	return (
-		<>
+		<div className='min-h-screen bg-main-background bg-cover bg-center bg-fixed bg-no-repeat'>
+			<Navbar navbar={navbar} />
 			<Loading loading={loading} />
 			<div
 				className={`${
-					loading
-						? 'hidden'
-						: 'container flex flex-col gap-y-4 md:grid md:grid-cols-4 md:gap-x-8 font-poppins py-12'
+					loading ? 'hidden' : 'w-10/12 h-screen m-auto pt-16'
 				}`}
 			>
-				<div className='md:col-span-3'>{children}</div>
+				{children}
 			</div>
-		</>
+		</div>
 	)
 }
 
