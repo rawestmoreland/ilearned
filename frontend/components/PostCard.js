@@ -45,7 +45,7 @@ const PostCard = ({ post }) => {
 					</span>
 					<span>
 						{' '}
-						on{' '}
+						|{' '}
 						{format(new Date(published), 'PPP', {
 							locale: localeMap[locale],
 						})}
