@@ -26,14 +26,10 @@ const Layout = ({ children, ...props }) => {
 	}, [router])
 
 	return (
-		<div className='min-h-screen bg-main-background bg-cover bg-center bg-fixed bg-no-repeat'>
+		<div className=''>
 			<Navbar navbar={navbar} />
 			<Loading loading={loading} />
-			<div
-				className={`${
-					loading ? 'hidden' : 'w-10/12 h-screen m-auto pt-16'
-				}`}
-			>
+			<div className={`${loading ? 'hidden' : 'container pt-16'}`}>
 				{children}
 			</div>
 		</div>
