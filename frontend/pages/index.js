@@ -13,7 +13,6 @@ export default function Home({ posts }) {
 
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
-	console.log(ctx.locale)
 	const [postsRes] = await Promise.all([
 		fetchAPI('/posts', {}, { locale: ctx.locale, populate: '*' }),
 	])

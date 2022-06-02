@@ -34,8 +34,7 @@ module.exports = {
 				},
 			},
 			backgroundImage: {
-				'main-background':
-					"url('../public/images/main-background.svg')",
+				'main-background': "url('/images/main-background.svg')",
 			},
 			fontFamily: {
 				'big-shoulders': ['"Big Shoulders Display"', 'sans-serif'],

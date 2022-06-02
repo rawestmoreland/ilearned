@@ -9,7 +9,6 @@ const localeMap = {
 }
 
 const PostCard = ({ post }) => {
-	console.log(post)
 	const {
 		title,
 		image,
