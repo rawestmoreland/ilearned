@@ -1,12 +1,6 @@
 {
   "environments": {
     "review": {
-      "formation": {
-        "worker": {
-          "quantity": 1,
-          "size": "free"
-        }
-      },
       "buildpacks": [
         {
           "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
