@@ -19,12 +19,13 @@ const PostCard = ({ post }) => {
 		locale,
 	} = post.attributes
 	return (
-		<div className='bg-off-white border rounded-md'>
-			<div className='relative top-0 left-0 w-full h-[250px]'>
+		<div className='bg-off-white border rounded-lg'>
+			<div className='relative top-0 left-0 w-full h-[250px] rounded-t-lg'>
 				<Image
 					src={image.data.attributes.url}
 					objectFit='cover'
 					layout='fill'
+					className='rounded-t-lg'
 				/>
 			</div>
 			<div className='m-4'>
