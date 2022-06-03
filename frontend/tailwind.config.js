@@ -1,9 +1,15 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
 	content: [
 		'./pages/**/*.{js,ts,jsx,tsx}',
 		'./components/**/*.{js,ts,jsx,tsx}',
 	],
 	theme: {
+		screens: {
+			'xs': '475px',
+			...defaultTheme.screens,
+		},
 		extend: {
 			colors: {
 				'rich-black': '#000814',
@@ -11,6 +17,7 @@ module.exports = {
 				'prussian-blue': '#003566',
 				'mikado-yellow': '#FFC300',
 				'gold-web': '#FFD60A',
+				'terracotta': '#e46e5e',
 				'off-white': '#F5F5F5',
 			},
 			container: {
@@ -27,13 +34,14 @@ module.exports = {
 				},
 			},
 			backgroundImage: {
-				'main-background':
-					"url('../public/images/main-background.svg')",
+				'main-background': "url('/images/main-background.svg')",
 			},
 			fontFamily: {
-				'poppins': ['Poppins', 'sans-serif'],
+				'big-shoulders': ['"Big Shoulders Display"', 'sans-serif'],
+				'rubik': ['Rubik', 'sans-serif'],
+				'merriweather': ['Merriweather', 'serif'],
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require('@tailwindcss/line-clamp')],
 }

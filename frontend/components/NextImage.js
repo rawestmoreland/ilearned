@@ -27,9 +27,9 @@ const NextImage = ({ media, ...props }) => {
 		<Image
 			loader={loader}
 			layout='responsive'
-			width={width || '100%'}
-			height={height || '100%'}
-			objectFit='contain'
+			width={props.width || width || '100%'}
+			height={props.height || height || '100%'}
+			objectFit={props.cover ? 'cover' : 'contain'}
 			src={url}
 			alt={alternativeText || ''}
 		/>
