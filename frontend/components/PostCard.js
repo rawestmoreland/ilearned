@@ -37,19 +37,31 @@ const PostCard = ({ post }) => {
 				</div>
 				<h2 className='font-rubik font-bold text-xl mb-4'>{title}</h2>
 				<div className='font-merriweather text-sm leading-loose mb-4'>
-					<p>{description}</p>
+					<p className='line-clamp-6'>{description}</p>
 				</div>
-				<div className='font-merriweather text-sm'>
-					<span className='font-bold'>
-						{authors.data[0].attributes.name}
-					</span>
-					<span>
-						{' '}
-						|{' '}
-						{format(new Date(published), 'PPP', {
-							locale: localeMap[locale],
-						})}
-					</span>
+				<div className='grid grid-cols-[40px_1fr] gap-x-2 items-center font-merriweather text-sm'>
+					<div>
+						<Image
+							src={
+								authors.data[0].attributes.picture.data
+									.attributes.url
+							}
+							height={40}
+							width={40}
+							objectFit='cover'
+							className='rounded-full'
+						/>
+					</div>
+					<div className='flex flex-col'>
+						<span className='font-bold'>
+							{authors.data[0].attributes.name}
+						</span>
+						<span>
+							{format(new Date(published), 'PPP', {
+								locale: localeMap[locale],
+							})}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
