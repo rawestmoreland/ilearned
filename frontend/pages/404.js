@@ -4,7 +4,7 @@ const Custom404 = () => {
 	return (
 		<Layout>
 			<div className='container flex h-screen w-screen items-center justify-center text-off-white text-xl font-big-rubik font-bold tracking-wider'>
-				<h1>😢 Sorry, we couldn't find that page 😢</h1>
+				<h1>😢 Sorry, we couldn&apos;t find that page 😢</h1>
 			</div>
 		</Layout>
 	)
