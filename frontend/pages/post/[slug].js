@@ -1,11 +1,17 @@
+import Layout from '../../components/Layout'
+import PostContent from '../../components/PostContent'
+
 import { fetchAPI, getPostsData } from '../../utils/api'
 
 import client from '../../lib/apollo-client'
 import gql from 'graphql-tag'
 
 const Post = ({ post }) => {
-	console.log(post)
-	return <div></div>
+	return (
+		<Layout>
+			<PostContent post={post} />
+		</Layout>
+	)
 }
 
 export async function getStaticPaths(context) {

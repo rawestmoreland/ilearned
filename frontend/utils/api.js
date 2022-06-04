@@ -131,6 +131,16 @@ export async function getPostsData({ slug, locale }) {
 								content
 								description
 								published
+								locale
+								categories {
+									data {
+										id
+										attributes {
+											name
+											slug
+										}
+									}
+								}
 								authors {
 									data {
 										attributes {

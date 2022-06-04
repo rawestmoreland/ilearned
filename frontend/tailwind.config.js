@@ -12,6 +12,7 @@ module.exports = {
 		},
 		extend: {
 			colors: {
+				'cod-gray': '#111111',
 				'rich-black': '#000814',
 				'oxford-blue': '#001D3D',
 				'prussian-blue': '#003566',
