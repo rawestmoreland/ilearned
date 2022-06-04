@@ -26,6 +26,7 @@ const PostCard = ({ post }) => {
 					objectFit='cover'
 					layout='fill'
 					className='rounded-t-lg'
+					alt={image.data.attributes?.alternativeText || ''}
 				/>
 			</div>
 			<div className='m-4'>
@@ -51,6 +52,7 @@ const PostCard = ({ post }) => {
 							width={40}
 							objectFit='cover'
 							className='rounded-full'
+							alt={image.data.attributes?.alternativeText || ''}
 						/>
 					</div>
 					<div className='flex flex-col'>
