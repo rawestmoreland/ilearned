@@ -19,6 +19,7 @@ export async function getServerSideProps(ctx) {
 			{},
 			{
 				locale: ctx.locale,
+				sort: 'published:desc',
 				populate: {
 					authors: { populate: ['picture'] },
 					image: '*',

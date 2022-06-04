@@ -9,7 +9,7 @@ const PostContent = ({ post }) => {
 	const { title, authors, locale, published, categories, content } =
 		post.attributes
 	return (
-		<div className='bg-off-white mt-12 rounded-md p-8 md:p-16'>
+		<div className='bg-off-white my-12 rounded-md p-8 md:p-16'>
 			<div className='mb-2'>
 				<CategoryRow categories={categories} />
 			</div>
