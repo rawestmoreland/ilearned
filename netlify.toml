@@ -3,11 +3,26 @@
 	publish = ".next"
 	command = "npm run build"
 
+[context.production]
+	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-prod.herokuapp.com"}
+
 [context.branch-deploy]
   command = "npm run noIndex"
+[context.branch-deploy.environment]
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
+	NODE_ENV = "development"
+
+[context.deploy-preview]
+	command = "npm run noIndex && node ./setApiUrl.js"
+[context.deploy-preview.environment]
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-13.herokuapp.com"
+	NODE_ENV = "development"
 
 [context.staging]
 	command = "npm run noIndex"
+[context.staging.environment]
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
+	NODE_ENV = "development"
 
 
 [[plugins]]
