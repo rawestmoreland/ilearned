@@ -11,6 +11,9 @@ module.exports = {
 			...defaultTheme.screens,
 		},
 		extend: {
+			gridTemplateColumns: {
+				'post-grid': 'repeat(auto-fill, minmax(300px, 1fr))',
+			},
 			colors: {
 				'cod-gray': '#111111',
 				'rich-black': '#000814',
@@ -20,6 +23,7 @@ module.exports = {
 				'gold-web': '#FFD60A',
 				'terracotta': '#e46e5e',
 				'off-white': '#F5F5F5',
+				'link-blue': '#3870A7',
 			},
 			container: {
 				screens: {

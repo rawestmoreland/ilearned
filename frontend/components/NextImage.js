@@ -14,7 +14,7 @@ const NextImage = ({ media, ...props }) => {
 	if (props.width && props.height) {
 		return (
 			<Image
-				loader={loader}
+				unoptimized
 				src={url}
 				alt={alternativeText || ''}
 				{...props}

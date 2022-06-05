@@ -6,7 +6,7 @@ import { localeMap } from '../utils/localize'
 const AuthorRow = ({ author, published, locale }) => {
 	const { picture, name } = author.attributes
 	return (
-		<div className='grid grid-cols-[40px_1fr] gap-x-2 items-center font-merriweather text-sm'>
+		<div className='grid grid-cols-[40px_1fr] gap-x-2 items-center font-merriweather text-sm mb-4 [margin-block-start:auto]'>
 			<div>
 				<Image
 					src={picture.data.attributes.url}

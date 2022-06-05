@@ -3,18 +3,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.post-content img {
-	margin: 2rem auto;
-	max-width: 80%;
-}
-
-.post-content a {
-	color: #3870a7;
-	text-decoration: underline;
-}
-
-.post-content ul {
-	list-style: disc;
-	margin: 0 0 1.25rem 1.25rem;
-}

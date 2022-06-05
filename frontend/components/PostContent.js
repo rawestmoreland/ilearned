@@ -22,7 +22,7 @@ const PostContent = ({ post }) => {
 			<div className='mt-8'>
 				<ReactMarkdown
 					children={content}
-					className='font-rubik text-cod-gray'
+					className='post-content font-rubik text-cod-gray'
 					components={{
 						code({ node, inline, className, children, ...props }) {
 							const match = /language-(\w+)/.exec(className || '')
@@ -46,17 +46,26 @@ const PostContent = ({ post }) => {
 								</code>
 							)
 						},
+						a: ({ node, ...props }) => (
+							<a
+								className='text-link-blue underline'
+								{...props}
+							/>
+						),
 						p: ({ node, ...props }) => (
 							<p
 								className='text-sm mb-2 text-cod-gray'
 								{...props}
 							/>
 						),
-						ul: ({ node, ...props }) => (
-							<ul
-								className='text-sm list-disc mb-2 ml-2'
+						img: ({ node, ...props }) => (
+							<img
+								className='mx-auto my-8 md:max-w-[80%]'
 								{...props}
 							/>
+						),
+						ul: ({ node, ordered = false, ...props }) => (
+							<ul className='text-sm list-disc ml-2' {...props} />
 						),
 						h1: ({ node, ...props }) => (
 							<h1
