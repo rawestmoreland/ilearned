@@ -13,7 +13,7 @@
 	NODE_ENV = "development"
 
 [context.deploy-preview]
-	command = "netlify env set NEXT_PUBLIC_STRAPI_API_URL 'https://ilearned-pr-$REVIEW_ID.herokuapp.com' npm run noIndex && node ./setApiUrl.js"
+	command = "netlify env set NEXT_PUBLIC_STRAPI_API_URL 'https://ilearned-pr-$REVIEW_ID.herokuapp.com' && npm run noIndex && node ./setApiUrl.js"
 [context.deploy-preview.environment]
 	NODE_ENV = "development"
 
