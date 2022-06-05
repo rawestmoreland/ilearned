@@ -1,0 +1,14 @@
+[build]
+	base = "frontend/"
+	publish = ".next"
+	command = "npm run build"
+
+[context.branch-deploy]
+  command = "npm run noIndex"
+
+[context.staging]
+	command = "npm run noIndex"
+
+
+[[plugins]]
+	package = "@netlify/plugin-nextjs"

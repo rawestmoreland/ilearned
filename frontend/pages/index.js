@@ -23,19 +23,15 @@ export default function Home({ posts, adminSettings, categories }) {
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
 	const [postsRes, categoriesRes, adminSettingsRes] = await Promise.all([
-		fetchAPI(
-			'/posts',
-			{},
-			{
-				locale: ctx.locale,
-				sort: 'published:desc',
-				populate: {
-					authors: { populate: ['picture'] },
-					image: '*',
-					categories: '*',
-				},
-			}
-		),
+		fetchAPI('/posts', false, {
+			locale: ctx.locale,
+			sort: 'published:desc',
+			populate: {
+				authors: { populate: ['picture'] },
+				image: '*',
+				categories: '*',
+			},
+		}),
 		fetchAPI('/categories'),
 		fetchAPI('/admin-setting', true),
 	])

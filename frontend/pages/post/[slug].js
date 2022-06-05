@@ -18,15 +18,11 @@ export async function getStaticPaths(context) {
 	const posts = await context.locales.reduce(
 		async (currentPostsPromise, locale) => {
 			const currentPosts = await currentPostsPromise
-			const localePosts = await fetchAPI(
-				'/posts',
-				{},
-				{
-					locale,
-					fields: ['slug', 'locale'],
-				}
-			)
-			return [...currentPosts, ...localePosts.data]
+			const localePosts = await fetchAPI('/posts', false, {
+				locale,
+				fields: ['slug', 'locale'],
+			})
+			return [...currentPosts, ...localePosts]
 		},
 		Promise.resolve([])
 	)

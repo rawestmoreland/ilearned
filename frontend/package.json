@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"develop": "next dev",
+		"noIndex": "npm run build && echo 'User-agent: *\nDisallow: /' > public/robots.txt",
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
