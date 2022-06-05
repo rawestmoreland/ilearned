@@ -7,15 +7,23 @@ export function getStrapiURL(path) {
 }
 
 // Helper to make GET requests to Strapi
-export async function fetchAPI(path, options = {}, urlParamsObject = {}) {
+export async function fetchAPI(
+	path,
+	authRequired = false,
+	urlParamsObject = {}
+) {
 	const defaultOptions = {
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	}
+
+	if (authRequired) {
+		defaultOptions.headers.Authorization = `Bearer ${process.env.ADMIN_API_TOKEN}`
+	}
+
 	const mergedOptions = {
 		...defaultOptions,
-		...options,
 	}
 
 	// Build request URL
@@ -26,10 +34,11 @@ export async function fetchAPI(path, options = {}, urlParamsObject = {}) {
 
 	const response = await fetch(requestUrl, mergedOptions)
 
+	const { data, error } = await response.json()
+
 	if (!response.ok) {
 		throw new Error(`An error occured please try again`)
 	}
-	const data = await response.json()
 	return data
 }
 

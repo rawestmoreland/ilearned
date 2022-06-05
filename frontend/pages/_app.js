@@ -35,19 +35,15 @@ function MyApp({ Component, pageProps }) {
 
 MyApp.getInitialProps = async (ctx) => {
 	const appProps = await App.getInitialProps(ctx)
-	const globalLocale = await fetchAPI(
-		'/global',
-		{},
-		{
-			locale: ctx.router.locale,
-			populate: {
-				favicon: { populate: '*' },
-				metadata: { populate: '*' },
-				navbar: { populate: '*' },
-			},
-		}
-	)
-	return { ...appProps, pageProps: { global: globalLocale.data } }
+	const globalLocale = await fetchAPI('/global', false, {
+		locale: ctx.router.locale,
+		populate: {
+			favicon: { populate: '*' },
+			metadata: { populate: '*' },
+			navbar: { populate: '*' },
+		},
+	})
+	return { ...appProps, pageProps: { global: globalLocale } }
 }
 
 export default MyApp
