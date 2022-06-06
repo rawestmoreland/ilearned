@@ -1,34 +1,36 @@
+import Layout from '../../components/Layout'
+import PostContent from '../../components/PostContent'
+
 import { fetchAPI, getPostsData } from '../../utils/api'
+import Custom404 from '../404'
 
-import client from '../../lib/apollo-client'
-import gql from 'graphql-tag'
+const Post = ({ post, error }) => {
+	if (!error) {
+		return (
+			<Layout>
+				<PostContent post={post} />
+			</Layout>
+		)
+	}
 
-const Post = ({ post }) => {
-	console.log(post)
-	return <div></div>
+	return <Custom404 />
 }
 
 export async function getStaticPaths(context) {
 	const posts = await context.locales.reduce(
 		async (currentPostsPromise, locale) => {
 			const currentPosts = await currentPostsPromise
-			const localePosts = await fetchAPI(
-				'/posts',
-				{},
-				{
-					locale,
-					fields: ['slug', 'locale'],
-				}
-			)
-			return [...currentPosts, ...localePosts.data]
+			const localePosts = await fetchAPI('/posts', false, {
+				locale,
+				fields: ['slug', 'locale'],
+			})
+			return [...currentPosts, ...localePosts]
 		},
 		Promise.resolve([])
 	)
 
 	const paths = posts.map((post) => {
 		const { slug, locale } = post.attributes
-
-		// Decompose the slug that was saved in Strapi
 
 		return {
 			params: { slug },
@@ -48,9 +50,8 @@ export async function getStaticProps(context) {
 		locale,
 	})
 
-	if (postData == null) {
-		// Giving the page no props will trigger a 404 page
-		return { props: {} }
+	if (!postData) {
+		return { props: { post: null, error: true } }
 	}
 
 	return {

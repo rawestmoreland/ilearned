@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"develop": "next dev",
+		"noIndex": "npm run build && echo 'User-agent: *\nDisallow: /' > public/robots.txt",
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
@@ -17,9 +18,14 @@
 		"qs": "^6.10.3",
 		"react": "18.1.0",
 		"react-dom": "18.1.0",
-		"react-spinners": "^0.12.0"
+		"react-markdown": "^8.0.3",
+		"react-spinners": "^0.12.0",
+		"react-syntax-highlighter": "^15.5.0",
+		"refractor": "^4.7.0",
+		"slugify": "^1.6.5"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^7.1.0",
 		"@tailwindcss/line-clamp": "^0.4.0",
 		"autoprefixer": "^10.4.7",
 		"eslint": "8.16.0",

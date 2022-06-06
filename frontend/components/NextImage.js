@@ -14,7 +14,7 @@ const NextImage = ({ media, ...props }) => {
 	if (props.width && props.height) {
 		return (
 			<Image
-				loader={loader}
+				unoptimized
 				src={url}
 				alt={alternativeText || ''}
 				{...props}
@@ -37,7 +37,7 @@ const NextImage = ({ media, ...props }) => {
 }
 
 Image.propTypes = {
-	media: mediaPropTypes.isRequired,
+	media: mediaPropTypes,
 	className: PropTypes.string,
 }
 

@@ -3,34 +3,44 @@ import PostGrid from '../components/PostGrid'
 
 import { fetchAPI } from '../utils/api'
 
-export default function Home({ posts }) {
+export default function Home({ posts, adminSettings, categories }) {
+	const { live } = adminSettings.attributes
 	return (
 		<Layout>
-			<PostGrid posts={posts} />
+			{live || process.env.NODE_ENV === 'development' ? (
+				<PostGrid posts={posts} />
+			) : (
+				<div className='absolute top-1/2 left-1/2 -translate-x-1/2'>
+					<h1 className='font-big-shoulders text-4xl tracking-widest text-off-white'>
+						🧠 Coming Soon 🧠
+					</h1>
+				</div>
+			)}
 		</Layout>
 	)
 }
 
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
-	const [postsRes] = await Promise.all([
-		fetchAPI(
-			'/posts',
-			{},
-			{
-				locale: ctx.locale,
-				populate: {
-					authors: { populate: ['picture'] },
-					image: '*',
-					categories: '*',
-				},
-			}
-		),
+	const [postsRes, categoriesRes, adminSettingsRes] = await Promise.all([
+		fetchAPI('/posts', false, {
+			locale: ctx.locale,
+			sort: 'published:desc',
+			populate: {
+				authors: { populate: ['picture'] },
+				image: '*',
+				categories: '*',
+			},
+		}),
+		fetchAPI('/categories'),
+		fetchAPI('/admin-setting', true),
 	])
 
 	return {
 		props: {
-			posts: postsRes.data,
+			posts: postsRes,
+			adminSettings: adminSettingsRes,
+			categories: categoriesRes,
 		},
 	}
 }
