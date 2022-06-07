@@ -1,7 +1,7 @@
 import Layout from '../../components/Layout'
 import PostContent from '../../components/PostContent'
 
-import { fetchAPI, getPostsData } from '../../utils/api'
+import { fetchAPI, getPostsBySlug } from '../../utils/api'
 import Custom404 from '../404'
 
 const Post = ({ post, error }) => {
@@ -45,7 +45,7 @@ export async function getStaticPaths(context) {
 export async function getStaticProps(context) {
 	const { params, locale, locales, defaultLocale } = context
 
-	const postData = await getPostsData({
+	const postData = await getPostsBySlug({
 		slug: params.slug,
 		locale,
 	})

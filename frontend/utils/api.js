@@ -38,8 +38,6 @@ export async function fetchAPI(
 	const { data, error } = await response.json()
 
 	if (!response.ok) {
-		console.log(data)
-		console.log(requestUrl)
 		throw new Error(`An error occured please try again`)
 	}
 	return data
@@ -119,7 +117,7 @@ global(locale: $locale) {
  * @param {string} options.slug The post's slug
  * @param {string} options.locale The current locale specified in router.locale
  */
-export async function getPostsData({ slug, locale }) {
+export async function getPostsBySlug({ slug, locale }) {
 	// Find the pages that match this slug
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const pagesRes = await fetch(gqlEndpoint, {
@@ -202,4 +200,61 @@ export async function getPostsData({ slug, locale }) {
 
 	// Return the first item since there should only be one result per slug
 	return postData.data.posts.data[0]
+}
+
+/**
+ *
+ * @param {Object} options
+ * @param {string} options.slug The category's slug
+ */
+export async function getPostsByCategory({ slug }) {
+	// Find the pages that match this slug
+	const gqlEndpoint = getStrapiURL('/graphql')
+	const pagesRes = await fetch(gqlEndpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+        query GetGategoryPosts(
+          $slug: String!
+        ) {        
+          categories(
+            filters: { slug: { eq: $slug } }
+          ) {
+						data {
+							attributes {
+								name
+								slug
+								posts {
+									data {
+										id
+										attributes {
+											title
+											content
+											description
+											locale
+										}
+									}
+								}
+							}
+						}
+					}
+        }      
+      `,
+			variables: {
+				slug,
+			},
+		}),
+	})
+
+	const postData = await pagesRes.json()
+	// Make sure we found something, otherwise return null
+	if (postData.data.categories === null) {
+		return null
+	}
+
+	// Return the first item since there should only be one result per slug
+	return postData.data.categories.data
 }
