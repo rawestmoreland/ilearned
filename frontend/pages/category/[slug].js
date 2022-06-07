@@ -1,5 +1,6 @@
-import { fetchAPI, getPostsByCategory } from '../../utils/api'
+import { fetchAPI, getCategoriesBySlug } from '../../utils/api'
 import Layout from '../../components/Layout'
+import PostGrid from '../../components/PostGrid'
 
 const Category = ({ category, locale }) => {
 	const seo = {
@@ -12,21 +13,17 @@ const Category = ({ category, locale }) => {
 	return (
 		<Layout>
 			{/* <Seo seo={seo} /> */}
-			<div className=''>
-				<div className='text-off-white'>
-					<div>Articles Tagged</div>
-					<h1>{name.upperCase}</h1>
-					{posts.data
-						.filter((post) => {
-							return post.attributes.locale === locale
-						})
-						.map((localePost) => {
-							return (
-								<div key={localePost.id}>
-									{localePost.attributes.title}
-								</div>
-							)
-						})}
+			<div>
+				<div>
+					<div className='mt-4 md:mt-8'>
+						<span className='text-terracotta font-big-shoulders tracking-widest font-extrabold'>
+							ARTICLES TAGGED
+						</span>
+						<h1 className='text-off-white font-rubik text-5xl'>
+							{name.toUpperCase()}
+						</h1>
+					</div>
+					<PostGrid posts={posts.data} marginTop={8} />
 				</div>
 			</div>
 		</Layout>
@@ -70,11 +67,18 @@ export async function getStaticPaths(context) {
 
 export async function getStaticProps(context) {
 	const { params, locale } = context
-	const matchingCategories = await getPostsByCategory({ slug: params.slug })
+	const matchingCategories = await getCategoriesBySlug({ slug: params.slug })
+
+	// Filter out the posts that don't match our current locale
+	// TODO: This could probably be more efficient
+	matchingCategories.attributes.posts.data =
+		matchingCategories.attributes.posts.data.filter(
+			(post) => post.attributes.locale === locale
+		)
 
 	return {
 		props: {
-			category: matchingCategories[0],
+			category: matchingCategories,
 			locale,
 		},
 	}

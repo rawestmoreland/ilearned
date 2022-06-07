@@ -207,7 +207,7 @@ export async function getPostsBySlug({ slug, locale }) {
  * @param {Object} options
  * @param {string} options.slug The category's slug
  */
-export async function getPostsByCategory({ slug }) {
+export async function getCategoriesBySlug({ slug }) {
 	// Find the pages that match this slug
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const pagesRes = await fetch(gqlEndpoint, {
@@ -229,12 +229,51 @@ export async function getPostsByCategory({ slug }) {
 								slug
 								posts {
 									data {
-										id
 										attributes {
 											title
 											content
 											description
+											published
 											locale
+											slug
+											categories {
+												data {
+													id
+													attributes {
+														name
+														slug
+													}
+												}
+											}
+											authors {
+												data {
+													attributes {
+														name
+														picture {
+															data {
+																attributes {
+																	height
+																	width
+																	formats
+																	alternativeText
+																	url
+																}
+															}
+														}
+													}
+												}
+											}
+											image {
+												data {
+													attributes {
+														height
+														width
+														formats
+														alternativeText
+														url
+													}
+												}
+											}
 										}
 									}
 								}
@@ -256,5 +295,5 @@ export async function getPostsByCategory({ slug }) {
 	}
 
 	// Return the first item since there should only be one result per slug
-	return postData.data.categories.data
+	return postData.data.categories.data[0]
 }
