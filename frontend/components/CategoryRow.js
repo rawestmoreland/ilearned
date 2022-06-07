@@ -12,6 +12,7 @@ const CategoryRow = ({ categories }) => {
 				const { name, slug } = cat.attributes
 				return (
 					<Link
+						key={slug}
 						href={`/${
 							locale === 'en' ? '' : locale + '/'
 						}category/${slug}`}
