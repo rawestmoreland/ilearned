@@ -8,6 +8,7 @@ module.exports = {
 				)
 				process.env.ADMIN_API_TOKEN = process.env.TEST_ADMIN_API_TOKEN
 			} else if (process.env.BRANCH === 'master') {
+				console.log(`Setting API token to the STAGING API token.`)
 				process.env.ADMIN_API_TOKEN =
 					process.env.STAGING_ADMIN_API_TOKEN
 			}
