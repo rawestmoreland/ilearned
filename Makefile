@@ -20,7 +20,7 @@ refresh-local-db:
 
 db-to-heroku:
 	$(eval PRESIGNED_URL=$(shell aws s3 presign s3://ilearned/db-backups/ilearned.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)))
-	heroku pg:backups:restore '$(PRESIGNED_URL)' DATABASE_URL -a ilearned-staging --confirm ilearned-staging
+	heroku pg:backups:restore '$(PRESIGNED_URL)' HEROKU_POSTGRESQL_COPPER -a ilearned-staging --confirm ilearned-staging
 
 db-to-heroku-prod:
 	$(eval PRESIGNED_URL=$(shell aws s3 presign s3://strapi-sbb/db-backups/sbb.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)))
