@@ -9,8 +9,7 @@
 [context.branch-deploy]
   command = "npm run noIndex"
 [context.branch-deploy.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
-	NODE_ENV = "development"
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
 
 [context.deploy-preview]
 	command = "npm run noIndex"

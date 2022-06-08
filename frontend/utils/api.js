@@ -1,4 +1,3 @@
-import { request } from 'http'
 import qs from 'qs'
 
 export function getStrapiURL(path) {
@@ -46,6 +45,8 @@ export async function fetchAPI(
 	const { data, error } = await response.json()
 
 	if (!response.ok) {
+		console.log(requestUrl)
+		console.log(error)
 		throw new Error(`An error occured please try again`)
 	}
 	return data

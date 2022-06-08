@@ -60,8 +60,6 @@ export async function getStaticPaths(context) {
 		}
 	})
 
-	console.log(paths)
-
 	return {
 		paths,
 		fallback: false,
