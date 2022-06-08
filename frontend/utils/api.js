@@ -7,7 +7,7 @@ export function getStrapiURL(path) {
 }
 
 export function getApiToken() {
-	return process.env.ADMIN_API_TOKEN
+	return process.env.NEXT_PUBLIC_ADMIN_API_TOKEN
 }
 
 // Helper to make GET requests to Strapi

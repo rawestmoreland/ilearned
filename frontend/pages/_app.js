@@ -13,7 +13,6 @@ import Router from 'next/router'
 export const GlobalContext = createContext({})
 
 function MyApp({ Component, pageProps }) {
-	console.log(process.env.ADMIN_API_TOKEN)
 	const { global } = pageProps
 	if (global == null) {
 		return <ErrorPage statusCode={404} />

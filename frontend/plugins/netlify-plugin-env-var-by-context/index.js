@@ -6,10 +6,11 @@ module.exports = {
 				console.log(
 					`Setting ADMIN_API_TOKEN to TEST_ADMIN_API_TOKEN value`
 				)
-				process.env.ADMIN_API_TOKEN = process.env.TEST_ADMIN_API_TOKEN
+				process.env.NEXT_PUBLIC_ADMIN_API_TOKEN =
+					process.env.TEST_ADMIN_API_TOKEN
 			} else if (process.env.BRANCH === 'master') {
 				console.log(`Setting API token to the STAGING API token.`)
-				process.env.ADMIN_API_TOKEN =
+				process.env.NEXT_PUBLIC_ADMIN_API_TOKEN =
 					process.env.STAGING_ADMIN_API_TOKEN
 			}
 		}
