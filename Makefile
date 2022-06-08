@@ -46,3 +46,6 @@ refresh-test-db:
 
 bash-test-db:
 	heroku pg:psql postgresql-lively-39609 --app ilearned-staging
+
+bash-stage-db:
+	heroku pg:psql postgresql-shaped-12101 --app ilearned-staging
