@@ -1,5 +1,7 @@
 const parse = require("pg-connection-string").parse;
-const config = parse(process.env.DATABASE_URL);
+const config = parse(
+  process.env.DATABASE_URL || process.env.HEROKU_POSTGRESQL_COPPER
+);
 module.exports = ({ env }) => ({
   connection: {
     client: "postgres",

@@ -20,7 +20,7 @@ refresh-local-db:
 
 db-to-heroku:
 	$(eval PRESIGNED_URL=$(shell aws s3 presign s3://ilearned/db-backups/ilearned.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)))
-	heroku pg:backups:restore '$(PRESIGNED_URL)' DATABASE_URL -a ilearned-staging --confirm ilearned-staging
+	heroku pg:backups:restore '$(PRESIGNED_URL)' HEROKU_POSTGRESQL_COPPER -a ilearned-staging --confirm ilearned-staging
 
 db-to-heroku-prod:
 	$(eval PRESIGNED_URL=$(shell aws s3 presign s3://strapi-sbb/db-backups/sbb.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)))
@@ -37,3 +37,12 @@ import-heroku-vars-prod:
 
 copy-vars:
 	cat envvars.txt | tr '\n' ' ' | xargs heroku config:set -a ilearned-prod
+
+refresh-stage-db:
+	heroku pg:copy ilearned-prod::DATABASE_URL DATABASE_URL --app ilearned-staging --confirm ilearned-staging
+
+refresh-test-db:
+	heroku pg:copy ilearned-staging::DATABASE_URL HEROKU_POSTGRESQL_COPPER --app ilearned-staging --confirm ilearned-staging
+
+bash-test-db:
+	heroku pg:psql postgresql-lively-39609 --app ilearned-staging

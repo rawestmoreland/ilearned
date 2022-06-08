@@ -9,13 +9,13 @@
 [context.branch-deploy]
   command = "npm run noIndex"
 [context.branch-deploy.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
 	NODE_ENV = "development"
 
 [context.deploy-preview]
 	command = "npm run noIndex"
 [context.deploy-preview.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-18.herokuapp.com"
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
 	NODE_ENV = "development"
 
 [context.staging]
@@ -24,10 +24,10 @@
 	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
 	NODE_ENV = "development"
 
+[functions]
+	directory = "./utils/functions"
 
 [[plugins]]
 	package = "@netlify/plugin-nextjs"
 [[plugins]]
-	package = 'netlify-plugin-contextual-env'
-  [plugins.inputs]
-  mode = 'prefix'
+	package = './plugins/netlify-plugin-env-var-by-context'
