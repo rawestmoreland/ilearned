@@ -7,7 +7,7 @@ export function getStrapiURL(path) {
 }
 
 export function getApiToken() {
-	return process.env.ADMIN_API_TOKEN
+	return process.env.TEST_ADMIN_API_TOKEN || process.env.ADMIN_API_TOKEN
 }
 
 // Helper to make GET requests to Strapi
@@ -26,6 +26,7 @@ export async function fetchAPI(
 
 	if (authRequired) {
 		defaultOptions.headers.Authorization = `Bearer ${API_TOKEN}`
+		debugger
 	}
 
 	const mergedOptions = {
