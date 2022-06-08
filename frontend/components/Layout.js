@@ -10,7 +10,6 @@ import { GlobalContext } from '../pages/_app'
 
 const Layout = ({ children, ...props }) => {
 	const { navbar, footer } = useContext(GlobalContext)
-	console.log(footer)
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
