@@ -1,8 +1,8 @@
 require('dotenv').config()
 
-exports.handler = async (event) => {
+exports.handler = async () => {
 	return {
 		statusCode: 200,
-		body: JSON.stringify({ context: process.env.CONTEXT }),
+		body: JSON.stringify({ message: 'hey' }),
 	}
 }
