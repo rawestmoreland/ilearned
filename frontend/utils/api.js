@@ -7,6 +7,12 @@ export function getStrapiURL(path) {
 	}${path}`
 }
 
+export function getApiToken() {
+	return process.env.NODE_ENV === 'development'
+		? process.env.MASTER_ADMIN_API_TOKEN
+		: process.env.ADMIN_API_TOKEN
+}
+
 // Helper to make GET requests to Strapi
 export async function fetchAPI(
 	path,
@@ -19,8 +25,10 @@ export async function fetchAPI(
 		},
 	}
 
+	const API_TOKEN = getApiToken()
+
 	if (authRequired) {
-		defaultOptions.headers.Authorization = `Bearer ${process.env.ADMIN_API_TOKEN}`
+		defaultOptions.headers.Authorization = `Bearer ${API_TOKEN}`
 	}
 
 	const mergedOptions = {
@@ -155,6 +163,7 @@ export async function getPostsBySlug({ slug, locale }) {
 									data {
 										attributes {
 											name
+											slug
 											picture {
 												data {
 													attributes {
@@ -210,7 +219,7 @@ export async function getPostsBySlug({ slug, locale }) {
 export async function getCategoriesBySlug({ slug }) {
 	// Find the pages that match this slug
 	const gqlEndpoint = getStrapiURL('/graphql')
-	const pagesRes = await fetch(gqlEndpoint, {
+	const categoriesRes = await fetch(gqlEndpoint, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -249,6 +258,7 @@ export async function getCategoriesBySlug({ slug }) {
 												data {
 													attributes {
 														name
+														slug
 														picture {
 															data {
 																attributes {
@@ -288,7 +298,7 @@ export async function getCategoriesBySlug({ slug }) {
 		}),
 	})
 
-	const postData = await pagesRes.json()
+	const postData = await categoriesRes.json()
 	// Make sure we found something, otherwise return null
 	if (postData.data.categories === null) {
 		return null
@@ -296,4 +306,108 @@ export async function getCategoriesBySlug({ slug }) {
 
 	// Return the first item since there should only be one result per slug
 	return postData.data.categories.data[0]
+}
+
+export async function getAuthorsByName({ slug }) {
+	const gqlEndpoint = getStrapiURL('/graphql')
+	const authorsRes = await fetch(gqlEndpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+			query GetAuthorPosts(
+				$slug: String!
+			) {        
+				authors(
+					filters: { slug: { eq: $slug } }
+				) {
+					data {
+						id
+						attributes {
+							name
+							email
+							slug
+							picture {
+								data {
+									attributes {
+										height
+										width
+										formats
+										alternativeText
+										url
+									}
+								}
+							}
+							posts {
+								data {
+									attributes {
+										title
+										content
+										description
+										published
+										locale
+										slug
+										categories {
+											data {
+												id
+												attributes {
+													name
+													slug
+												}
+											}
+										}
+										authors {
+											data {
+												attributes {
+													name
+													slug
+													picture {
+														data {
+															attributes {
+																height
+																width
+																formats
+																alternativeText
+																url
+															}
+														}
+													}
+												}
+											}
+										}
+										image {
+											data {
+												attributes {
+													height
+													width
+													formats
+													alternativeText
+													url
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			`,
+			variables: {
+				slug,
+			},
+		}),
+	})
+
+	const authorsData = await authorsRes.json()
+	// Make sure we found something, otherwise return null
+	if (authorsData.data.authors === null) {
+		return null
+	}
+
+	// Return the first item since there should only be one result per slug
+	return authorsData.data.authors.data[0]
 }

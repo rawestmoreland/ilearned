@@ -21,6 +21,7 @@ export default function Home({ posts, adminSettings, categories }) {
 }
 
 export async function getServerSideProps(ctx) {
+	console.log(process.env.NODE_ENV)
 	// Run API calls in parallel
 	const [postsRes, categoriesRes, adminSettingsRes] = await Promise.all([
 		fetchAPI('/posts', false, {

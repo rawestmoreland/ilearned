@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "localized_strings",
+  "info": {
+    "singularName": "localized-string",
+    "pluralName": "localized-strings",
+    "displayName": "Localized Strings",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "text": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "context": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text"
+    },
+    "slug": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "uid",
+      "targetField": "text",
+      "required": true
+    }
+  }
+}
