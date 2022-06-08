@@ -4,6 +4,7 @@ import PostGrid from '../components/PostGrid'
 import { fetchAPI } from '../utils/api'
 
 export default function Home({ posts, adminSettings, categories }) {
+	console.log(process.env.ADMIN_API_TOKEN)
 	const { live } = adminSettings.attributes
 	return (
 		<Layout>

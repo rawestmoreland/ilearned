@@ -26,7 +26,6 @@ export async function fetchAPI(
 
 	if (authRequired) {
 		defaultOptions.headers.Authorization = `Bearer ${API_TOKEN}`
-		debugger
 	}
 
 	const mergedOptions = {
