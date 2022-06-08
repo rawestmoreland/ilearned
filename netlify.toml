@@ -15,7 +15,7 @@
 [context.deploy-preview]
 	command = "npm run noIndex"
 [context.deploy-preview.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-18.herokuapp.com"
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
 	NODE_ENV = "development"
 
 [context.staging]
