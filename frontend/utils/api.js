@@ -73,8 +73,10 @@ export async function getGlobalData(locale) {
 					}
 				}
 			}
-query GetGlobal($locale: I18NLocaleCode!) {
-global(locale: $locale) {
+			query GetGlobal(
+				$locale: I18NLocaleCode!
+			) {
+				global(locale: $locale) {
 					data {
 						id
 						attributes {
@@ -102,6 +104,22 @@ global(locale: $locale) {
 									text
 								}
 							}
+							footer {
+								logo {
+									...FileParts
+								}
+								smallText
+								columns {
+									id
+									title
+									links {
+										id
+										url
+										newTab
+										text
+									}
+								}
+							}
 						}
 					}
 				}
@@ -115,7 +133,7 @@ global(locale: $locale) {
 
 	const global = await globalRes.json()
 
-	return global?.data.global.data
+	return global.data.global
 }
 
 /**
@@ -140,6 +158,7 @@ export async function getPostsBySlug({ slug, locale }) {
         ) {        
           posts(
             filters: { slug: { eq: $slug } }
+						pagination: {page: 1, pageSize: 10}
             locale: $locale
           ) {
 						data {
@@ -190,6 +209,14 @@ export async function getPostsBySlug({ slug, locale }) {
 								}
 							}
 						}
+						meta {
+							pagination {
+								page
+								pageSize
+								pageCount
+								total
+							}
+						}
 					}
         }      
       `,
@@ -225,7 +252,7 @@ export async function getCategoriesBySlug({ slug }) {
 		},
 		body: JSON.stringify({
 			query: `
-        query GetGategoryPosts(
+        query GetCategoriesBySlug(
           $slug: String!
         ) {        
           categories(
