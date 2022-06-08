@@ -6,23 +6,16 @@
 [context.production]
 	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"}
 
-[context.branch-deploy]
-  command = "npm run noIndex"
-[context.branch-deploy.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
-	NODE_ENV = "development"
-
 [context.deploy-preview]
 	command = "npm run noIndex"
 [context.deploy-preview.environment]
 	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
 	NODE_ENV = "development"
 
-[context.staging]
+[context.master]
 	command = "npm run noIndex"
-[context.staging.environment]
+[context.master.environment]
 	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
-	NODE_ENV = "development"
 
 [functions]
 	directory = "./utils/functions"
