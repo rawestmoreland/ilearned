@@ -7,11 +7,7 @@ export function getStrapiURL(path) {
 }
 
 export function getApiToken() {
-	const token =
-		process.env.NODE_ENV === 'development'
-			? process.env.TEST_ADMIN_API_TOKEN
-			: process.env.ADMIN_API_TOKEN
-	return token
+	return process.env.ADMIN_API_TOKEN
 }
 
 // Helper to make GET requests to Strapi
