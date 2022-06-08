@@ -43,3 +43,6 @@ refresh-stage-db:
 
 refresh-test-db:
 	heroku pg:copy ilearned-staging::DATABASE_URL HEROKU_POSTGRESQL_COPPER --app ilearned-staging --confirm ilearned-staging
+
+bash-test-db:
+	heroku pg:psql postgresql-lively-39609 --app ilearned-staging
