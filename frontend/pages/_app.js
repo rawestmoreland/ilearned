@@ -41,6 +41,13 @@ MyApp.getInitialProps = async (ctx) => {
 			favicon: { populate: '*' },
 			metadata: { populate: '*' },
 			navbar: { populate: '*' },
+			footer: {
+				populate: {
+					columns: { populate: '*' },
+					logo: '*',
+					smallText: '*',
+				},
+			},
 		},
 	})
 	return { ...appProps, pageProps: { global: globalLocale } }

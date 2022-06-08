@@ -4,11 +4,12 @@ import { useRouter } from 'next/router'
 
 import Loading from './Loading'
 import Navbar from './Navbar'
+import Footer from './Footer'
 
 import { GlobalContext } from '../pages/_app'
 
 const Layout = ({ children, ...props }) => {
-	const { navbar } = useContext(GlobalContext)
+	const { navbar, footer } = useContext(GlobalContext)
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
@@ -26,12 +27,13 @@ const Layout = ({ children, ...props }) => {
 	}, [router])
 
 	return (
-		<div className=''>
+		<div className='relative'>
 			<Navbar navbar={navbar} />
 			<Loading loading={loading} />
 			<div className={`${loading ? 'hidden' : 'container pt-16'}`}>
 				{children}
 			</div>
+			<Footer footer={footer} />
 		</div>
 	)
 }
