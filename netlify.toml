@@ -10,12 +10,13 @@
   command = "npm run noIndex"
 [context.branch-deploy.environment]
 	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
+	NODE_ENV = "production"
 
 [context.deploy-preview]
 	command = "npm run noIndex"
 [context.deploy-preview.environment]
 	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-20.herokuapp.com"
-	NODE_ENV = "development"
+	NODE_ENV = "production"
 
 [context.staging]
 	command = "npm run noIndex"

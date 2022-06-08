@@ -37,3 +37,9 @@ import-heroku-vars-prod:
 
 copy-vars:
 	cat envvars.txt | tr '\n' ' ' | xargs heroku config:set -a ilearned-prod
+
+refresh-stage-db:
+	heroku pg:copy ilearned-prod::DATABASE_URL DATABASE_URL --app ilearned-staging --confirm ilearned-staging
+
+refresh-test-db:
+	heroku pg:copy ilearned-staging::DATABASE_URL HEROKU_POSTGRESQL_COPPER --app ilearned-staging --confirm ilearned-staging
