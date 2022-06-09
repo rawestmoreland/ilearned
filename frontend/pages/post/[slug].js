@@ -24,12 +24,12 @@ export async function getStaticPaths(context) {
 				locale,
 				fields: ['slug', 'locale'],
 			})
-			return [...currentPosts, ...localePosts]
+			return [...currentPosts, ...localePosts.data]
 		},
 		Promise.resolve([])
 	)
 
-	const paths = posts.data.map((post) => {
+	const paths = posts.map((post) => {
 		const { slug, locale } = post.attributes
 
 		return {

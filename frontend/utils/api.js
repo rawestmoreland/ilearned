@@ -264,6 +264,7 @@ export async function getCategoriesBySlug({ slug }) {
 								slug
 								posts {
 									data {
+										id
 										attributes {
 											title
 											content

@@ -44,7 +44,7 @@ export async function getStaticPaths(context) {
 			 */
 			categorySlugs.data.forEach((slug) => (slug.locale = locale))
 
-			return [...currentCategories, ...categorySlugs]
+			return [...currentCategories, ...categorySlugs.data]
 		},
 		Promise.resolve([])
 	)

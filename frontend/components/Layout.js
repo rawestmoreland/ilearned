@@ -9,7 +9,8 @@ import Footer from './Footer'
 import { GlobalContext } from '../pages/_app'
 
 const Layout = ({ children, ...props }) => {
-	const { navbar, footer } = useContext(GlobalContext)
+	const { global } = useContext(GlobalContext)
+	const { navbar, footer } = global
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
