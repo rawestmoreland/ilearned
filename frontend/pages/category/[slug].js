@@ -1,14 +1,31 @@
+import { useState } from 'react'
+
+import InfininiteScroll from 'react-infinite-scroll-component'
+
 import { fetchAPI, getCategoriesBySlug } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Category = ({ category, locale }) => {
-	const seo = {
-		metaTitle: category.attributes.name,
-		metaDescription: `All ${category.attributes.name} posts`,
-	}
+const Category = ({ category, meta, locale }) => {
+	const { name, posts, slug } = category.attributes
+	const [postsMeta, setPostsMeta] = useState(meta)
+	const [postsData, setPostsData] = useState(posts.data)
+	// const seo = {
+	// 	metaTitle: category.attributes.name,
+	// 	metaDescription: `All ${category.attributes.name} posts`,
+	// }
 
-	const { name, posts } = category.attributes
+	async function getMorePosts() {
+		const postsRes = await getCategoriesBySlug({
+			slug: slug,
+		})
+
+		setPostsData([
+			...allPosts,
+			...postsRes.data.categories.data[0].attributes.posts.data,
+		])
+		setPostsMeta(postsRes.data.categories.meta.pagination)
+	}
 
 	return (
 		<Layout>
@@ -23,7 +40,14 @@ const Category = ({ category, locale }) => {
 							{name.toUpperCase()}
 						</h1>
 					</div>
-					<PostGrid posts={posts.data} marginTop={8} />
+					<InfininiteScroll
+						dataLength={postsData.length}
+						next={getMorePosts}
+						loader={<h4>Loading...</h4>}
+						hasMore={postsMeta.pageCount > postsMeta.page}
+					>
+						<PostGrid posts={postsData} />
+					</InfininiteScroll>
 				</div>
 			</div>
 		</Layout>
@@ -67,18 +91,22 @@ export async function getStaticPaths(context) {
 
 export async function getStaticProps(context) {
 	const { params, locale } = context
-	const matchingCategories = await getCategoriesBySlug({ slug: params.slug })
+	const matchingCategories = await getCategoriesBySlug({
+		slug: params.slug,
+		page: 1,
+	})
 
 	// Filter out the posts that don't match our current locale
 	// TODO: This could probably be more efficient
-	matchingCategories.attributes.posts.data =
-		matchingCategories.attributes.posts.data.filter(
+	matchingCategories.data.categories.data[0].attributes.posts.data =
+		matchingCategories.data.categories.data[0].attributes.posts.data.filter(
 			(post) => post.attributes.locale === locale
 		)
 
 	return {
 		props: {
-			category: matchingCategories,
+			category: matchingCategories.data.categories.data[0],
+			meta: matchingCategories.data.categories.meta.pagination,
 			locale,
 		},
 	}
