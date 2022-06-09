@@ -40,18 +40,18 @@ export async function fetchAPI(
 
 	const response = await fetch(requestUrl, mergedOptions)
 
-	const { data, error } = await response.json()
+	const { data, error, meta } = await response.json()
 
 	if (!response.ok) {
 		console.log(requestUrl)
 		console.log(error)
 		throw new Error(`An error occured please try again`)
 	}
-	return data
+	return { data, error: error || null, meta: meta || null }
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)
-export async function getGlobalData(locale) {
+export async function getGlobalData({ locale }) {
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const globalRes = await fetch(gqlEndpoint, {
 		method: 'POST',
@@ -123,7 +123,7 @@ export async function getGlobalData(locale) {
 						}
 					}
 				}
-}      
+			}      
       `,
 			variables: {
 				locale,
@@ -133,7 +133,7 @@ export async function getGlobalData(locale) {
 
 	const global = await globalRes.json()
 
-	return global.data.global
+	return global.data?.global
 }
 
 /**

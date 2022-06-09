@@ -29,7 +29,7 @@ export async function getStaticPaths(context) {
 		Promise.resolve([])
 	)
 
-	const paths = posts.map((post) => {
+	const paths = posts.data.map((post) => {
 		const { slug, locale } = post.attributes
 
 		return {
@@ -43,7 +43,7 @@ export async function getStaticPaths(context) {
 }
 
 export async function getStaticProps(context) {
-	const { params, locale, locales, defaultLocale } = context
+	const { params, locale } = context
 
 	const postData = await getPostsBySlug({
 		slug: params.slug,

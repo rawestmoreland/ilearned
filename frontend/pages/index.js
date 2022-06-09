@@ -1,14 +1,52 @@
+import { useEffect, useState } from 'react'
+
+import InfininiteScroll from 'react-infinite-scroll-component'
+
 import Layout from '../components/Layout'
 import PostGrid from '../components/PostGrid'
 
 import { fetchAPI } from '../utils/api'
 
-export default function Home({ posts, adminSettings, categories }) {
-	const { live } = adminSettings.attributes
+export default function Home({ posts, adminSettings, locale }) {
+	const [postsData, setPostsData] = useState(posts.data)
+	const [postsMeta, setPostsMeta] = useState(posts.meta.pagination)
+	const { live } = adminSettings.data.attributes
+
+	async function getMorePosts() {
+		console.log('getting More')
+		const morePostsRes = await fetchAPI('/posts', false, {
+			locale,
+			sort: 'published:desc',
+			populate: {
+				authors: { populate: ['picture'] },
+				image: '*',
+				categories: '*',
+				meta: '*',
+			},
+			pagination: {
+				page: postsMeta.page + 1,
+				pageSize: 10,
+				withCount: true,
+			},
+		})
+
+		setPostsData([...postsData, ...morePostsRes.data])
+		setPostsMeta(morePostsRes.meta)
+	}
+
+	useEffect(() => {}, [postsData])
+
 	return (
 		<Layout>
 			{live || process.env.NODE_ENV === 'development' ? (
-				<PostGrid posts={posts} />
+				<InfininiteScroll
+					dataLength={postsData.length}
+					next={getMorePosts}
+					loader={<h4>Loading...</h4>}
+					hasMore={postsMeta.pageCount > postsMeta.page}
+				>
+					<PostGrid posts={postsData} />
+				</InfininiteScroll>
 			) : (
 				<div className='absolute top-1/2 left-1/2 -translate-x-1/2'>
 					<h1 className='font-big-shoulders text-4xl tracking-widest text-off-white'>
@@ -22,17 +60,22 @@ export default function Home({ posts, adminSettings, categories }) {
 
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
-	const [postsRes, categoriesRes, adminSettingsRes] = await Promise.all([
+	const [postsRes, adminSettingsRes] = await Promise.all([
 		fetchAPI('/posts', false, {
 			locale: ctx.locale,
 			sort: 'published:desc',
+			pagination: {
+				page: 1,
+				pageSize: 10,
+				withCount: true,
+			},
 			populate: {
 				authors: { populate: ['picture'] },
 				image: '*',
 				categories: '*',
+				meta: '*',
 			},
 		}),
-		fetchAPI('/categories'),
 		fetchAPI('/admin-setting', true),
 	])
 
@@ -40,7 +83,7 @@ export async function getServerSideProps(ctx) {
 		props: {
 			posts: postsRes,
 			adminSettings: adminSettingsRes,
-			categories: categoriesRes,
+			locale: ctx.locale,
 		},
 	}
 }
