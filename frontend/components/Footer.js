@@ -4,7 +4,7 @@ import NextImage from './NextImage'
 const Footer = ({ footer }) => {
 	const { smallText, columns } = footer
 	return (
-		<footer className='bg-oxford-blue p-4'>
+		<footer className='flex flex-col justify-between bg-oxford-blue p-4'>
 			<div className='container flex flex-col'>
 				<div>
 					{footer.logo && (
@@ -30,11 +30,11 @@ const Footer = ({ footer }) => {
 										key={link.id}
 										className='text-off-white py-1 px-1 -mx-1'
 									>
-										<a className='hover:underline cursor-pointer font-rubik'>
-											<Link href={link.url}>
+										<Link href={link.url}>
+											<a className='hover:underline cursor-pointer font-rubik'>
 												{link.text}
-											</Link>
-										</a>
+											</a>
+										</Link>
 									</li>
 								))}
 							</ul>

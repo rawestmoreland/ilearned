@@ -40,18 +40,18 @@ export async function fetchAPI(
 
 	const response = await fetch(requestUrl, mergedOptions)
 
-	const { data, error } = await response.json()
+	const { data, error, meta } = await response.json()
 
 	if (!response.ok) {
 		console.log(requestUrl)
 		console.log(error)
 		throw new Error(`An error occured please try again`)
 	}
-	return data
+	return { data, error: error || null, meta: meta || null }
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)
-export async function getGlobalData(locale) {
+export async function getGlobalData({ locale }) {
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const globalRes = await fetch(gqlEndpoint, {
 		method: 'POST',
@@ -73,8 +73,10 @@ export async function getGlobalData(locale) {
 					}
 				}
 			}
-query GetGlobal($locale: I18NLocaleCode!) {
-global(locale: $locale) {
+			query GetGlobal(
+				$locale: I18NLocaleCode!
+			) {
+				global(locale: $locale) {
 					data {
 						id
 						attributes {
@@ -102,10 +104,26 @@ global(locale: $locale) {
 									text
 								}
 							}
+							footer {
+								logo {
+									...FileParts
+								}
+								smallText
+								columns {
+									id
+									title
+									links {
+										id
+										url
+										newTab
+										text
+									}
+								}
+							}
 						}
 					}
 				}
-}      
+			}      
       `,
 			variables: {
 				locale,
@@ -115,7 +133,7 @@ global(locale: $locale) {
 
 	const global = await globalRes.json()
 
-	return global?.data.global.data
+	return global.data?.global
 }
 
 /**
@@ -140,6 +158,7 @@ export async function getPostsBySlug({ slug, locale }) {
         ) {        
           posts(
             filters: { slug: { eq: $slug } }
+						pagination: {page: 1, pageSize: 10}
             locale: $locale
           ) {
 						data {
@@ -190,6 +209,14 @@ export async function getPostsBySlug({ slug, locale }) {
 								}
 							}
 						}
+						meta {
+							pagination {
+								page
+								pageSize
+								pageCount
+								total
+							}
+						}
 					}
         }      
       `,
@@ -225,7 +252,7 @@ export async function getCategoriesBySlug({ slug }) {
 		},
 		body: JSON.stringify({
 			query: `
-        query GetGategoryPosts(
+        query GetCategoriesBySlug(
           $slug: String!
         ) {        
           categories(
@@ -237,6 +264,7 @@ export async function getCategoriesBySlug({ slug }) {
 								slug
 								posts {
 									data {
+										id
 										attributes {
 											title
 											content
@@ -341,6 +369,7 @@ export async function getAuthorsByName({ slug }) {
 							}
 							posts {
 								data {
+									id
 									attributes {
 										title
 										content

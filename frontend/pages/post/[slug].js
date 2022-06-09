@@ -24,7 +24,7 @@ export async function getStaticPaths(context) {
 				locale,
 				fields: ['slug', 'locale'],
 			})
-			return [...currentPosts, ...localePosts]
+			return [...currentPosts, ...localePosts.data]
 		},
 		Promise.resolve([])
 	)
@@ -43,7 +43,7 @@ export async function getStaticPaths(context) {
 }
 
 export async function getStaticProps(context) {
-	const { params, locale, locales, defaultLocale } = context
+	const { params, locale } = context
 
 	const postData = await getPostsBySlug({
 		slug: params.slug,

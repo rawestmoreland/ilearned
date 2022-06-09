@@ -1,7 +1,6 @@
 import { fetchAPI, getAuthorsByName } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
-import slugify from 'slugify'
 
 const Author = ({ author }) => {
 	const seo = {
@@ -43,9 +42,9 @@ export async function getStaticPaths(context) {
 			 * authors aren't localized, but we want paths to
 			 * all authors for each locale route.
 			 */
-			authorNames.forEach((name) => (name.locale = locale))
+			authorNames.data.forEach((name) => (name.locale = locale))
 
-			return [...currentAuthors, ...authorNames]
+			return [...currentAuthors, ...authorNames.data]
 		},
 		Promise.resolve([])
 	)

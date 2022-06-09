@@ -42,9 +42,9 @@ export async function getStaticPaths(context) {
 			 * Categories aren't localized, but we want paths to
 			 * all categories for each locale route.
 			 */
-			categorySlugs.forEach((slug) => (slug.locale = locale))
+			categorySlugs.data.forEach((slug) => (slug.locale = locale))
 
-			return [...currentCategories, ...categorySlugs]
+			return [...currentCategories, ...categorySlugs.data]
 		},
 		Promise.resolve([])
 	)
