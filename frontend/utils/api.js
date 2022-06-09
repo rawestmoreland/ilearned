@@ -369,6 +369,7 @@ export async function getAuthorsByName({ slug }) {
 							}
 							posts {
 								data {
+									id
 									attributes {
 										title
 										content

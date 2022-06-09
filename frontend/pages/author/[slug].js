@@ -8,7 +8,7 @@ const Author = ({ author }) => {
 		metaDescription: `All ${author.attributes.name} posts`,
 	}
 
-	const { name, posts } = author.data.attributes
+	const { name, posts } = author.attributes
 
 	return (
 		<Layout>
@@ -44,7 +44,7 @@ export async function getStaticPaths(context) {
 			 */
 			authorNames.data.forEach((name) => (name.locale = locale))
 
-			return [...currentAuthors, ...authorNames]
+			return [...currentAuthors, ...authorNames.data]
 		},
 		Promise.resolve([])
 	)
