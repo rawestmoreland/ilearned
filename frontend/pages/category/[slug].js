@@ -18,6 +18,7 @@ const Category = ({ category, meta, locale }) => {
 	async function getMorePosts() {
 		const postsRes = await getCategoriesBySlug({
 			slug: slug,
+			page: postsMeta.page + 1,
 		})
 
 		setPostsData([

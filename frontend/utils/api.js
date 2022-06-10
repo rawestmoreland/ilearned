@@ -344,7 +344,7 @@ export async function getCategoriesBySlug({ slug, page = 1 }) {
 	return { data }
 }
 
-export async function getAuthorsByName({ slug }) {
+export async function getAuthorsByName({ slug, page = 1 }) {
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const authorsRes = await fetch(gqlEndpoint, {
 		method: 'POST',
@@ -357,6 +357,7 @@ export async function getAuthorsByName({ slug }) {
 				$slug: String!
 			) {        
 				authors(
+					pagination: {page: ${page}, pageSize: 10}
 					filters: { slug: { eq: $slug } }
 				) {
 					data {
@@ -430,6 +431,14 @@ export async function getAuthorsByName({ slug }) {
 							}
 						}
 					}
+					meta {
+						pagination {
+							page
+							pageSize
+							pageCount
+							total
+						}
+					}
 				}
 			}
 			`,
@@ -439,12 +448,12 @@ export async function getAuthorsByName({ slug }) {
 		}),
 	})
 
-	const authorsData = await authorsRes.json()
+	const { data } = await authorsRes.json()
 	// Make sure we found something, otherwise return null
-	if (authorsData.data.authors === null) {
+	if (data.authors === null) {
 		return null
 	}
 
 	// Return the first item since there should only be one result per slug
-	return authorsData.data.authors.data[0]
+	return { data }
 }

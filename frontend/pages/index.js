@@ -13,7 +13,6 @@ export default function Home({ posts, adminSettings, locale }) {
 	const { live } = adminSettings.data.attributes
 
 	async function getMorePosts() {
-		console.log('getting More')
 		const morePostsRes = await fetchAPI('/posts', false, {
 			locale,
 			sort: 'published:desc',
@@ -31,10 +30,8 @@ export default function Home({ posts, adminSettings, locale }) {
 		})
 
 		setPostsData([...postsData, ...morePostsRes.data])
-		setPostsMeta(morePostsRes.meta)
+		setPostsMeta(morePostsRes.meta.pagination)
 	}
-
-	useEffect(() => {}, [postsData])
 
 	return (
 		<Layout>
