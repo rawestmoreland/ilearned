@@ -7,7 +7,7 @@ const CategoryRow = ({ categories }) => {
 	const { locale } = useContext(GlobalContext)
 
 	return (
-		<div className='flex text-terracotta text-xs font-bold font-big-shoulders tracking-widest uppercase mt-4 gap-x-2'>
+		<div className='flex flex-wrap text-terracotta text-xs font-bold font-big-shoulders tracking-widest uppercase my-4 gap-2'>
 			{categories.data.map((cat) => {
 				const { name, slug } = cat.attributes
 				return (

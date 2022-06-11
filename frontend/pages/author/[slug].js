@@ -2,30 +2,28 @@ import { useState } from 'react'
 
 import InfininiteScroll from 'react-infinite-scroll-component'
 
-import { fetchAPI, getAuthorsByName } from '../../utils/api'
+import { fetchAPI, getPostsByAuthor } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Author = ({ author, meta }) => {
-	const { name, posts } = author.attributes
+const Author = ({ posts, author, meta, locale }) => {
+	const { name, slug } = author.attributes
 	const [postsMeta, setPostsMeta] = useState(meta)
-	const [postsData, setPostsData] = useState(posts.data)
+	const [postsData, setPostsData] = useState(posts)
 	// const seo = {
 	// 	metaTitle: author.attributes.name,
 	// 	metaDescription: `All ${author.attributes.name} posts`,
 	// }
 
 	async function getMorePosts() {
-		const postsRes = await getAuthorsByName({
-			slug: slug,
+		const postsRes = await getPostsByAuthor({
+			slug,
+			locale,
 			page: postsMeta.page + 1,
 		})
 
-		setPostsData([
-			...allPosts,
-			...postsRes.data.authors.data[0].attributes.posts.data,
-		])
-		setPostsMeta(postsRes.data.authors.meta.pagination)
+		setPostsData([...postsData, ...postsRes.data.posts.data])
+		setPostsMeta(postsRes.data.posts.meta.pagination)
 	}
 
 	return (
@@ -92,22 +90,17 @@ export async function getStaticPaths(context) {
 
 export async function getStaticProps(context) {
 	const { params, locale } = context
-	const matchingAuthors = await getAuthorsByName({
+	const matchingPosts = await getPostsByAuthor({
 		slug: params.slug,
+		locale,
 		page: 1,
 	})
 
-	// Filter out the posts that don't match our current locale
-	// TODO: This could probably be more efficient
-	matchingAuthors.data.authors.data[0].attributes.posts.data =
-		matchingAuthors.data.authors.data[0].attributes.posts.data.filter(
-			(post) => post.attributes.locale === locale
-		)
-
 	return {
 		props: {
-			author: matchingAuthors.data.authors.data[0],
-			meta: matchingAuthors.data.authors.meta.pagination,
+			posts: matchingPosts.data.posts.data,
+			author: matchingPosts.data.authors.data[0],
+			meta: matchingPosts.data.posts.meta.pagination,
 			locale,
 		},
 	}
