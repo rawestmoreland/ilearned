@@ -242,7 +242,7 @@ export async function getPostsBySlug({ slug, locale }) {
  * @param {Object} options
  * @param {string} options.slug The category's slug
  */
-export async function getCategoriesBySlug({ slug, page = 1 }) {
+export async function getPostsByCategory({ slug, locale, page = 1 }) {
 	// Find the pages that match this slug
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const categoriesRes = await fetch(gqlEndpoint, {
@@ -252,169 +252,39 @@ export async function getCategoriesBySlug({ slug, page = 1 }) {
 		},
 		body: JSON.stringify({
 			query: `
-        query GetCategoriesBySlug(
-          $slug: String!
-        ) {        
-          categories(
-						pagination: { page: ${page}, pageSize: 10}
-            filters: { slug: { eq: $slug } }
-          ) {
-						data {
-							attributes {
-								name
-								slug
-								posts {
-									data {
-										id
-										attributes {
-											title
-											content
-											description
-											published
-											locale
-											slug
-											categories {
-												data {
-													id
-													attributes {
-														name
-														slug
-													}
-												}
-											}
-											authors {
-												data {
-													attributes {
-														name
-														slug
-														picture {
-															data {
-																attributes {
-																	height
-																	width
-																	formats
-																	alternativeText
-																	url
-																}
-															}
-														}
-													}
-												}
-											}
-											image {
-												data {
-													attributes {
-														height
-														width
-														formats
-														alternativeText
-														url
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						meta {
-							pagination {
-								page
-								pageSize
-								pageCount
-								total
-							}
-						}
-					}
-        }      
-      `,
-			variables: {
-				slug,
-			},
-		}),
-	})
-
-	const { data } = await categoriesRes.json()
-	// Make sure we found something, otherwise return null
-	if (data.categories === null) {
-		return null
-	}
-
-	// Return the first item since there should only be one result per slug
-	return { data }
-}
-
-export async function getAuthorsByName({ slug }) {
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const authorsRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: `
-			query GetAuthorPosts(
+			query GetCategoryPosts(
 				$slug: String!
+				$locale: I18NLocaleCode!
 			) {        
-				authors(
-					filters: { slug: { eq: $slug } }
+				posts(
+					pagination: {page: ${page}, pageSize: 10}
+					filters: { categories: {slug: {containsi: $slug}} }
+					locale: $locale
 				) {
 					data {
 						id
 						attributes {
-							name
-							email
+							title
+							content
+							description
+							published
+							locale
 							slug
-							picture {
-								data {
-									attributes {
-										height
-										width
-										formats
-										alternativeText
-										url
-									}
-								}
-							}
-							posts {
+							categories {
 								data {
 									id
 									attributes {
-										title
-										content
-										description
-										published
-										locale
+										name
 										slug
-										categories {
-											data {
-												id
-												attributes {
-													name
-													slug
-												}
-											}
-										}
-										authors {
-											data {
-												attributes {
-													name
-													slug
-													picture {
-														data {
-															attributes {
-																height
-																width
-																formats
-																alternativeText
-																url
-															}
-														}
-													}
-												}
-											}
-										}
-										image {
+									}
+								}
+							}
+							authors {
+								data {
+									attributes {
+										name
+										slug
+										picture {
 											data {
 												attributes {
 													height
@@ -428,6 +298,153 @@ export async function getAuthorsByName({ slug }) {
 									}
 								}
 							}
+							image {
+								data {
+									attributes {
+										height
+										width
+										formats
+										alternativeText
+										url
+									}
+								}
+							}
+						}
+					}
+					meta {
+						pagination {
+							page
+							pageSize
+							pageCount
+							total
+						}
+					}
+				}
+				categories(
+					filters: {slug: {eq: $slug}}
+				) {
+					data {
+						id
+						attributes {
+							name
+							slug
+						}
+					}
+				}
+			}      
+      `,
+			variables: {
+				slug,
+				locale,
+			},
+		}),
+	})
+
+	const { data } = await categoriesRes.json()
+	// Make sure we found something, otherwise return null
+	if (data.posts === null) {
+		return null
+	}
+
+	// Return the first item since there should only be one result per slug
+	return { data }
+}
+
+export async function getPostsByAuthor({ slug, locale, page = 1 }) {
+	const gqlEndpoint = getStrapiURL('/graphql')
+	const authorsRes = await fetch(gqlEndpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+			query GetAuthorPosts(
+				$slug: String!
+				$locale: I18NLocaleCode!
+			) {        
+				posts(
+					pagination: {page: ${page}, pageSize: 10}
+					filters: { authors: {slug: {containsi: $slug}} }
+					locale: $locale
+				) {
+					data {
+						id
+						attributes {
+							title
+							content
+							description
+							published
+							locale
+							slug
+							categories {
+								data {
+									id
+									attributes {
+										name
+										slug
+									}
+								}
+							}
+							authors {
+								data {
+									attributes {
+										name
+										slug
+										picture {
+											data {
+												attributes {
+													height
+													width
+													formats
+													alternativeText
+													url
+												}
+											}
+										}
+									}
+								}
+							}
+							image {
+								data {
+									attributes {
+										height
+										width
+										formats
+										alternativeText
+										url
+									}
+								}
+							}
+						}
+					}
+					meta {
+						pagination {
+							page
+							pageSize
+							pageCount
+							total
+						}
+					}
+				}
+				authors(
+					filters: {slug: {eq: $slug}}
+				) {
+					data {
+						attributes {
+							name
+							slug
+							picture {
+								data {
+									attributes {
+										height
+										width
+										formats
+										alternativeText
+										url
+									}
+								}
+							}
 						}
 					}
 				}
@@ -435,16 +452,17 @@ export async function getAuthorsByName({ slug }) {
 			`,
 			variables: {
 				slug,
+				locale,
 			},
 		}),
 	})
 
-	const authorsData = await authorsRes.json()
+	const { data } = await authorsRes.json()
 	// Make sure we found something, otherwise return null
-	if (authorsData.data.authors === null) {
+	if (data.posts === null) {
 		return null
 	}
 
 	// Return the first item since there should only be one result per slug
-	return authorsData.data.authors.data[0]
+	return { data }
 }

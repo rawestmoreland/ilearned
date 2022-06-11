@@ -1,14 +1,30 @@
-import { fetchAPI, getAuthorsByName } from '../../utils/api'
+import { useState } from 'react'
+
+import InfininiteScroll from 'react-infinite-scroll-component'
+
+import { fetchAPI, getPostsByAuthor } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Author = ({ author }) => {
-	const seo = {
-		metaTitle: author.attributes.name,
-		metaDescription: `All ${author.attributes.name} posts`,
-	}
+const Author = ({ posts, author, meta, locale }) => {
+	const { name, slug } = author.attributes
+	const [postsMeta, setPostsMeta] = useState(meta)
+	const [postsData, setPostsData] = useState(posts)
+	// const seo = {
+	// 	metaTitle: author.attributes.name,
+	// 	metaDescription: `All ${author.attributes.name} posts`,
+	// }
 
-	const { name, posts } = author.attributes
+	async function getMorePosts() {
+		const postsRes = await getPostsByAuthor({
+			slug,
+			locale,
+			page: postsMeta.page + 1,
+		})
+
+		setPostsData([...postsData, ...postsRes.data.posts.data])
+		setPostsMeta(postsRes.data.posts.meta.pagination)
+	}
 
 	return (
 		<Layout>
@@ -23,7 +39,14 @@ const Author = ({ author }) => {
 							{name.toUpperCase()}
 						</h1>
 					</div>
-					<PostGrid posts={posts.data} marginTop={8} />
+					<InfininiteScroll
+						dataLength={postsData.length}
+						next={getMorePosts}
+						loader={<h4>Loading...</h4>}
+						hasMore={postsMeta.pageCount > postsMeta.page}
+					>
+						<PostGrid posts={postsData} marginTop={8} />
+					</InfininiteScroll>
 				</div>
 			</div>
 		</Layout>
@@ -67,18 +90,17 @@ export async function getStaticPaths(context) {
 
 export async function getStaticProps(context) {
 	const { params, locale } = context
-	const matchingAuthors = await getAuthorsByName({ slug: params.slug })
-
-	// Filter out the posts that don't match our current locale
-	// TODO: This could probably be more efficient
-	matchingAuthors.attributes.posts.data =
-		matchingAuthors.attributes.posts.data.filter(
-			(post) => post.attributes.locale === locale
-		)
+	const matchingPosts = await getPostsByAuthor({
+		slug: params.slug,
+		locale,
+		page: 1,
+	})
 
 	return {
 		props: {
-			author: matchingAuthors,
+			posts: matchingPosts.data.posts.data,
+			author: matchingPosts.data.authors.data[0],
+			meta: matchingPosts.data.posts.meta.pagination,
 			locale,
 		},
 	}
