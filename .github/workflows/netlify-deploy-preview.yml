@@ -11,7 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm --version && node --version
-      - run: cd frontend && yarn
+      - run: npm install
+      - run: cd frontend && npm install
       - run: cd ../
-      - run: yarn add -D netlify-cli
+      - run: npm i -D netlify-cli
       - run: npx netlify-cli status
