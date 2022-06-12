@@ -8,22 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - uses: actions/checkout@v2
-
-      # ( Build to ./dist or other directory... )
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2
-        with:
-          publish-dir: ./frontend/.next
-          netlify-config-path: ./netlify.toml
-          production-branch: production
-          deploy-message: "Deploy from GitHub Actions"
-          enable-pull-request-comment: false
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 1
+      - run: npm --version && node --version
+      - run: yarn
+      - run: yarn build
+      - run: yarn add -D netlify-cli
+      - run: npx netlify-cli status
