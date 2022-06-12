@@ -8,13 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - uses: actions/checkout@v2
       - run: npm --version && node --version
-      - run: yarn
+      - run: cd frontend && yarn
       - run: yarn build
+      - run: cd -
       - run: yarn add -D netlify-cli
       - run: npx netlify-cli status
