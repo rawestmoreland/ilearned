@@ -3,6 +3,7 @@ name: 'Netlify Preview Deploy'
 on:
   pull_request:
     types: ['opened', 'edited', 'synchronized']
+  workflow_dispatch:
 
 jobs:
   deploy:
