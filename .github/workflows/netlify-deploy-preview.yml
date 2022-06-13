@@ -14,5 +14,5 @@ jobs:
       - run: cd frontend && npm install
       - run: cd ../
       - run: npm i -D netlify-cli
-      - run: sed "s/https://ilearned-pr-.*/https://ilearned-pr-${{github.event.number}}.herokuapp.com/g"
+      - run: sed "s/https://ilearned-pr-.*/https://ilearned-pr-$(echo ${{github.event.pull_request_number}}).herokuapp.com/g"
       - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --context deploy-preview
