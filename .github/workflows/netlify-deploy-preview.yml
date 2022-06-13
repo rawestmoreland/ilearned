@@ -16,12 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       # Find the PR associated with this push, if there is one.
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      - run: echo "PR Number = ${{steps.findPr.outputs.pr}}"
+      - name: Get Pull Request Number
+        id: pr
+        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      - run: echo "PR Number = ${{steps.pr.outputs.pull_request_number}}"
 #       - run: npm --version && node --version
 #       - run: cd frontend && npm install
 #       - run: cd ../
