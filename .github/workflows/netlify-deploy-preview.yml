@@ -1,13 +1,18 @@
 name: 'Netlify Preview Deploy'
 
 on:
-  pull_request:
-    types: ['opened', 'edited', 'synchronized']
+  workflow_run:
+    workflows: ["Check deployment status"]
+    types:
+      - completed
+  # pull_request:
+  #   types: ['opened', 'edited', 'synchronized']
   workflow_dispatch:
 
 jobs:
-  build:
+  on-heroku-deploy-sucess:
     runs-on: ubuntu-18.04
+    if: ${{github.event.workflow_run.conclusion == 'success'}}
     steps:
       - uses: actions/checkout@v2
       # Find the PR associated with this push, if there is one.
@@ -27,3 +32,8 @@ jobs:
         env:
           PR: ${{ steps.findPr.outputs.pr }}
       - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --context deploy-preview
+  on-heroku-deploy-failure:
+    runs-on: ubuntu-latest
+    if: ${{github.event.workflow_run.conclusion == 'failure'}}
+    steps:
+      - run: echo 'The triggering workflow failed'
