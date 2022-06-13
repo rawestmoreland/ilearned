@@ -5,9 +5,9 @@ on:
   #   workflows: ["Check deployment status"]
   #   types:
   #     - completed
-  pull_request:
-    types: ['opened', 'edited', 'synchronized']
-  workflow_dispatch:
+    pull_request:
+      types: ['opened', 'edited', 'synchronized']
+    workflow_dispatch:
 
 jobs:
   on-heroku-deploy-sucess:
