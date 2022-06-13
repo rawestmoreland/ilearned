@@ -15,4 +15,4 @@ jobs:
       - run: cd frontend && npm install
       - run: cd ../
       - run: npm i -D netlify-cli
-      - run: npx netlify-cli status
+      - run: netlify build
