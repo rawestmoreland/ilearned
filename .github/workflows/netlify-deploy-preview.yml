@@ -14,4 +14,4 @@ jobs:
       - run: cd frontend && npm install
       - run: cd ../
       - run: npm i -D netlify-cli
-      - run: netlify build
+      - run: netlify deploy --build --auth ${{NETLIFY_AUTH_TOKEN}} --site ${{NETLIFY_SITE_ID}} --context deploy-preview
