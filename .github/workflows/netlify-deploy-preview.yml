@@ -11,14 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm --version && node --version
-      - run: |
-          if [ -e yarn.lock ]; then
-          yarn install --frozen-lockfile
-          elif [ -e package-lock.json ]; then
-          npm ci
-          else
-          npm i
-          fi
       - run: cd frontend && npm install
       - run: cd ../
       - run: npm i -D netlify-cli
