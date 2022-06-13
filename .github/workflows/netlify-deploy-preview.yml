@@ -28,7 +28,9 @@ jobs:
       - run: sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${PR}).herokuapp.com\"~g" netlify.toml
         env:
           PR: ${{ steps.findPr.outputs.pr }}
-      - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --context deploy-preview
+      - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${PR})  --context deploy-preview
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
   on-heroku-deploy-failure:
     runs-on: ubuntu-latest
     if: ${{github.event.workflow_run.conclusion == 'failure'}}
