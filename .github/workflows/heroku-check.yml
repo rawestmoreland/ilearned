@@ -1,22 +1,22 @@
-name: Check deployment status
+# name: Check deployment status
 
-on: deployment_status
+# on: deployment_status
 
-jobs:
-  deployment-status:
-    runs-on: ubuntu-latest
+# jobs:
+#   deployment-status:
+#     runs-on: ubuntu-latest
 
-    if: github.event.deployment_status.state != 'pending'
+#     if: github.event.deployment_status.state != 'pending'
 
-    steps:
-    - uses: octokit/request-action@v2.0.23
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        route: POST /repos/:repository/statuses/${{ github.event.deployment.sha }}
-        repository: ${{ github.repository }}
-        state: ${{ github.event.deployment_status.state }}
-        target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        description: >
-                    ${{ format('Heroku deployment is {0}', github.event.deployment_status.state) }}
-        context: deployment-status
+#     steps:
+#     - uses: octokit/request-action@v2.0.23
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         route: POST /repos/:repository/statuses/${{ github.event.deployment.sha }}
+#         repository: ${{ github.repository }}
+#         state: ${{ github.event.deployment_status.state }}
+#         target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+#         description: >
+#                     ${{ format('Heroku deployment is {0}', github.event.deployment_status.state) }}
+#         context: deployment-status

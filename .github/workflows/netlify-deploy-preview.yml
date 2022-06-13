@@ -1,16 +1,13 @@
 name: 'Netlify Preview Deploy'
 
 on:
-  workflow_run:
-    workflows: ["Check deployment status"]
-    types:
-      - completed
-  # pull_request:
-  #   types: ['opened', 'edited', 'synchronized']
+  # workflow_run:
+  #   workflows: ["Check deployment status"]
+  #   types:
+  #     - completed
+  pull_request:
+    types: ['opened', 'edited', 'synchronized']
   workflow_dispatch:
-  
-env:
-  PR_NUMBER: ${{github.event.pull_request.number}}
 
 jobs:
   on-heroku-deploy-sucess:
