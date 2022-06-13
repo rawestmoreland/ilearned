@@ -20,7 +20,7 @@ jobs:
         id: pr
         run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
         env:
-          GITHUB_TOKEN: ${{secrets.ILEARNED_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: echo "PR Number = ${{steps.pr.outputs.pull_request_number}}"
 #       - run: npm --version && node --version
 #       - run: cd frontend && npm install
