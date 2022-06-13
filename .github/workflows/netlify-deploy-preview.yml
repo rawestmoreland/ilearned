@@ -23,19 +23,14 @@ jobs:
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      - name: Get node and npm versions
-        run: npm --version && node --version
-      - name: Install the frontend deps
-        run: cd frontend && npm install
+      - run: npm --version && node --version
+      - run: cd frontend && npm install
       - run: cd ../
-      - name: Install Netlify cli
-        run: npm i -D netlify-cli
-      - name: Replace deploy URL with correct PR number
-        run: sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${PR}).herokuapp.com\"~g" netlify.toml
+      - run: npm i -D netlify-cli
+      - run: sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${PR}).herokuapp.com\"~g" netlify.toml
         env:
           PR: ${{ steps.findPr.outputs.pr }}
-      - name: Deploy to Netlify
-        run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --context deploy-preview
+      - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --context deploy-preview
   on-heroku-deploy-failure:
     runs-on: ubuntu-latest
     if: ${{github.event.workflow_run.conclusion == 'failure'}}
