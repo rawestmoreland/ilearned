@@ -15,23 +15,26 @@ env:
 jobs:
   on-heroku-deploy-sucess:
     runs-on: ubuntu-18.04
-    if: ${{github.event.workflow_run.conclusion == 'success'}}
+    # if: ${{github.event.workflow_run.conclusion == 'success'}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       # Find the PR associated with this push, if there is one.
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      - run: echo "PR Number = ${{env.PR_NUMBER}}"
-      - run: npm --version && node --version
-      - run: cd frontend && npm install
-      - run: cd ../
-      - run: npm i -D netlify-cli
-      - run: sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${{ steps.findPr.outputs.pr }}).herokuapp.com\"~g" netlify.toml
-      - run: cat netlify.toml
-      - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ steps.findPr.outputs.pr }}) --context deploy-preview
+      - run: echo "PR Number = ${PR}"
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR: ${{steps.findPR.outputs.pr}}
+      # - run: npm --version && node --version
+      # - run: cd frontend && npm install
+      # - run: cd ../
+      # - run: npm i -D netlify-cli
+      # - run: sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${{ steps.findPr.outputs.pr }}).herokuapp.com\"~g" netlify.toml
+      # - run: cat netlify.toml
+      # - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ steps.findPr.outputs.pr }}) --context deploy-preview
   on-heroku-deploy-failure:
     runs-on: ubuntu-latest
     if: ${{github.event.workflow_run.conclusion == 'failure'}}
