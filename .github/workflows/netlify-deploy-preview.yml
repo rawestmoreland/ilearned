@@ -8,6 +8,9 @@ on:
   # pull_request:
   #   types: ['opened', 'edited', 'synchronized']
   workflow_dispatch:
+  
+env:
+  PR_NUMBER: ${{github.event.pull_request.number}}
 
 jobs:
   on-heroku-deploy-sucess:
@@ -21,6 +24,7 @@ jobs:
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
+      - run: echo "PR Number = ${{env.PR_NUMBER}}"
       - run: npm --version && node --version
       - run: cd frontend && npm install
       - run: cd ../
