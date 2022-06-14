@@ -14,7 +14,7 @@
 [context.deploy-preview]
 	command = "yarn run noIndex"
 [context.deploy-preview.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-43.herokuapp.com"
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-45.herokuapp.com"
 
 [context.master]
 	command = "yarn run noIndex"
