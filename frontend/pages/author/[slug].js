@@ -90,6 +90,7 @@ export async function getStaticPaths(context) {
 
 export async function getStaticProps(context) {
 	const { params, locale } = context
+	console.log(params)
 	const matchingPosts = await getPostsByAuthor({
 		slug: params.slug,
 		locale,
