@@ -17,6 +17,7 @@ jobs:
             - name: Download workflow artifact (PR Number)
               uses: dawidd6/action-download-artifact@v2.11.0
               with:
+                  name: pull_request_number
                   workflow: get-pr-number.yml
                   run_id: ${{ github.event.workflow_run.id }}
                   search_artifacts: true
