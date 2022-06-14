@@ -10,16 +10,16 @@ on:
 jobs:
     on-heroku-deploy-sucess:
         runs-on: ubuntu-18.04
-        if: ${{github.event.workflow_run.conclusion == 'success'}}
+        # if: ${{github.event.workflow_run.conclusion == 'success'}}
         steps:
             - uses: actions/checkout@v1
             # Find the PR associated with this push, if there is one.
             - name: Download workflow artifact (PR Number)
               uses: dawidd6/action-download-artifact@v2.11.0
               with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
                   workflow: get-pr-number.yml
                   run_id: ${{ github.event.workflow_run.id }}
+                  search_artifacts: true
 
             - name: Read the PR number from file
               id: pr
