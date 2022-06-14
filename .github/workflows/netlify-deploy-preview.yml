@@ -36,6 +36,14 @@ jobs:
             - run: sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${{ steps.pr.outputs.content }}).herokuapp.com\"~g" netlify.toml
             - run: cat netlify.toml
             - run: netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ steps.pr.outputs.content }}) --context deploy-preview
+            - name: Comment on PR
+              uses: mshick/add-pr-comment
+              with:
+                  message: |
+                      Netlify deploy preview #${{steps.pr.outputs.content}} was deployed
+                  repo-token: ${{secrets.GITHUB_TOKEN}}
+                  repo-token-user-login: 'github-ations[bot]'
+                  allow-repeats: false
     on-heroku-deploy-failure:
         runs-on: ubuntu-latest
         if: ${{github.event.workflow_run.conclusion == 'failure'}}
