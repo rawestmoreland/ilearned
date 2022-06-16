@@ -21,7 +21,6 @@ jobs:
                   path: ./pull_request_number
                   workflow: get-pr-number.yml
                   run_id: ${{ github.event.workflow_run.id }}
-                  search_artifacts: true
 
             - name: Read the PR number from file
               id: pr
