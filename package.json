@@ -4,7 +4,8 @@
 	"scripts": {
 		"develop": "lerna run dev --parallel",
 		"dev": "lerna run dev --parallel",
-		"dev-backend": "cd backend/app && npm run dev",
+		"cy:open-only": "cd frontend && yarn run cypress open",
+		"dev-backend": "cd backend/app && yarn dev",
 		"postinstall": "lerna bootstrap"
 	},
 	"devDependencies": {

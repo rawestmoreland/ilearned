@@ -4,10 +4,10 @@ import PostContent from '../../components/PostContent'
 import { fetchAPI, getPostsBySlug } from '../../utils/api'
 import Custom404 from '../404'
 
-const Post = ({ post, error }) => {
+const Post = ({ post, error, ...pageProps }) => {
 	if (!error) {
 		return (
-			<Layout>
+			<Layout global={pageProps.global}>
 				<PostContent post={post} />
 			</Layout>
 		)

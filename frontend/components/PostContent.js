@@ -11,7 +11,7 @@ const PostContent = ({ post }) => {
 	return (
 		<div className='bg-off-white my-12 rounded-md p-8 md:p-16'>
 			<div className='mb-2'>
-				<CategoryRow categories={categories} />
+				<CategoryRow categories={categories} locale={locale} />
 			</div>
 			<h1 className='font-rubik text-4xl mb-8'>{title}</h1>
 			<AuthorRow

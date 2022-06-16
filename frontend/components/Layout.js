@@ -6,11 +6,8 @@ import Loading from './Loading'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
-import { GlobalContext } from '../pages/_app'
-
 const Layout = ({ children, ...props }) => {
-	const { global } = useContext(GlobalContext)
-	const { navbar, footer } = global
+	const { navbar, footer } = props.global.attributes
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
