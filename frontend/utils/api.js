@@ -50,6 +50,33 @@ export async function fetchAPI(
 	return { data, error: error || null, meta: meta || null }
 }
 
+export async function getAdminSettings() {
+	const gqlEndpoint = getStrapiURL('/graphql')
+	const adminRes = await fetch(gqlEndpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_API_TOKEN}`,
+		},
+		body: JSON.stringify({
+			query: `
+			query GetAdminSettings {
+				adminSetting {
+					data {
+						attributes {
+							live
+						}
+					}
+				}
+			}
+			`,
+		}),
+	})
+	const { data } = await adminRes.json()
+
+	return { data }
+}
+
 // Get site data from Strapi (metadata, navbar, footer...)
 export async function getGlobalData({ locale }) {
 	const gqlEndpoint = getStrapiURL('/graphql')
@@ -131,9 +158,13 @@ export async function getGlobalData({ locale }) {
 		}),
 	})
 
-	const global = await globalRes.json()
+	const { data } = await globalRes.json()
 
-	return global.data?.global
+	if (!data) {
+		return null
+	}
+
+	return { data }
 }
 
 export async function getPosts({ locale, page = 1 }) {
@@ -160,6 +191,7 @@ export async function getPosts({ locale, page = 1 }) {
 							description
 							published
 							locale
+							slug
 							categories {
 								data {
 									id
@@ -249,7 +281,6 @@ export async function getPostsBySlug({ slug, locale }) {
         ) {        
           posts(
             filters: { slug: { eq: $slug } }
-						pagination: {page: ${page}, pageSize: 10}
             locale: $locale
           ) {
 						data {

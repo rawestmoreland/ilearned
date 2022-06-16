@@ -10,6 +10,7 @@ import PostGrid from '../../components/PostGrid'
 const Author = ({ posts, author, meta, locale, ...pageProps }) => {
 	const { ref, inView } = useInView()
 	const { name, slug } = author?.attributes
+	const { live } = pageProps.adminSettings.attributes
 	// const seo = {
 	// 	metaTitle: category.attributes.name,
 	// 	metaDescription: `All ${category.attributes.name} posts`,
@@ -47,7 +48,7 @@ const Author = ({ posts, author, meta, locale, ...pageProps }) => {
 	}, [inView])
 
 	return (
-		<Layout global={pageProps.global}>
+		<Layout global={pageProps.global} live={live}>
 			{/* <Seo seo={seo} /> */}
 			<div>
 				<div>

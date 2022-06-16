@@ -5,9 +5,10 @@ import { fetchAPI, getPostsBySlug } from '../../utils/api'
 import Custom404 from '../404'
 
 const Post = ({ post, error, ...pageProps }) => {
+	const { live } = pageProps.adminSettings.attributes
 	if (!error) {
 		return (
-			<Layout global={pageProps.global}>
+			<Layout global={pageProps.global} live={live}>
 				<PostContent post={post} />
 			</Layout>
 		)

@@ -9,9 +9,9 @@ import PostGrid from '../components/PostGrid'
 
 import { fetchAPI, getPosts } from '../utils/api'
 
-export default function Home({ posts, adminSettings, locale, ...pageProps }) {
+export default function Home({ posts, locale, ...pageProps }) {
 	const { ref, inView } = useInView()
-	const { live } = adminSettings.data.attributes
+	const { live } = pageProps.adminSettings.attributes
 
 	const { data, fetchNextPage, isLoading } = useInfiniteQuery(
 		['posts', locale],
@@ -45,11 +45,11 @@ export default function Home({ posts, adminSettings, locale, ...pageProps }) {
 	}, [inView])
 
 	return (
-		<Layout global={pageProps.global}>
+		<Layout global={pageProps.global} live={live}>
 			{live ? (
 				data && (
 					<>
-						<PostGrid pages={data.pages} />
+						<PostGrid pages={data.pages} marginTop={16} />
 						<div ref={ref}></div>
 					</>
 				)
@@ -66,15 +66,13 @@ export default function Home({ posts, adminSettings, locale, ...pageProps }) {
 
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
-	const [postsRes, adminSettingsRes] = await Promise.all([
+	const [postsRes] = await Promise.all([
 		getPosts({ locale: ctx.locale, page: 1 }),
-		fetchAPI('/admin-setting', true),
 	])
 
 	return {
 		props: {
 			posts: postsRes.data.posts,
-			adminSettings: adminSettingsRes,
 			locale: ctx.locale,
 		},
 	}

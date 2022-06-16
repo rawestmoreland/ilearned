@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 import React, { createContext } from 'react'
 
-import { getGlobalData } from '../utils/api'
+import { getAdminSettings, getGlobalData } from '../utils/api'
 import { getStrapiMedia } from '../utils/media'
 
 import '../styles/globals.css'
@@ -39,10 +39,20 @@ function MyApp({ Component, pageProps }) {
 
 MyApp.getInitialProps = async (ctx) => {
 	const appProps = await App.getInitialProps(ctx)
-	const globalLocale = await getGlobalData({ locale: ctx.router.locale })
+	const [globalLocale, adminSettings] = await Promise.all([
+		getGlobalData({
+			locale: ctx.router.locale,
+		}),
+		getAdminSettings(),
+		Promise.resolve(),
+	])
 	return {
 		...appProps,
-		pageProps: { global: globalLocale?.data, locale: ctx.router.locale },
+		pageProps: {
+			global: globalLocale?.data.global.data,
+			adminSettings: adminSettings?.data.adminSetting.data,
+			locale: ctx.router.locale,
+		},
 	}
 }
 

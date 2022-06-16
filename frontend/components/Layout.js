@@ -25,15 +25,21 @@ const Layout = ({ children, ...props }) => {
 	}, [router])
 
 	return (
-		<div className='grid min-h-screen'>
-			<div>
+		<div>
+			<div className='realtive min-h-screen'>
 				<Navbar navbar={navbar} />
 				<Loading loading={loading} />
 				<div className={`${loading ? 'hidden' : 'container pt-16'}`}>
 					{children}
 				</div>
 			</div>
-			<Footer footer={footer} />
+			<div
+				className={`${
+					props.live ? 'relative' : 'fixed'
+				} bottom-0 w-full`}
+			>
+				<Footer footer={footer} />
+			</div>
 		</div>
 	)
 }
