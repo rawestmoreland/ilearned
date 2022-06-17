@@ -1,0 +1,34 @@
+name: Deploy Heroku and Netlify Preview Apps
+
+on:
+    pull_request:
+        types: [opened, edited, closed, synchronize]
+        branches:
+            - 'master'
+    workflow_dispatch:
+
+jobs:
+    automate-review-app:
+        runs-on: ubuntu-latest
+        name: Create / Delete a Review App
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Deploy Heroku App
+              uses: pmbanugo/heroku-review-app-actions@v2.0.0 # Uses the action
+              id: deploy
+              with:
+                  api-key: ${{ secrets.HEROKU_API_KEY }}
+                  pipeline-id: ${{ secrets.HEROKU_PIPELINE_ID }}
+                  base-name: ilearned
+            - name: Get the review app url # Use the output from the `deploy` step
+              run: echo "The URL is ${{ steps.deploy.outputs.url }}"
+            - name: Comment on commit # Optional: You can use any action to comment on the PR
+              uses: phulsechinmay/rewritable-pr-comment@v0.2.1
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  COMMENT_IDENTIFIER: 'Deploy'
+                  message: |
+                      I deployed a review app for you to try out this pull request 👇🏽
+
+                      Heroku App: ${{ steps.deploy.outputs.url }}
