@@ -14,7 +14,6 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
-            - run: echo "${{github.event.action}}"
             - name: Deploy Heroku App
               uses: pmbanugo/heroku-review-app-actions@v2.0.0 # Uses the action
               id: deploy
@@ -34,6 +33,7 @@ jobs:
 
                       Heroku App: ${{ steps.deploy.outputs.url }}
             - name: Deploy to netlify
+              if: ${{github.event.action}} != 'closed'
               run: |
                   npm --version && node --version
 
