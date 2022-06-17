@@ -46,4 +46,4 @@ jobs:
 
                   cat netlify.toml
 
-                  netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ steps.pr.outputs.content }}) --context deploy-preview
+                  netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ github.event.number }}) --context deploy-preview
