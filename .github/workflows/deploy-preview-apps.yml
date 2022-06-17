@@ -47,12 +47,12 @@ jobs:
                   cat netlify.toml
 
                   netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ github.event.number }}) --context deploy-preview
-              - name: Create comment
-                uses: peter-evans/create-or-update-comment@v2
-                with:
+            - name: Create comment
+              uses: peter-evans/create-or-update-comment@v2
+              with:
                   issue-number: ${{github.event.number}}
                   body: |
-                    :sparkles: Netlify Deploy Preview Successfully Created :sparkles:
-                    Visit your deploy [on netlify][1]
+                      :sparkles: Netlify Deploy Preview Successfully Created :sparkles:
+                      Visit your deploy [on netlify][1]
 
-                    [1]: https://deploy-preview-${{github.event.number}}.netlify.app 
+                      [1]: https://deploy-preview-${{github.event.number}}--ilearnedathing.netlify.app
