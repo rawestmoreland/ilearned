@@ -49,9 +49,6 @@ export default function Home({ posts, locale, ...pageProps }) {
 			{live ? (
 				data && (
 					<>
-						<div className='text-terracotta font-rubik text-3xl'>
-							All of Our Posts
-						</div>
 						<PostGrid pages={data.pages} marginTop={16} />
 						<div ref={ref}></div>
 					</>
