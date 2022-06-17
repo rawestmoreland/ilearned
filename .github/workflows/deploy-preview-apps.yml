@@ -34,7 +34,7 @@ jobs:
                       Heroku App: ${{ steps.deploy.outputs.url }}
             - name: Deploy to netlify
               run: |
-                  npm --version && node --verion
+                  npm --version && node --version
 
                   cd frontend && npm install
 
