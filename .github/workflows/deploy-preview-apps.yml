@@ -21,6 +21,7 @@ jobs:
                   api-key: ${{ secrets.HEROKU_API_KEY }}
                   pipeline-id: ${{ secrets.HEROKU_PIPELINE_ID }}
                   base-name: ilearned
+                  file_glob: './backend/app'
             - name: Get the review app url
               run: echo "The URL is ${{ steps.deploy.outputs.url }}"
             - name: Comment on commit
