@@ -21,7 +21,6 @@ jobs:
                   api-key: ${{ secrets.HEROKU_API_KEY }}
                   pipeline-id: ${{ secrets.HEROKU_PIPELINE_ID }}
                   base-name: ilearned
-                  files-glob: './backend/app'
             - name: Get the review app url
               run: echo "The URL is ${{ steps.deploy.outputs.url }}"
             - name: Comment on commit
@@ -34,7 +33,7 @@ jobs:
 
                       Heroku App: ${{ steps.deploy.outputs.url }}
             - name: Deploy to netlify
-              if: ${{github.event.action}} != 'closed'
+              if: github.event.action != 'closed'
               run: |
                   npm --version && node --version
 
