@@ -32,3 +32,18 @@ jobs:
                       I deployed a review app for you to try out this pull request 👇🏽
 
                       Heroku App: ${{ steps.deploy.outputs.url }}
+            - name: Deploy to netlify
+              run: |
+                  npm --version && node --verion
+
+                  cd frontend && npm install
+
+                  cd ../
+
+                  npm i -D netlify-cli
+
+                  sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${{github.event.number}}).herokuapp.com\"~g" netlify.toml
+
+                  cat netlify.toml
+
+                  netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ steps.pr.outputs.content }}) --context deploy-preview
