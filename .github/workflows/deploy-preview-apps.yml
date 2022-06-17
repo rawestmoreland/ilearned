@@ -33,7 +33,7 @@ jobs:
 
                       Heroku App: ${{ steps.deploy.outputs.url }}
             - name: Deploy to netlify
-              if: github.event.action != 'closed'
+              if: github.event.action != 'closed' && github.event.pull_request.merged == false
               run: |
                   npm --version && node --version
 
