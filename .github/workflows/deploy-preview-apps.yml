@@ -15,7 +15,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Deploy Heroku App
-              uses: rawestmoreland/heroku-review-app-actions@v2.0.2-dev
+              uses: rawestmoreland/heroku-review-app-actions@v2.0.2-dev-1
               id: deploy
               with:
                   api-key: ${{ secrets.HEROKU_API_KEY }}
