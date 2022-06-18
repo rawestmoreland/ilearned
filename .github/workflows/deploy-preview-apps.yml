@@ -50,6 +50,7 @@ jobs:
                   netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ github.event.number }}) --context deploy-preview
             - name: Create comment
               uses: peter-evans/create-or-update-comment@v2
+              if: github.event.action != 'closed' && github.event.pull_request.merged == false
               with:
                   issue-number: ${{github.event.number}}
                   body: |
