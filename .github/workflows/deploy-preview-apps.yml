@@ -24,6 +24,7 @@ jobs:
             - name: Get the review app url
               run: echo "The URL is ${{ steps.deploy.outputs.url }}"
             - name: Comment on commit
+              if: github.event.action != 'closed' && github.event.pull_request.merged == false
               uses: phulsechinmay/rewritable-pr-comment@v0.2.1
               with:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
