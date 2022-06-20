@@ -7,7 +7,9 @@ export function getStrapiURL(path) {
 }
 
 export function getApiToken() {
-	return process.env.NEXT_PUBLIC_ADMIN_API_TOKEN
+	return process.env.NODE_ENV === 'development'
+		? process.env.NEXT_PUBLIC_DEV_API_TOKEN
+		: process.env.NEXT_PUBLIC_ADMIN_API_TOKEN
 }
 
 // Helper to make GET requests to Strapi
@@ -56,7 +58,7 @@ export async function getAdminSettings() {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_API_TOKEN}`,
+			Authorization: `Bearer ${getApiToken()}`,
 		},
 		body: JSON.stringify({
 			query: `
@@ -192,6 +194,14 @@ export async function getPosts({ locale, page = 1 }) {
 							published
 							locale
 							slug
+							localizations {
+								data {
+									id
+									attributes {
+										locale
+									}
+								}
+							}
 							categories {
 								data {
 									id
@@ -615,7 +625,7 @@ export async function getAllThings(locale) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_API_TOKEN}`,
+			Authorization: `Bearer ${getApiToken()}`,
 		},
 		body: JSON.stringify({
 			query: `

@@ -7,10 +7,12 @@ import { useInView } from 'react-intersection-observer'
 import Layout from '../components/Layout'
 import PostGrid from '../components/PostGrid'
 
-import { fetchAPI, getPosts } from '../utils/api'
+import { getPosts } from '../utils/api'
+import { getLocalizedPaths } from '../utils/localize'
 
-export default function Home({ posts, locale, ...pageProps }) {
+export default function Home({ posts, pageContext, ...pageProps }) {
 	const { ref, inView } = useInView()
+	const { locale } = pageContext
 	const { live } = pageProps.adminSettings.attributes
 
 	const { data, fetchNextPage, isLoading } = useInfiniteQuery(
@@ -45,7 +47,7 @@ export default function Home({ posts, locale, ...pageProps }) {
 	}, [inView])
 
 	return (
-		<Layout global={pageProps.global} live={live}>
+		<Layout global={pageProps.global} pageContext={pageContext} live={live}>
 			{live ? (
 				data && (
 					<>
@@ -65,15 +67,28 @@ export default function Home({ posts, locale, ...pageProps }) {
 }
 
 export async function getServerSideProps(ctx) {
+	const { locale, locales, defaultLocale } = ctx
 	// Run API calls in parallel
 	const [postsRes] = await Promise.all([
 		getPosts({ locale: ctx.locale, page: 1 }),
 	])
 
+	const pageContext = {
+		locale,
+		locales,
+		defaultLocale,
+		slug: '',
+	}
+
+	const localizedPaths = getLocalizedPaths(pageContext)
+
 	return {
 		props: {
 			posts: postsRes.data.posts,
-			locale: ctx.locale,
+			pageContext: {
+				...pageContext,
+				localizedPaths,
+			},
 		},
 	}
 }

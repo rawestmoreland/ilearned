@@ -27,7 +27,7 @@ const Layout = ({ children, ...props }) => {
 	return (
 		<div>
 			<div className='realtive min-h-screen'>
-				<Navbar navbar={navbar} />
+				<Navbar navbar={navbar} pageContext={props.pageContext} />
 				<Loading loading={loading} />
 				<div className={`${loading ? 'hidden' : 'container pt-16'}`}>
 					{children}
