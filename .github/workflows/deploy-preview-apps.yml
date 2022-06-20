@@ -15,7 +15,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Deploy Heroku App
-              uses: pmbanugo/heroku-review-app-actions@v2.0.1
+              uses: rawestmoreland/heroku-review-app-actions@v2.0.2-dev-7
               id: deploy
               with:
                   api-key: ${{ secrets.HEROKU_API_KEY }}
@@ -24,6 +24,7 @@ jobs:
             - name: Get the review app url
               run: echo "The URL is ${{ steps.deploy.outputs.url }}"
             - name: Comment on commit
+              if: github.event.action != 'closed' && github.event.pull_request.merged == false
               uses: phulsechinmay/rewritable-pr-comment@v0.2.1
               with:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +34,7 @@ jobs:
 
                       Heroku App: ${{ steps.deploy.outputs.url }}
             - name: Deploy to netlify
-              if: ${{github.event.action}} != 'closed'
+              if: github.event.action != 'closed' && github.event.pull_request.merged == false
               run: |
                   npm --version && node --version
 
@@ -50,6 +51,7 @@ jobs:
                   netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias deploy-preview-$(echo ${{ github.event.number }}) --context deploy-preview
             - name: Create comment
               uses: peter-evans/create-or-update-comment@v2
+              if: github.event.action != 'closed' && github.event.pull_request.merged == false
               with:
                   issue-number: ${{github.event.number}}
                   body: |
