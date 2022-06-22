@@ -1,15 +1,15 @@
 import PostCard from './PostCard'
 
-const PostGrid = ({ pages, marginTop = 12 }) => {
+const PostGrid = ({ posts, marginTop = 16 }) => {
 	return (
 		<div className={`grid grid-cols-post-grid gap-8 pb-12 mt-${marginTop}`}>
-			{pages?.map((page) =>
-				page.data.posts.data.map((post) => (
+			{posts.map((post) => {
+				return (
 					<div key={post.id} className='col-span-1'>
 						<PostCard post={post} />
 					</div>
-				))
-			)}
+				)
+			})}
 		</div>
 	)
 }

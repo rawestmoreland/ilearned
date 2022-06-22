@@ -1,54 +1,33 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 
-import { useInfiniteQuery } from 'react-query'
-import { useInView } from 'react-intersection-observer'
+import InfininiteScroll from 'react-infinite-scroll-component'
 
 import { fetchAPI, getPostsByAuthor } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Author = ({ posts, author, meta, locale, ...pageProps }) => {
-	const { ref, inView } = useInView()
-	const { name, slug } = author?.attributes
-	const { live } = pageProps.adminSettings.attributes
+const Author = ({ posts, author, meta, locale }) => {
+	const { name, slug } = author.attributes
+	const [postsMeta, setPostsMeta] = useState(meta)
+	const [postsData, setPostsData] = useState(posts)
 	// const seo = {
-	// 	metaTitle: category.attributes.name,
-	// 	metaDescription: `All ${category.attributes.name} posts`,
+	// 	metaTitle: author.attributes.name,
+	// 	metaDescription: `All ${author.attributes.name} posts`,
 	// }
 
-	const { data, isLoading, fetchNextPage } = useInfiniteQuery(
-		['posts', slug],
-		({ pageParam = 1 }) =>
-			getPostsByAuthor({ slug, locale, page: pageParam }),
-		{
-			initialData: () => {
-				return {
-					pages: [
-						{
-							data: {
-								posts: { data: posts.data, meta: posts.meta },
-							},
-						},
-					],
-				}
-			},
-			getNextPageParam: (lastPage) => {
-				return lastPage.data.posts.meta.pagination.page <
-					lastPage.data.posts.meta.pagination.pageCount
-					? lastPage.data.posts.meta.pagination.page + 1
-					: undefined
-			},
-		}
-	)
+	async function getMorePosts() {
+		const postsRes = await getPostsByAuthor({
+			slug,
+			locale,
+			page: postsMeta.page + 1,
+		})
 
-	useEffect(() => {
-		if (inView) {
-			fetchNextPage()
-		}
-	}, [inView])
+		setPostsData([...postsData, ...postsRes.data.posts.data])
+		setPostsMeta(postsRes.data.posts.meta.pagination)
+	}
 
 	return (
-		<Layout global={pageProps.global} live={live}>
+		<Layout>
 			{/* <Seo seo={seo} /> */}
 			<div>
 				<div>
@@ -60,12 +39,14 @@ const Author = ({ posts, author, meta, locale, ...pageProps }) => {
 							{name.toUpperCase()}
 						</h1>
 					</div>
-					data && (
-					<>
-						<PostGrid pages={data.pages} />
-						<div ref={ref}></div>
-					</>
-					)
+					<InfininiteScroll
+						dataLength={postsData.length}
+						next={getMorePosts}
+						loader={<h4>Loading...</h4>}
+						hasMore={postsMeta.pageCount > postsMeta.page}
+					>
+						<PostGrid posts={postsData} marginTop={8} />
+					</InfininiteScroll>
 				</div>
 			</div>
 		</Layout>
@@ -76,17 +57,17 @@ export async function getStaticPaths(context) {
 	const authors = await context.locales.reduce(
 		async (currentAuthorsPromise, locale) => {
 			const currentAuthors = await currentAuthorsPromise
-			const authorSlugs = await fetchAPI('/authors', false, {
+			const authorNames = await fetchAPI('/authors', false, {
 				fields: ['slug'],
 			})
 
 			/**
-			 * Categories aren't localized, but we want paths to
-			 * all categories for each locale route.
+			 * authors aren't localized, but we want paths to
+			 * all authors for each locale route.
 			 */
-			authorSlugs.data.forEach((slug) => (slug.locale = locale))
+			authorNames.data.forEach((name) => (name.locale = locale))
 
-			return [...currentAuthors, ...authorSlugs.data]
+			return [...currentAuthors, ...authorNames.data]
 		},
 		Promise.resolve([])
 	)
@@ -109,6 +90,7 @@ export async function getStaticPaths(context) {
 
 export async function getStaticProps(context) {
 	const { params, locale } = context
+	console.log(params)
 	const matchingPosts = await getPostsByAuthor({
 		slug: params.slug,
 		locale,
@@ -117,8 +99,8 @@ export async function getStaticProps(context) {
 
 	return {
 		props: {
-			posts: matchingPosts.data.posts,
-			author: matchingPosts.data.authors?.data[0] || null,
+			posts: matchingPosts.data.posts.data,
+			author: matchingPosts.data.authors.data[0],
 			meta: matchingPosts.data.posts.meta.pagination,
 			locale,
 		},

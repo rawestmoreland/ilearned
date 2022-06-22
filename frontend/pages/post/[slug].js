@@ -4,11 +4,10 @@ import PostContent from '../../components/PostContent'
 import { fetchAPI, getPostsBySlug } from '../../utils/api'
 import Custom404 from '../404'
 
-const Post = ({ post, error, ...pageProps }) => {
-	const { live } = pageProps.adminSettings.attributes
+const Post = ({ post, error }) => {
 	if (!error) {
 		return (
-			<Layout global={pageProps.global} live={live}>
+			<Layout>
 				<PostContent post={post} />
 			</Layout>
 		)

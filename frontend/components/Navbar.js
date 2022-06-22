@@ -7,10 +7,7 @@ const Navbar = ({ navbar }) => {
 		<nav className='fixed top-0 flex items-center justify-center w-screen h-16 px-2 md:px-6 bg-white border-b z-50'>
 			<div className='flex align-center w-full justify-between'>
 				<Link href='/'>
-					<a
-						data-cy='nav-logo'
-						className='flex justify-center cursor-pointer'
-					>
+					<a className='flex justify-center cursor-pointer'>
 						<NextImage
 							media={navbar.logo}
 							height='40'
