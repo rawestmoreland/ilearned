@@ -7,10 +7,10 @@ import PostGrid from '../components/PostGrid'
 
 import { fetchAPI } from '../utils/api'
 
-export default function Home({ posts, adminSettings, locale }) {
+export default function Home({ posts, locale, ...pageProps }) {
 	const [postsData, setPostsData] = useState(posts.data)
 	const [postsMeta, setPostsMeta] = useState(posts.meta.pagination)
-	const { live } = adminSettings.data.attributes
+	const { live } = pageProps.adminSettings.attributes
 
 	async function getMorePosts() {
 		const morePostsRes = await fetchAPI('/posts', false, {
@@ -34,11 +34,11 @@ export default function Home({ posts, adminSettings, locale }) {
 	}
 
 	return (
-		<Layout>
+		<Layout live={live}>
 			{live || process.env.NODE_ENV === 'development' ? (
 				<InfininiteScroll
 					dataLength={postsData.length}
-					next={getMorePosts}
+					next={() => getMorePosts()}
 					loader={<h4>Loading...</h4>}
 					hasMore={postsMeta.pageCount > postsMeta.page}
 				>
@@ -57,7 +57,7 @@ export default function Home({ posts, adminSettings, locale }) {
 
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
-	const [postsRes, adminSettingsRes] = await Promise.all([
+	const [postsRes] = await Promise.all([
 		fetchAPI('/posts', false, {
 			locale: ctx.locale,
 			sort: 'published:desc',
@@ -73,13 +73,11 @@ export async function getServerSideProps(ctx) {
 				meta: '*',
 			},
 		}),
-		fetchAPI('/admin-setting', true),
 	])
 
 	return {
 		props: {
 			posts: postsRes,
-			adminSettings: adminSettingsRes,
 			locale: ctx.locale,
 		},
 	}

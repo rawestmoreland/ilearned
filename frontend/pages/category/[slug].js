@@ -6,7 +6,8 @@ import { fetchAPI, getPostsByCategory } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Category = ({ posts, category, meta, locale }) => {
+const Category = ({ posts, category, meta, locale, ...pageProps }) => {
+	const { live } = pageProps.adminSettings.attributes
 	const { name, slug } = category?.attributes
 	const [postsMeta, setPostsMeta] = useState(meta)
 	const [postsData, setPostsData] = useState(posts)
@@ -27,7 +28,7 @@ const Category = ({ posts, category, meta, locale }) => {
 	}
 
 	return (
-		<Layout>
+		<Layout live={live}>
 			{/* <Seo seo={seo} /> */}
 			<div>
 				<div>
@@ -41,11 +42,11 @@ const Category = ({ posts, category, meta, locale }) => {
 					</div>
 					<InfininiteScroll
 						dataLength={postsData.length}
-						next={getMorePosts}
+						next={() => getMorePosts()}
 						loader={<h4>Loading...</h4>}
 						hasMore={postsMeta.pageCount > postsMeta.page}
 					>
-						<PostGrid posts={postsData} />
+						<PostGrid posts={postsData} marginTop={4} />
 					</InfininiteScroll>
 				</div>
 			</div>

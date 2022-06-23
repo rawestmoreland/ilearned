@@ -6,7 +6,8 @@ import { fetchAPI, getPostsByAuthor } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Author = ({ posts, author, meta, locale }) => {
+const Author = ({ posts, author, meta, locale, ...pageProps }) => {
+	const { live } = pageProps.adminSettings.attributes
 	const { name, slug } = author.attributes
 	const [postsMeta, setPostsMeta] = useState(meta)
 	const [postsData, setPostsData] = useState(posts)
@@ -27,7 +28,7 @@ const Author = ({ posts, author, meta, locale }) => {
 	}
 
 	return (
-		<Layout>
+		<Layout live={live}>
 			{/* <Seo seo={seo} /> */}
 			<div>
 				<div>
@@ -45,7 +46,7 @@ const Author = ({ posts, author, meta, locale }) => {
 						loader={<h4>Loading...</h4>}
 						hasMore={postsMeta.pageCount > postsMeta.page}
 					>
-						<PostGrid posts={postsData} marginTop={8} />
+						<PostGrid posts={postsData} marginTop={4} />
 					</InfininiteScroll>
 				</div>
 			</div>
