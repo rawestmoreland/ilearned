@@ -43,7 +43,7 @@ MyApp.getInitialProps = async (ctx) => {
 		}),
 		getAdminSettings(),
 	])
-	console.log(globalLocale)
+  console.log(adminSettings)
 	return {
 		...appProps,
 		pageProps: {
