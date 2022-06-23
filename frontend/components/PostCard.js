@@ -33,7 +33,7 @@ const PostCard = ({ post }) => {
 				</Link>
 			</div>
 			<div className='flex flex-col h-full mx-4'>
-				<CategoryRow categories={categories} locale={locale} />
+				<CategoryRow categories={categories} />
 				<Link
 					href={`/${locale !== 'en' ? locale + '/' : ''}post/${slug}`}
 				>

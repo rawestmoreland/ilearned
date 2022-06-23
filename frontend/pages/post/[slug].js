@@ -8,7 +8,7 @@ const Post = ({ post, error, ...pageProps }) => {
 	const { live } = pageProps.adminSettings.attributes
 	if (!error) {
 		return (
-			<Layout global={pageProps.global} live={live}>
+			<Layout live={live}>
 				<PostContent post={post} />
 			</Layout>
 		)

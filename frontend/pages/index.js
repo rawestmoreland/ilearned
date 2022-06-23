@@ -1,58 +1,49 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useInfiniteQuery } from 'react-query'
-
-import { useInView } from 'react-intersection-observer'
+import InfininiteScroll from 'react-infinite-scroll-component'
 
 import Layout from '../components/Layout'
 import PostGrid from '../components/PostGrid'
 
-import { fetchAPI, getPosts } from '../utils/api'
+import { fetchAPI } from '../utils/api'
 
 export default function Home({ posts, locale, ...pageProps }) {
-	const { ref, inView } = useInView()
+	const [postsData, setPostsData] = useState(posts.data)
+	const [postsMeta, setPostsMeta] = useState(posts.meta.pagination)
 	const { live } = pageProps.adminSettings.attributes
 
-	const { data, fetchNextPage, isLoading } = useInfiniteQuery(
-		['posts', locale],
-		({ pageParam = 1 }) => getPosts({ locale, page: pageParam }),
-		{
-			initialData: () => {
-				return {
-					pages: [
-						{
-							data: {
-								posts: { data: posts.data, meta: posts.meta },
-							},
-						},
-					],
-					pageParams: [null],
-				}
+	async function getMorePosts() {
+		const morePostsRes = await fetchAPI('/posts', false, {
+			locale,
+			sort: 'published:desc',
+			populate: {
+				authors: { populate: ['picture'] },
+				image: '*',
+				categories: '*',
+				meta: '*',
 			},
-			getNextPageParam: (lastPage) => {
-				return lastPage.data.posts.meta.pagination.page <
-					lastPage.data.posts.meta.pagination.pageCount
-					? lastPage.data.posts.meta.pagination.page + 1
-					: undefined
+			pagination: {
+				page: postsMeta.page + 1,
+				pageSize: 10,
+				withCount: true,
 			},
-		}
-	)
+		})
 
-	useEffect(() => {
-		if (inView) {
-			fetchNextPage()
-		}
-	}, [inView])
+		setPostsData([...postsData, ...morePostsRes.data])
+		setPostsMeta(morePostsRes.meta.pagination)
+	}
 
 	return (
-		<Layout global={pageProps.global} live={live}>
-			{live ? (
-				data && (
-					<>
-						<PostGrid pages={data.pages} marginTop={16} />
-						<div ref={ref}></div>
-					</>
-				)
+		<Layout live={live}>
+			{live || process.env.NODE_ENV === 'development' ? (
+				<InfininiteScroll
+					dataLength={postsData.length}
+					next={() => getMorePosts()}
+					loader={<h4>Loading...</h4>}
+					hasMore={postsMeta.pageCount > postsMeta.page}
+				>
+					<PostGrid posts={postsData} />
+				</InfininiteScroll>
 			) : (
 				<div className='absolute top-1/2 left-1/2 -translate-x-1/2'>
 					<h1 className='font-big-shoulders text-4xl tracking-widest text-off-white'>
@@ -67,12 +58,26 @@ export default function Home({ posts, locale, ...pageProps }) {
 export async function getServerSideProps(ctx) {
 	// Run API calls in parallel
 	const [postsRes] = await Promise.all([
-		getPosts({ locale: ctx.locale, page: 1 }),
+		fetchAPI('/posts', false, {
+			locale: ctx.locale,
+			sort: 'published:desc',
+			pagination: {
+				page: 1,
+				pageSize: 10,
+				withCount: true,
+			},
+			populate: {
+				authors: { populate: ['picture'] },
+				image: '*',
+				categories: '*',
+				meta: '*',
+			},
+		}),
 	])
 
 	return {
 		props: {
-			posts: postsRes.data.posts,
+			posts: postsRes,
 			locale: ctx.locale,
 		},
 	}
