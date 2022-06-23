@@ -2,20 +2,17 @@ import Head from 'next/head'
 import ErrorPage from 'next/error'
 import App from 'next/app'
 
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
-
-import React, { createContext } from 'react'
+import { createContext } from 'react'
 
 import { getAdminSettings, getGlobalData } from '../utils/api'
 import { getStrapiMedia } from '../utils/media'
 
 import '../styles/globals.css'
+import Router from 'next/router'
 
 export const GlobalContext = createContext({})
 
 function MyApp({ Component, pageProps }) {
-	const [queryClient] = React.useState(() => new QueryClient())
 	const { global, locale } = pageProps
 	if (global == null) {
 		return <ErrorPage statusCode={404} />
@@ -29,10 +26,11 @@ function MyApp({ Component, pageProps }) {
 					href={getStrapiMedia(favicon.data.attributes.url)}
 				/>
 			</Head>
-			<QueryClientProvider client={queryClient}>
-				<ReactQueryDevtools />
+			<GlobalContext.Provider
+				value={{ global: global.attributes, locale }}
+			>
 				<Component {...pageProps} />
-			</QueryClientProvider>
+			</GlobalContext.Provider>
 		</>
 	)
 }

@@ -74,9 +74,9 @@ export async function getAdminSettings() {
 			`,
 		}),
 	})
-	const { data } = await adminRes.json()
+	const { data, error } = await adminRes.json()
 
-	return { data }
+	return { data, error }
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)
@@ -291,6 +291,7 @@ export async function getPostsBySlug({ slug, locale }) {
         ) {        
           posts(
             filters: { slug: { eq: $slug } }
+						pagination: {page: 1, pageSize: 10}
             locale: $locale
           ) {
 						data {
@@ -391,6 +392,7 @@ export async function getPostsByCategory({ slug, locale, page = 1 }) {
 				posts(
 					pagination: {page: ${page}, pageSize: 10}
 					filters: { categories: {slug: {containsi: $slug}} }
+					sort: "id:asc"
 					locale: $locale
 				) {
 					data {
@@ -498,6 +500,7 @@ export async function getPostsByAuthor({ slug, locale, page = 1 }) {
 				posts(
 					pagination: {page: ${page}, pageSize: 10}
 					filters: { authors: {slug: {containsi: $slug}} }
+					sort: "id:asc"
 					locale: $locale
 				) {
 					data {

@@ -6,8 +6,12 @@ import Loading from './Loading'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
+import { GlobalContext } from '../pages/_app'
+
 const Layout = ({ children, ...props }) => {
-	const { navbar, footer } = props.global.attributes
+	const { live } = props
+	const { global } = useContext(GlobalContext)
+	const { navbar, footer } = global
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
@@ -33,11 +37,7 @@ const Layout = ({ children, ...props }) => {
 					{children}
 				</div>
 			</div>
-			<div
-				className={`${
-					props.live ? 'relative' : 'fixed'
-				} bottom-0 w-full`}
-			>
+			<div className={`${live ? 'relative' : 'fixed'} bottom-0 w-full`}>
 				<Footer footer={footer} />
 			</div>
 		</div>
