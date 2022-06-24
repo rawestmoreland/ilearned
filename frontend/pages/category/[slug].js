@@ -1,54 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { useInfiniteQuery } from 'react-query'
-import { useInView } from 'react-intersection-observer'
+import InfininiteScroll from 'react-infinite-scroll-component'
 
 import { fetchAPI, getPostsByCategory } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
 const Category = ({ posts, category, meta, locale, ...pageProps }) => {
-	const { ref, inView } = useInView()
-	const { name, slug } = category?.attributes
 	const { live } = pageProps.adminSettings.attributes
+	const { name, slug } = category?.attributes
+	const [postsMeta, setPostsMeta] = useState(meta)
+	const [postsData, setPostsData] = useState(posts)
 	// const seo = {
 	// 	metaTitle: category.attributes.name,
 	// 	metaDescription: `All ${category.attributes.name} posts`,
 	// }
 
-	const { data, isLoading, fetchNextPage } = useInfiniteQuery(
-		['posts', slug],
-		({ pageParam = 1 }) =>
-			getPostsByCategory({ slug, locale, page: pageParam }),
-		{
-			initialData: () => {
-				return {
-					pages: [
-						{
-							data: {
-								posts: { data: posts.data, meta: posts.meta },
-							},
-						},
-					],
-				}
-			},
-			getNextPageParam: (lastPage) => {
-				return lastPage.data.posts.meta.pagination.page <
-					lastPage.data.posts.meta.pagination.pageCount
-					? lastPage.data.posts.meta.pagination.page + 1
-					: undefined
-			},
-		}
-	)
+	async function getMorePosts() {
+		const postsRes = await getPostsByCategory({
+			slug,
+			locale,
+			page: postsMeta.page + 1,
+		})
 
-	useEffect(() => {
-		if (inView) {
-			fetchNextPage()
-		}
-	}, [inView])
+		setPostsData([...postsData, ...postsRes.data.posts.data])
+		setPostsMeta(postsRes.data.posts.meta.pagination)
+	}
 
 	return (
-		<Layout global={pageProps.global} live={live}>
+		<Layout live={live}>
 			{/* <Seo seo={seo} /> */}
 			<div>
 				<div>
@@ -60,12 +40,14 @@ const Category = ({ posts, category, meta, locale, ...pageProps }) => {
 							{name.toUpperCase()}
 						</h1>
 					</div>
-					data && (
-					<>
-						<PostGrid pages={data.pages} />
-						<div ref={ref}></div>
-					</>
-					)
+					<InfininiteScroll
+						dataLength={postsData.length}
+						next={() => getMorePosts()}
+						loader={<h4>Loading...</h4>}
+						hasMore={postsMeta.pageCount > postsMeta.page}
+					>
+						<PostGrid posts={postsData} marginTop={4} />
+					</InfininiteScroll>
 				</div>
 			</div>
 		</Layout>
@@ -117,7 +99,7 @@ export async function getStaticProps(context) {
 
 	return {
 		props: {
-			posts: matchingPosts.data.posts,
+			posts: matchingPosts.data.posts.data,
 			category: matchingPosts.data.categories?.data[0] || null,
 			meta: matchingPosts.data.posts.meta.pagination,
 			locale,
