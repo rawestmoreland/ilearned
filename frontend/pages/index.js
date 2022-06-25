@@ -62,7 +62,7 @@ export default function Home({ posts, pageContext, ...pageProps }) {
 	)
 }
 
-export async function getServerSideProps(ctx) {
+export async function getStaticProps(ctx) {
 	const { locale, locales, defaultLocale } = ctx
 	// Run API calls in parallel
 	const [postsRes] = await Promise.all([

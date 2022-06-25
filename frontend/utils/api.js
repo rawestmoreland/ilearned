@@ -74,9 +74,9 @@ export async function getAdminSettings() {
 			`,
 		}),
 	})
-	const { data, error } = await adminRes.json()
+	const { data, errors } = await adminRes.json()
 
-	return { data, error }
+	return { data, errors }
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)

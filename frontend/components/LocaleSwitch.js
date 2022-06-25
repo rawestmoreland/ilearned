@@ -89,8 +89,8 @@ const LocaleSwitch = ({ pageContext }) => {
 							{pageContext.localizedPaths.map(
 								({ href, locale }) => {
 									return (
-										<div className='p-1'>
-											<Menu.Item key={locale}>
+										<div key={locale} className='p-1'>
+											<Menu.Item>
 												{({ active }) => (
 													<CustomLink
 														href={href}

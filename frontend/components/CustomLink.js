@@ -1,6 +1,5 @@
 import { forwardRef } from 'react'
 import Link from 'next/link'
-import { resolveHref } from 'next/dist/shared/lib/router/router'
 
 const CustomLink = forwardRef((props, ref) => {
 	const { href, locale, children, ...rest } = props
@@ -13,5 +12,7 @@ const CustomLink = forwardRef((props, ref) => {
 		</Link>
 	)
 })
+
+CustomLink.displayName = 'CustomLink'
 
 export default CustomLink
