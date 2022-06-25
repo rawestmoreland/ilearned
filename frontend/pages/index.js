@@ -6,11 +6,13 @@ import Layout from '../components/Layout'
 import PostGrid from '../components/PostGrid'
 
 import { fetchAPI } from '../utils/api'
+import { getLocalizedPaths } from '../utils/localize'
 
-export default function Home({ posts, locale, ...pageProps }) {
+export default function Home({ posts, pageContext, ...pageProps }) {
 	const [postsData, setPostsData] = useState(posts.data)
 	const [postsMeta, setPostsMeta] = useState(posts.meta.pagination)
 	const { live } = pageProps.adminSettings.attributes
+	const { locale } = pageContext
 
 	async function getMorePosts() {
 		const morePostsRes = await fetchAPI('/posts', false, {
@@ -33,8 +35,13 @@ export default function Home({ posts, locale, ...pageProps }) {
 		setPostsMeta(morePostsRes.meta.pagination)
 	}
 
+	useEffect(() => {
+		setPostsData(posts.data)
+		setPostsMeta(posts.meta.pagination)
+	}, [posts])
+
 	return (
-		<Layout live={live}>
+		<Layout live={live} pageContext={pageContext}>
 			{live || process.env.NODE_ENV === 'development' ? (
 				<InfininiteScroll
 					dataLength={postsData.length}
@@ -88,7 +95,10 @@ export async function getServerSideProps(ctx) {
 	return {
 		props: {
 			posts: postsRes,
-			locale: ctx.locale,
+			pageContext: {
+				...pageContext,
+				localizedPaths,
+			},
 		},
 	}
 }

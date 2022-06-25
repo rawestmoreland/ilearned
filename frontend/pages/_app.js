@@ -43,7 +43,6 @@ MyApp.getInitialProps = async (ctx) => {
 		}),
 		getAdminSettings(),
 	])
-	console.log(adminSettings)
 	return {
 		...appProps,
 		pageProps: {

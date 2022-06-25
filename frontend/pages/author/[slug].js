@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import InfininiteScroll from 'react-infinite-scroll-component'
 
@@ -6,7 +6,9 @@ import { fetchAPI, getPostsByAuthor } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
 
-const Author = ({ posts, author, meta, locale, ...pageProps }) => {
+import { getLocalizedPaths } from '../../utils/localize'
+
+const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
 	const { live } = pageProps.adminSettings.attributes
 	const { name, slug } = author.attributes
 	const [postsMeta, setPostsMeta] = useState(meta)
@@ -27,8 +29,13 @@ const Author = ({ posts, author, meta, locale, ...pageProps }) => {
 		setPostsMeta(postsRes.data.posts.meta.pagination)
 	}
 
+	useEffect(() => {
+		setPostsData(posts)
+		setPostsMeta(meta)
+	}, [posts])
+
 	return (
-		<Layout live={live}>
+		<Layout live={live} pageContext={pageContext}>
 			{/* <Seo seo={seo} /> */}
 			<div>
 				<div>
@@ -90,20 +97,32 @@ export async function getStaticPaths(context) {
 }
 
 export async function getStaticProps(context) {
-	const { params, locale } = context
-	console.log(params)
+	const { params, locale, locales, defaultLocale } = context
 	const matchingPosts = await getPostsByAuthor({
 		slug: params.slug,
 		locale,
 		page: 1,
 	})
 
+	const pageContext = {
+		pageName: 'author',
+		locale,
+		locales,
+		defaultLocale,
+		slug: params.slug,
+	}
+
+	const localizedPaths = getLocalizedPaths(pageContext)
+
 	return {
 		props: {
 			posts: matchingPosts.data.posts.data,
 			author: matchingPosts.data.authors.data[0],
 			meta: matchingPosts.data.posts.meta.pagination,
-			locale,
+			pageContext: {
+				...pageContext,
+				localizedPaths,
+			},
 		},
 	}
 }

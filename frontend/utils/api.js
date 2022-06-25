@@ -169,7 +169,7 @@ export async function getGlobalData({ locale }) {
 	return { data }
 }
 
-export async function getPosts({ locale, page = 1 }) {
+export async function getPosts({ locale, slug = null, page = 1 }) {
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const postsRes = await fetch(gqlEndpoint, {
 		method: 'POST',
@@ -179,10 +179,16 @@ export async function getPosts({ locale, page = 1 }) {
 		body: JSON.stringify({
 			query: `
 			query GetPosts(
+				$page: Int!
+				${slug && '$slug: String'}
 				$locale: I18NLocaleCode!
 			) {
 				posts(
-					pagination: {page: ${page}, pageSize: 10}
+					pagination: {page: $page, pageSize: 10}
+					${
+						slug &&
+						'filters: {or: [{categories: {slug: {containsi: $slug}}}, {authors: {slug: {containsi: $slug}}}]  }'
+					}
           locale: $locale
 				) {
 					data {
@@ -256,11 +262,13 @@ export async function getPosts({ locale, page = 1 }) {
 			`,
 			variables: {
 				locale,
+				slug,
+				page,
 			},
 		}),
 	})
 
-	const { data } = await postsRes.json()
+	const { data, errors } = await postsRes.json()
 
 	if (!data.posts) {
 		return null
