@@ -6,7 +6,7 @@ import { getLocalizedPaths } from '../../utils/localize'
 import Custom404 from '../404'
 
 const Post = ({ post, error, pageContext, ...pageProps }) => {
-	const { live } = pageProps.adminSettings.attributes
+	const { live } = pageProps?.adminSettings?.attributes
 	if (!error) {
 		return (
 			<Layout live={live} pageContext={pageContext}>
@@ -15,7 +15,7 @@ const Post = ({ post, error, pageContext, ...pageProps }) => {
 		)
 	}
 
-	return <Custom404 />
+	return <Custom404 live={live} pageContext={pageContext} />
 }
 
 export async function getStaticPaths(context) {
@@ -52,9 +52,7 @@ export async function getStaticProps(context) {
 		locale,
 	})
 
-	if (!postData) {
-		return { props: { post: null, error: true } }
-	}
+	console.log(!postData.data.posts.data.length)
 
 	const pageContext = {
 		pageName: 'post',
@@ -66,9 +64,19 @@ export async function getStaticProps(context) {
 
 	const localizedPaths = getLocalizedPaths(pageContext)
 
+	if (!postData.data.posts.data.length || postData.errors) {
+		return {
+			props: {
+				post: null,
+				error: true,
+				pageContext: { ...pageContext, localizedPaths },
+			},
+		}
+	}
+
 	return {
 		props: {
-			post: postData,
+			post: postData.data.posts.data[0],
 			pageContext: { ...pageContext, localizedPaths },
 		},
 	}

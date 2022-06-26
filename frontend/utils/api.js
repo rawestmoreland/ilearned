@@ -169,7 +169,12 @@ export async function getGlobalData({ locale }) {
 	return { data }
 }
 
-export async function getPosts({ locale, slug = null, page = 1 }) {
+export async function getPosts({
+	locale,
+	slug = null,
+	page = 1,
+	pageName = null,
+}) {
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const postsRes = await fetch(gqlEndpoint, {
 		method: 'POST',
@@ -186,9 +191,10 @@ export async function getPosts({ locale, slug = null, page = 1 }) {
 				posts(
 					pagination: {page: $page, pageSize: 10}
 					${
-						slug &&
+						(pageName === 'category' || pageName === 'author') &&
 						'filters: {or: [{categories: {slug: {containsi: $slug}}}, {authors: {slug: {containsi: $slug}}}]  }'
 					}
+					${!pageName && 'filters: {slug: {eq: $slug}}'}
           locale: $locale
 				) {
 					data {
@@ -270,11 +276,7 @@ export async function getPosts({ locale, slug = null, page = 1 }) {
 
 	const { data, errors } = await postsRes.json()
 
-	if (!data.posts) {
-		return null
-	}
-
-	return { data }
+	return { data, errors }
 }
 
 /**
@@ -368,14 +370,10 @@ export async function getPostsBySlug({ slug, locale }) {
 		}),
 	})
 
-	const postData = await pagesRes.json()
-	// Make sure we found something, otherwise return null
-	if (postData.data.posts === null || postData.data.posts.length === 0) {
-		return null
-	}
+	const { data, errors } = await pagesRes.json()
 
 	// Return the first item since there should only be one result per slug
-	return postData.data.posts.data[0]
+	return { data, errors }
 }
 
 /**
