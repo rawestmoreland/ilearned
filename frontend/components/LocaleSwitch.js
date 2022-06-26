@@ -43,7 +43,7 @@ const LocaleSwitch = ({ pageContext }) => {
 					page: 1,
 				})
 
-				router.push(`${router.asPath}}`, `${router.asPath}}`, {
+				router.push(`${router.asPath}`, `${router.asPath}`, {
 					locale: pageContext.locale,
 				})
 			}

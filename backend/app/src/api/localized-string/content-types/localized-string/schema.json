@@ -43,6 +43,14 @@
       "type": "uid",
       "targetField": "text",
       "required": true
+    },
+    "key": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "type": "string"
     }
   }
 }
