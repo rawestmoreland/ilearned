@@ -1,41 +1,18 @@
+import { forwardRef } from 'react'
 import Link from 'next/link'
-import PropTypes from 'prop-types'
-import { linkPropTypes } from 'utils/types'
 
-const CustomLink = ({ link, children }) => {
-	const isInternalLink = link.url.startsWith('/')
-
-	// For internal links, use the Next.js Link component
-	if (isInternalLink) {
-		return (
-			<Link href={link.url}>
-				<a>{children}</a>
-			</Link>
-		)
-	}
-
-	// Plain <a> tags for external links
-	if (link.newTab) {
-		return (
-			<a href={link.url} target='_blank' rel='noopener noreferrer'>
-				{children}
-			</a>
-		)
-	}
+const CustomLink = forwardRef((props, ref) => {
+	const { href, locale, children, ...rest } = props
 
 	return (
-		<a href={link.url} target='_self'>
-			{children}
-		</a>
+		<Link href={href} locale={locale}>
+			<a ref={ref} {...rest}>
+				{children}
+			</a>
+		</Link>
 	)
-}
+})
 
-CustomLink.propTypes = {
-	link: linkPropTypes,
-	children: PropTypes.oneOfType([
-		PropTypes.arrayOf(PropTypes.node),
-		PropTypes.node,
-	]).isRequired,
-}
+CustomLink.displayName = 'CustomLink'
 
 export default CustomLink

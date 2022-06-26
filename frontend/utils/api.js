@@ -7,7 +7,9 @@ export function getStrapiURL(path) {
 }
 
 export function getApiToken() {
-	return process.env.NEXT_PUBLIC_ADMIN_API_TOKEN
+	return process.env.NODE_ENV === 'development'
+		? process.env.NEXT_PUBLIC_DEV_API_TOKEN
+		: process.env.NEXT_PUBLIC_ADMIN_API_TOKEN
 }
 
 // Helper to make GET requests to Strapi
@@ -56,7 +58,7 @@ export async function getAdminSettings() {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_API_TOKEN}`,
+			Authorization: `Bearer ${getApiToken()}`,
 		},
 		body: JSON.stringify({
 			query: `
@@ -72,9 +74,9 @@ export async function getAdminSettings() {
 			`,
 		}),
 	})
-	const { data, error } = await adminRes.json()
+	const { data, errors } = await adminRes.json()
 
-	return { data, error }
+	return { data, errors }
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)
@@ -161,6 +163,114 @@ export async function getGlobalData({ locale }) {
 	const { data } = await globalRes.json()
 
 	if (!data) {
+		return null
+	}
+
+	return { data }
+}
+
+export async function getPosts({ locale, slug = null, page = 1 }) {
+	const gqlEndpoint = getStrapiURL('/graphql')
+	const postsRes = await fetch(gqlEndpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			query: `
+			query GetPosts(
+				$page: Int!
+				${slug && '$slug: String'}
+				$locale: I18NLocaleCode!
+			) {
+				posts(
+					pagination: {page: $page, pageSize: 10}
+					${
+						slug &&
+						'filters: {or: [{categories: {slug: {containsi: $slug}}}, {authors: {slug: {containsi: $slug}}}]  }'
+					}
+          locale: $locale
+				) {
+					data {
+						id
+						attributes {
+							title
+							content
+							description
+							published
+							locale
+							slug
+							localizations {
+								data {
+									id
+									attributes {
+										locale
+									}
+								}
+							}
+							categories {
+								data {
+									id
+									attributes {
+										name
+										slug
+									}
+								}
+							}
+							authors {
+								data {
+									attributes {
+										name
+										slug
+										picture {
+											data {
+												attributes {
+													height
+													width
+													formats
+													alternativeText
+													url
+												}
+											}
+										}
+									}
+								}
+							}
+							image {
+								data {
+									attributes {
+										height
+										width
+										formats
+										alternativeText
+										url
+									}
+								}
+							}
+						}
+					}
+					meta {
+						pagination {
+							page
+							pageSize
+							pageCount
+							total
+						}
+					}
+				}
+			}
+			`,
+			variables: {
+				locale,
+				slug,
+				page,
+			},
+		}),
+	})
+
+	const { data, errors } = await postsRes.json()
+
+	if (!data.posts) {
 		return null
 	}
 
@@ -498,4 +608,161 @@ export async function getPostsByAuthor({ slug, locale, page = 1 }) {
 
 	// Return the first item since there should only be one result per slug
 	return { data }
+}
+
+export async function getHomePageData(locale) {
+	const { data } = await fetchAPI('/posts', false, {
+		locale: locale,
+		sort: 'published:desc',
+		pagination: {
+			page: 1,
+			pageSize: 10,
+			withCount: true,
+		},
+		populate: {
+			authors: { populate: ['picture'] },
+			image: '*',
+			categories: '*',
+			meta: '*',
+		},
+	})
+
+	return data
+}
+
+export async function getAllThings(locale) {
+	const gqlEndpoint = getStrapiURL('/graphql')
+	const authorsRes = await fetch(gqlEndpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${getApiToken()}`,
+		},
+		body: JSON.stringify({
+			query: `
+			query GetAllThings(
+				$locale: I18NLocaleCode!
+			) {
+				posts(
+					locale: $locale
+					sort: "published:desc"
+					pagination: { page: 1, pageSize: 10 }
+					) {
+					data {
+						id
+						attributes {
+							title
+							content
+							description
+							locale
+							authors {
+								data {
+									attributes {
+										name
+										slug
+										picture {
+											data {
+												attributes {
+													height
+													width
+													formats
+													alternativeText
+													url
+												}
+											}
+										}
+									}
+								}
+							}
+							categories {
+								data {
+									id
+									attributes {
+										name
+										slug
+									}
+								}
+							}
+							published
+							slug
+							image {
+								data {
+									attributes {
+										width
+										height
+										url
+										formats
+									}
+								}
+							}
+						}
+					}
+					meta {
+						pagination {
+							page
+							pageSize
+							pageCount
+							total
+						}
+					}
+				}
+				categories {
+					data {
+						id
+						attributes {
+							name
+							posts {
+								data {
+									id
+									attributes {
+										title
+									}
+								}
+							}
+						}
+					}
+				}
+				homepage {
+					data {
+						attributes {
+							Hero {
+								title
+							}
+							seo {
+								metaTitle
+								metaDescription
+								twitterUsername
+								twitterCardType
+								shareImage {
+									data {
+										attributes {
+											formats
+											height
+											width
+											url
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				adminSetting {
+					data {
+						attributes {
+							live
+						}
+					}
+				}
+			}
+			`,
+			variables: {
+				locale,
+			},
+		}),
+	})
+
+	const { data, errors } = await authorsRes.json()
+
+	return { data, errors: errors || null }
 }

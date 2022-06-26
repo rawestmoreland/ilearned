@@ -2,13 +2,14 @@ import Layout from '../../components/Layout'
 import PostContent from '../../components/PostContent'
 
 import { fetchAPI, getPostsBySlug } from '../../utils/api'
+import { getLocalizedPaths } from '../../utils/localize'
 import Custom404 from '../404'
 
-const Post = ({ post, error, ...pageProps }) => {
+const Post = ({ post, error, pageContext, ...pageProps }) => {
 	const { live } = pageProps.adminSettings.attributes
 	if (!error) {
 		return (
-			<Layout live={live}>
+			<Layout live={live} pageContext={pageContext}>
 				<PostContent post={post} />
 			</Layout>
 		)
@@ -44,7 +45,7 @@ export async function getStaticPaths(context) {
 }
 
 export async function getStaticProps(context) {
-	const { params, locale } = context
+	const { params, locale, locales, defaultLocale } = context
 
 	const postData = await getPostsBySlug({
 		slug: params.slug,
@@ -55,8 +56,21 @@ export async function getStaticProps(context) {
 		return { props: { post: null, error: true } }
 	}
 
+	const pageContext = {
+		pageName: 'post',
+		locale,
+		locales,
+		defaultLocale,
+		slug: params.slug,
+	}
+
+	const localizedPaths = getLocalizedPaths(pageContext)
+
 	return {
-		props: { post: postData },
+		props: {
+			post: postData,
+			pageContext: { ...pageContext, localizedPaths },
+		},
 	}
 }
 

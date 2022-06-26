@@ -42,13 +42,12 @@ MyApp.getInitialProps = async (ctx) => {
 			locale: ctx.router.locale,
 		}),
 		getAdminSettings(),
-		Promise.resolve(),
 	])
 	return {
 		...appProps,
 		pageProps: {
-			global: globalLocale?.data.global.data,
-			adminSettings: adminSettings?.data.adminSetting.data,
+			global: globalLocale.data.global.data,
+			adminSettings: adminSettings.data.adminSetting.data,
 			locale: ctx.router.locale,
 		},
 	}

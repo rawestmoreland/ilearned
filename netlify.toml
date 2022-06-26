@@ -3,6 +3,9 @@
 	publish = ".next"
 	command = "yarn build"
 
+[dev]
+	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"}
+
 [context.production]
 	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"}
 
