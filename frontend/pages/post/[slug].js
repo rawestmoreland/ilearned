@@ -8,7 +8,7 @@ import Custom404 from '../404'
 const Post = ({ posts, error, pageContext, ...pageProps }) => {
 	const { live } = pageProps?.adminSettings?.attributes
 	const { locale } = pageContext
-	const post = posts.find((post) => post?.attributes.locale === locale)
+	const post = posts?.find((post) => post?.attributes.locale === locale)
 	if (!error && post) {
 		return (
 			<Layout live={live} pageContext={pageContext}>
