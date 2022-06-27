@@ -4,11 +4,14 @@ import { useRouter } from 'next/router'
 
 import Loading from './Loading'
 import Navbar from './Navbar'
+import Footer from './Footer'
 
 import { GlobalContext } from '../pages/_app'
 
 const Layout = ({ children, ...props }) => {
-	const { navbar } = useContext(GlobalContext)
+	const { live } = props
+	const { global } = useContext(GlobalContext)
+	const { navbar, footer } = global
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
@@ -26,11 +29,16 @@ const Layout = ({ children, ...props }) => {
 	}, [router])
 
 	return (
-		<div className=''>
-			<Navbar navbar={navbar} />
-			<Loading loading={loading} />
-			<div className={`${loading ? 'hidden' : 'container pt-16'}`}>
-				{children}
+		<div>
+			<div className='realtive min-h-screen'>
+				<Navbar navbar={navbar} pageContext={props.pageContext} />
+				<Loading loading={loading} />
+				<div className={`${loading ? 'hidden' : 'container pt-16'}`}>
+					{children}
+				</div>
+			</div>
+			<div className={`${live ? 'relative' : 'fixed'} bottom-0 w-full`}>
+				<Footer footer={footer} />
 			</div>
 		</div>
 	)
