@@ -6,12 +6,10 @@ import { getLocalizedPaths } from '../../utils/localize'
 import Custom404 from '../404'
 
 const Post = ({ posts, error, pageContext, ...pageProps }) => {
-	console.log({ posts })
 	const { live } = pageProps?.adminSettings?.attributes
 	const { locale } = pageContext
-	const post = posts.find((post) => post.attributes.locale === locale)
-	console.log({ post })
-	if (!error) {
+	const post = posts.find((post) => post?.attributes.locale === locale)
+	if (!error && post) {
 		return (
 			<Layout live={live} pageContext={pageContext}>
 				<PostContent post={post} />
@@ -19,7 +17,7 @@ const Post = ({ posts, error, pageContext, ...pageProps }) => {
 		)
 	}
 
-	return <Custom404 live={live} pageContext={pageContext} />
+	return <Custom404 live={live} pageContext={pageContext} noTranslation={!post} />
 }
 
 export async function getStaticPaths(context) {

@@ -423,8 +423,6 @@ export async function getPostsBySlug({ slug, locale = null }) {
 
 	const { data, errors } = await pagesRes.json()
 
-	console.log({ errors })
-
 	// Return the first item since there should only be one result per slug
 	return { data, errors }
 }
