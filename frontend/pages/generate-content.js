@@ -1,4 +1,3 @@
-import Layout from '../components/Layout'
 import { useState } from 'react'
 import { faker } from '@faker-js/faker'
 import slugify from 'slugify'
@@ -18,7 +17,7 @@ const GenerateContent = () => {
 		categoryList.data.forEach((category) =>
 			categoryChoices.push(category.id)
 		)
-		for (let i = 0; i < 70; i++) {
+		for (let i = 0; i < 200; i++) {
 			const authors = [faker.helpers.arrayElement(authorChoices)]
 			const categories = faker.helpers.arrayElements(categoryChoices, 4)
 			const title = faker.unique(faker.lorem.sentence)
@@ -37,7 +36,10 @@ const GenerateContent = () => {
 				image: 6,
 			}
 			const generate = await fetch(
-				`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/posts`,
+				`${
+					process.env.NEXT_PUBLIC_STRAPI_API_URL ||
+					'http://localhost:1337'
+				}/api/posts`,
 				{
 					method: 'POST',
 					headers: {
@@ -54,17 +56,15 @@ const GenerateContent = () => {
 	}
 
 	return (
-		<Layout>
-			<div className='flex justify-center items-center'>
-				<button
-					disabled={working}
-					onClick={() => addContent()}
-					className='border border-off-white bg-off-white rounded mt-16 p-2 shadow-md cursor-pointer'
-				>
-					Generate Strapi Content
-				</button>
-			</div>
-		</Layout>
+		<div className='flex justify-center items-center'>
+			<button
+				disabled={working}
+				onClick={() => addContent()}
+				className='border border-off-white bg-off-white rounded mt-16 p-2 shadow-md cursor-pointer'
+			>
+				Generate Strapi Content
+			</button>
+		</div>
 	)
 }
 
