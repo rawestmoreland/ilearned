@@ -79,6 +79,8 @@ backend/db
 
 *#
 envvars.txt
+*.rest
+*.http
 *.dump
 ssl
 .idea
