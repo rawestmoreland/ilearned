@@ -65,11 +65,6 @@
         }
       }
     },
-    "slug": {
-      "type": "uid",
-      "targetField": "title",
-      "required": true
-    },
     "auto_publish": {
       "type": "boolean",
       "default": false,
@@ -90,6 +85,15 @@
       "relation": "manyToMany",
       "target": "api::author.author",
       "inversedBy": "posts"
+    },
+    "slug": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "uid",
+      "targetField": "title"
     }
   }
 }

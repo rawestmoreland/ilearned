@@ -68,7 +68,7 @@ export async function getStaticProps(ctx) {
 	const [postsRes] = await Promise.all([
 		fetchAPI('/posts', false, {
 			locale: ctx.locale,
-			sort: 'published:desc',
+			sort: 'id:asc',
 			pagination: {
 				page: 1,
 				pageSize: 10,
