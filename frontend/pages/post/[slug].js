@@ -17,7 +17,13 @@ const Post = ({ posts, error, pageContext, ...pageProps }) => {
 		)
 	}
 
-	return <Custom404 live={live} pageContext={pageContext} noTranslation={!post} />
+	return (
+		<Custom404
+			live={live}
+			pageContext={pageContext}
+			noTranslation={!post}
+		/>
+	)
 }
 
 export async function getStaticPaths(context) {
@@ -51,6 +57,7 @@ export async function getStaticProps(context) {
 
 	const postData = await getPostsBySlug({
 		slug: params.slug,
+		locale: 'all',
 	})
 
 	const pageContext = {
