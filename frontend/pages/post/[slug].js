@@ -5,9 +5,11 @@ import { fetchAPI, getPostsBySlug } from '../../utils/api'
 import { getLocalizedPaths } from '../../utils/localize'
 import Custom404 from '../404'
 
-const Post = ({ post, error, pageContext, ...pageProps }) => {
+const Post = ({ posts, error, pageContext, ...pageProps }) => {
 	const { live } = pageProps?.adminSettings?.attributes
-	if (!error) {
+	const { locale } = pageContext
+	const post = posts?.find((post) => post?.attributes.locale === locale)
+	if (!error && post) {
 		return (
 			<Layout live={live} pageContext={pageContext}>
 				<PostContent post={post} />
@@ -15,7 +17,13 @@ const Post = ({ post, error, pageContext, ...pageProps }) => {
 		)
 	}
 
-	return <Custom404 live={live} pageContext={pageContext} />
+	return (
+		<Custom404
+			live={live}
+			pageContext={pageContext}
+			noTranslation={!post}
+		/>
+	)
 }
 
 export async function getStaticPaths(context) {
@@ -49,10 +57,8 @@ export async function getStaticProps(context) {
 
 	const postData = await getPostsBySlug({
 		slug: params.slug,
-		locale,
+		locale: 'all',
 	})
-
-	console.log(!postData.data.posts.data.length)
 
 	const pageContext = {
 		pageName: 'post',
@@ -76,7 +82,10 @@ export async function getStaticProps(context) {
 
 	return {
 		props: {
-			post: postData.data.posts.data[0],
+			posts: [
+				postData.data.posts.data[0],
+				...postData.data.posts.data[0].attributes.localizations.data,
+			],
 			pageContext: { ...pageContext, localizedPaths },
 		},
 	}
