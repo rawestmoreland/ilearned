@@ -15,8 +15,6 @@ const PostCard = ({ post }) => {
     locale,
     slug,
   } = post.attributes;
-
-  console.log(authors.data[0])
   return (
     <div className='flex flex-col justify-between bg-off-white border rounded-lg h-full'>
       <div className='relative top-0 left-0 w-full h-[250px] rounded-t-lg cursor-pointer'>
