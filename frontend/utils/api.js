@@ -432,7 +432,7 @@ export async function getPostsBySlug({ slug, locale = null }) {
  * @param {Object} options
  * @param {string} options.slug The category's slug
  */
-export async function getPostsByCategory({ slug, locale, page = 1 }) {
+export async function getPostsByCategory({ slug, locale = null, page = 1 }) {
 	// Find the pages that match this slug
 	const gqlEndpoint = getStrapiURL('/graphql')
 	const categoriesRes = await fetch(gqlEndpoint, {
@@ -444,13 +444,14 @@ export async function getPostsByCategory({ slug, locale, page = 1 }) {
 			query: `
 			query GetCategoryPosts(
 				$slug: String!
-				$locale: I18NLocaleCode!
+        $page: Int!
+				${locale && '$locale: I18NLocaleCode'}
 			) {        
 				posts(
-					pagination: {page: ${page}, pageSize: 10}
+					pagination: {page: $page, pageSize: 10}
 					filters: { categories: {slug: {containsi: $slug}} }
 					sort: "id:asc"
-					locale: $locale
+					${locale && 'locale: $locale'}
 				) {
 					data {
 						id
@@ -461,6 +462,57 @@ export async function getPostsByCategory({ slug, locale, page = 1 }) {
 							published
 							locale
 							slug
+              localizations {
+                data {
+                  attributes {
+                    title
+                    content
+                    description
+                    published
+                    locale
+                    slug
+                    categories {
+                      data {
+                        id
+                        attributes {
+                          name
+                          slug
+                        }
+                      }
+                    }
+                    authors {
+                      data {
+                        attributes {
+                          name
+                          slug
+                          picture {
+                            data {
+                              attributes {
+                                height
+                                width
+                                formats
+                                alternativeText
+                                url
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    image {
+                      data {
+                        attributes {
+                          height
+                          width
+                          formats
+                          alternativeText
+                          url
+                        }
+                      }
+                    }
+                  }
+                }
+              }
 							categories {
 								data {
 									id
@@ -527,6 +579,7 @@ export async function getPostsByCategory({ slug, locale, page = 1 }) {
 			variables: {
 				slug,
 				locale,
+        page
 			},
 		}),
 	})
