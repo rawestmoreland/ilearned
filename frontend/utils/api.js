@@ -579,7 +579,7 @@ export async function getPostsByCategory({ slug, locale = null, page = 1 }) {
 			variables: {
 				slug,
 				locale,
-        page
+				page,
 			},
 		}),
 	})

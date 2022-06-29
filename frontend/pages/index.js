@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import InfininiteScroll from 'react-infinite-scroll-component'
 
 import Layout from '../components/Layout'
+import Seo from '../components/Seo'
 import PostGrid from '../components/PostGrid'
 
 import { fetchAPI } from '../utils/api'
@@ -42,6 +43,7 @@ export default function Home({ posts, pageContext, ...pageProps }) {
 
 	return (
 		<Layout live={live} pageContext={pageContext}>
+			<Seo seo={pageContext.seo} />
 			{live || process.env.NODE_ENV === 'development' ? (
 				<InfininiteScroll
 					dataLength={postsData.length}
@@ -65,10 +67,10 @@ export default function Home({ posts, pageContext, ...pageProps }) {
 export async function getStaticProps(ctx) {
 	const { locale, locales, defaultLocale } = ctx
 	// Run API calls in parallel
-	const [postsRes] = await Promise.all([
+	const [postsRes, homepageRes] = await Promise.all([
 		fetchAPI('/posts', false, {
 			locale: ctx.locale,
-			sort: 'id:asc',
+			sort: 'published:desc',
 			pagination: {
 				page: 1,
 				pageSize: 10,
@@ -81,6 +83,10 @@ export async function getStaticProps(ctx) {
 				meta: '*',
 			},
 		}),
+		fetchAPI('/homepage', false, {
+			locale: ctx.locale,
+			populate: '*',
+		}),
 	])
 
 	const pageContext = {
@@ -88,6 +94,7 @@ export async function getStaticProps(ctx) {
 		locales,
 		defaultLocale,
 		slug: '',
+		seo: homepageRes.data.attributes.seo,
 	}
 
 	const localizedPaths = getLocalizedPaths(pageContext)
