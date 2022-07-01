@@ -78,6 +78,9 @@ backend/db
 ############################
 
 *#
+envvars.txt
+*.rest
+*.http
 *.dump
 ssl
 .idea
@@ -96,6 +99,7 @@ logs
 results
 node_modules
 .node_history
+*.rest
 
 ############################
 # Tests

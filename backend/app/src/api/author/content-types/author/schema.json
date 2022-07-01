@@ -33,6 +33,10 @@
       "relation": "manyToMany",
       "target": "api::post.post",
       "mappedBy": "authors"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

@@ -1,8 +1,8 @@
 import PostCard from './PostCard'
 
-const PostGrid = ({ posts }) => {
+const PostGrid = ({ posts, marginTop = 16 }) => {
 	return (
-		<div className='grid h-full xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-8'>
+		<div className={`grid grid-cols-post-grid gap-8 pb-12 mt-${marginTop}`}>
 			{posts.map((post) => {
 				return (
 					<div key={post.id} className='col-span-1'>

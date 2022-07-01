@@ -1,0 +1,33 @@
+[build]
+	base = "frontend/"
+	publish = ".next"
+	command = "yarn build"
+
+[dev]
+	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-prod.herokuapp.com"}
+
+[context.production]
+	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-prod.herokuapp.com"}
+
+[context.branch-deploy]
+  command = "yarn run noIndex"
+[context.branch-deploy.environment]
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
+
+[context.deploy-preview]
+	command = "yarn run noIndex"
+[context.deploy-preview.environment]
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-72.herokuapp.com"
+
+[context.master]
+	command = "yarn run noIndex"
+[context.master.environment]
+	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"
+
+
+[[plugins]]
+	package = "@netlify/plugin-nextjs"
+[[plugins]]
+	package = 'netlify-plugin-contextual-env'
+  [plugins.inputs]
+  mode = 'prefix'
