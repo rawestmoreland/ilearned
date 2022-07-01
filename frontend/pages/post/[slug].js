@@ -1,5 +1,6 @@
 import Layout from '../../components/Layout'
 import PostContent from '../../components/PostContent'
+import Seo from '../../components/Seo'
 
 import { fetchAPI, getPostsBySlug } from '../../utils/api'
 import { getLocalizedPaths } from '../../utils/localize'
@@ -9,9 +10,17 @@ const Post = ({ posts, error, pageContext, ...pageProps }) => {
 	const { live } = pageProps?.adminSettings?.attributes
 	const { locale } = pageContext
 	const post = posts?.find((post) => post?.attributes.locale === locale)
+	const { title, description, image } = post.attributes
+	const seo = {
+		metaTitle: title,
+		metaDescription: description,
+		shareImage: image,
+		article: true,
+	}
 	if (!error && post) {
 		return (
 			<Layout live={live} pageContext={pageContext}>
+				<Seo seo={seo} />
 				<PostContent post={post} />
 			</Layout>
 		)

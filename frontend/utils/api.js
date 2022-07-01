@@ -112,6 +112,7 @@ export async function getGlobalData({ locale }) {
 							favicon {
 								...FileParts
 							}
+							siteName
 							metadata {
 								metaTitle
 								metaDescription

@@ -7,7 +7,7 @@ import { getStrapiMedia } from '../utils/media'
 
 const Seo = ({ seo }) => {
 	const globalContext = useContext(GlobalContext)
-	const { metadata, siteName } = globalContext.global
+	const { metadata, siteName, metaTitleSuffix } = globalContext.global
 	const seoWithDefaults = {
 		...metadata,
 		...seo,
@@ -16,8 +16,8 @@ const Seo = ({ seo }) => {
 		...seoWithDefaults,
 		metaTitle: `${
 			seoWithDefaults.metaTitle === siteName
-				? siteName + ' | ' + seoWithDefaults.metaDescription
-				: seoWithDefaults.metaTitle + ' | ' + siteName
+				? siteName + ' | ' + metaTitleSuffix
+				: siteName + ' | ' + seoWithDefaults.metaTitle
 		}`,
 		shareImage: seoWithDefaults.shareImage.data.attributes || null,
 	}

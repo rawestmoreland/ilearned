@@ -5,6 +5,7 @@ import InfininiteScroll from 'react-infinite-scroll-component'
 import { fetchAPI, getPostsByAuthor } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
+import Seo from '../../components/Seo'
 
 import { getLocalizedPaths } from '../../utils/localize'
 
@@ -13,10 +14,10 @@ const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
 	const { name, slug } = author.attributes
 	const [postsMeta, setPostsMeta] = useState(meta)
 	const [postsData, setPostsData] = useState(posts)
-	// const seo = {
-	// 	metaTitle: author.attributes.name,
-	// 	metaDescription: `All ${author.attributes.name} posts`,
-	// }
+	const seo = {
+		metaTitle: author.attributes.name,
+		metaDescription: `All ${author.attributes.name} posts`,
+	}
 
 	async function getMorePosts() {
 		const postsRes = await getPostsByAuthor({
@@ -36,7 +37,7 @@ const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
 
 	return (
 		<Layout live={live} pageContext={pageContext}>
-			{/* <Seo seo={seo} /> */}
+			<Seo seo={seo} />
 			<div>
 				<div>
 					<div className='mt-4 md:mt-8'>
