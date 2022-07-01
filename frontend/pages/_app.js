@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import ErrorPage from 'next/error'
 import App from 'next/app'
+import { DefaultSeo } from 'next-seo'
 
 import { createContext } from 'react'
 
@@ -8,7 +9,6 @@ import { getAdminSettings, getGlobalData } from '../utils/api'
 import { getStrapiMedia } from '../utils/media'
 
 import '../styles/globals.css'
-import Router from 'next/router'
 
 export const GlobalContext = createContext({})
 
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
 	if (global == null) {
 		return <ErrorPage statusCode={404} />
 	}
-	const { favicon } = global.attributes
+	const { favicon, metaTitleSuffix, metadata } = global.attributes
 	return (
 		<>
 			<Head>
@@ -26,6 +26,42 @@ function MyApp({ Component, pageProps }) {
 					href={getStrapiMedia(favicon.data.attributes.url)}
 				/>
 			</Head>
+			<DefaultSeo
+				titleTemplate={`%s | ${metaTitleSuffix}`}
+				title={metadata.metaTitle}
+				description={metadata.metaDescription}
+				openGraph={{
+					...(metadata.shareImage &&
+					metadata.shareImage.data.attributes.formats
+						? {
+								images: Object.values(
+									metadata.shareImage.data.attributes.formats
+								).map((image) => {
+									return {
+										url: getStrapiMedia(image.url),
+										width: image.width,
+										height: image.height,
+									}
+								}),
+						  }
+						: {
+								images: [
+									{
+										url: metadata.shareImage.data.attributes
+											.url,
+										width: metadata.shareImage.data
+											.attributes.width,
+										height: metadata.shareImage.data
+											.attributes.height,
+									},
+								],
+						  }),
+				}}
+				twitter={{
+					cardType: metadata.twitterCardType,
+					handle: metadata.twitterUsername,
+				}}
+			/>
 			<GlobalContext.Provider
 				value={{ global: global.attributes, locale }}
 			>
@@ -39,7 +75,7 @@ MyApp.getInitialProps = async (ctx) => {
 	const appProps = await App.getInitialProps(ctx)
 	const [globalLocale, adminSettings] = await Promise.all([
 		getGlobalData({
-			locale: ctx.router.locale || 'en',
+			locale: ctx.router.locale,
 		}),
 		getAdminSettings(),
 	])

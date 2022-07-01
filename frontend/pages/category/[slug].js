@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 
 import InfininiteScroll from 'react-infinite-scroll-component'
 
-import { fetchAPI, getPostsByCategory } from '../../utils/api'
 import Layout from '../../components/Layout'
 import PostGrid from '../../components/PostGrid'
+import Seo from '../../components/Seo'
+
 import { getLocalizedPaths } from '../../utils/localize'
+import { fetchAPI, getPostsByCategory } from '../../utils/api'
 
 const Category = ({
 	posts,
@@ -19,10 +21,10 @@ const Category = ({
 	const { name, slug } = category?.attributes
 	const [postsMeta, setPostsMeta] = useState(meta)
 	const [postsData, setPostsData] = useState(posts)
-	// const seo = {
-	// 	metaTitle: category.attributes.name,
-	// 	metaDescription: `All ${category.attributes.name} posts`,
-	// }
+	const seo = {
+		metaTitle: category.attributes.name,
+		metaDescription: `All ${category.attributes.name} posts`,
+	}
 
 	async function getMorePosts() {
 		const postsRes = await getPostsByCategory({
@@ -42,7 +44,7 @@ const Category = ({
 
 	return (
 		<Layout live={live} pageContext={pageContext}>
-			{/* <Seo seo={seo} /> */}
+			<Seo seo={seo} />
 			<div>
 				<div>
 					<div className='mt-4 md:mt-8'>
