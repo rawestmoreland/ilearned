@@ -4,10 +4,10 @@
 	command = "yarn build"
 
 [dev]
-	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"}
+	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-prod.herokuapp.com"}
 
 [context.production]
-	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.herokuapp.com"}
+	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-prod.herokuapp.com"}
 
 [context.branch-deploy]
   command = "yarn run noIndex"

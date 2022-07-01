@@ -10,7 +10,7 @@ const Post = ({ posts, error, pageContext, ...pageProps }) => {
 	const { live } = pageProps?.adminSettings?.attributes
 	const { locale } = pageContext
 	const post = posts?.find((post) => post?.attributes.locale === locale)
-	const { title, description, image } = post.attributes
+	const { title, description, image } = post?.attributes || {}
 	const seo = {
 		metaTitle: title,
 		metaDescription: description,

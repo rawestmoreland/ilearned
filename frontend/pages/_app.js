@@ -75,7 +75,7 @@ MyApp.getInitialProps = async (ctx) => {
 	const appProps = await App.getInitialProps(ctx)
 	const [globalLocale, adminSettings] = await Promise.all([
 		getGlobalData({
-			locale: ctx.router.locale || 'en',
+			locale: ctx.router.locale,
 		}),
 		getAdminSettings(),
 	])
