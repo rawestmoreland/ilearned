@@ -4,7 +4,7 @@ import NextImage from './NextImage'
 const Footer = ({ footer }) => {
 	const { smallText, columns } = footer
 	return (
-		<footer className='flex flex-col justify-between bg-oxford-blue p-4'>
+		<footer className='absolute bottom-0 w-full flex flex-col h-60 justify-between bg-oxford-blue p-4'>
 			<div className='container flex flex-col'>
 				<div>
 					{footer.logo && (

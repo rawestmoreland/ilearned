@@ -17,7 +17,7 @@ const PostCard = ({ post }) => {
 	} = post.attributes
 	return (
 		<div className='flex flex-col justify-between bg-off-white border rounded-lg h-full'>
-			<div className='relative top-0 left-0 w-full h-[250px] rounded-t-lg cursor-pointer'>
+			<div className='relative top-0 left-0 w-full bg-white h-[250px] rounded-t-lg cursor-pointer p-4'>
 				<Link
 					href={`/${locale !== 'en' ? locale + '/' : ''}post/${slug}`}
 				>
