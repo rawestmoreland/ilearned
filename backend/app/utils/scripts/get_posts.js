@@ -14,7 +14,6 @@ async function main() {
     }
     const data = await postResponse.json();
     for (let post of data) {
-      // console.log(`Updating ${post.id}`);
       post.content = lodash.trimEnd(post.content, "\n");
       if (post.id === 31) {
         await fetch(`http://localhost:1338/api/posts/${post.id}`, {

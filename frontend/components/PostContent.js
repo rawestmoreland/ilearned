@@ -55,7 +55,7 @@ const PostContent = ({ post }) => {
               <img alt="" className='mx-auto my-8 md:max-w-[80%]' {...props} />
             ),
             ul: ({ node, ordered = false, ...props }) => (
-              <ul className='text-sm list-disc ml-2' {...props} />
+              <ul className='text-sm list-disc ml-2 my-2' {...props} />
             ),
             h1: ({ node, ...props }) => (
               <h1 className='text-3xl text-cod-gray mb-2' {...props} />
