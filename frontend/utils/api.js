@@ -1,67 +1,86 @@
-import qs from 'qs'
+import qs from 'qs';
 
 export function getStrapiURL(path) {
-	return `${
-		process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
-	}${path}`
+  return `${
+    process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
+  }${path}`;
 }
 
 export function getApiToken() {
-	return process.env.NODE_ENV === 'development'
-		? process.env.NEXT_PUBLIC_DEV_API_TOKEN
-		: process.env.NEXT_PUBLIC_ADMIN_API_TOKEN
+  return process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_DEV_API_TOKEN
+    : process.env.NEXT_PUBLIC_ADMIN_API_TOKEN;
+}
+
+export async function signIn({ email, password }) {
+  const signInRes = await fetch(`${getStrapiURL('/auth/local')}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  const data = await signInRes.json();
+
+  // {jwt, data, error}
+
+  return data;
 }
 
 // Helper to make GET requests to Strapi
 export async function fetchAPI(
-	path,
-	authRequired = false,
-	urlParamsObject = {}
+  path,
+  authRequired = false,
+  urlParamsObject = {}
 ) {
-	const defaultOptions = {
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	}
+  const defaultOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
 
-	const API_TOKEN = getApiToken()
+  const API_TOKEN = getApiToken();
 
-	if (authRequired) {
-		defaultOptions.headers.Authorization = `Bearer ${API_TOKEN}`
-	}
+  if (authRequired) {
+    defaultOptions.headers.Authorization = `Bearer ${API_TOKEN}`;
+  }
 
-	const mergedOptions = {
-		...defaultOptions,
-	}
+  const mergedOptions = {
+    ...defaultOptions,
+  };
 
-	// Build request URL
-	const queryString = qs.stringify(urlParamsObject)
-	const requestUrl = `${getStrapiURL(
-		`/api${path}${queryString ? `?${queryString}` : ''}`
-	)}`
+  // Build request URL
+  const queryString = qs.stringify(urlParamsObject);
+  const requestUrl = `${getStrapiURL(
+    `/api${path}${queryString ? `?${queryString}` : ''}`
+  )}`;
 
-	const response = await fetch(requestUrl, mergedOptions)
+  const response = await fetch(requestUrl, mergedOptions);
 
-	const { data, error, meta } = await response.json()
+  const { data, error, meta } = await response.json();
 
-	if (!response.ok) {
-		console.log(requestUrl)
-		console.log(error)
-		throw new Error(`An error occured please try again`)
-	}
-	return { data, error: error || null, meta: meta || null }
+  if (!response.ok) {
+    console.log(requestUrl);
+    console.log(error);
+    throw new Error(`An error occured please try again`);
+  }
+  return { data, error: error || null, meta: meta || null };
 }
 
 export async function getAdminSettings() {
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const adminRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${getApiToken()}`,
-		},
-		body: JSON.stringify({
-			query: `
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const adminRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getApiToken()}`,
+    },
+    body: JSON.stringify({
+      query: `
 			query GetAdminSettings {
 				adminSetting {
 					data {
@@ -72,23 +91,23 @@ export async function getAdminSettings() {
 				}
 			}
 			`,
-		}),
-	})
-	const { data, errors } = await adminRes.json()
+    }),
+  });
+  const { data, errors } = await adminRes.json();
 
-	return { data, errors }
+  return { data, errors };
 }
 
 // Get site data from Strapi (metadata, navbar, footer...)
 export async function getGlobalData({ locale }) {
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const globalRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: `
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const globalRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
 			fragment FileParts on UploadFileEntityResponse {
 				data {
 					id
@@ -155,35 +174,35 @@ export async function getGlobalData({ locale }) {
 				}
 			}      
       `,
-			variables: {
-				locale,
-			},
-		}),
-	})
+      variables: {
+        locale,
+      },
+    }),
+  });
 
-	const { data, errors } = await globalRes.json()
+  const { data, errors } = await globalRes.json();
 
-	if (!data) {
-		return null
-	}
+  if (!data) {
+    return null;
+  }
 
-	return { data }
+  return { data };
 }
 
 export async function getPosts({
-	locale,
-	slug = null,
-	page = 1,
-	pageName = null,
+  locale,
+  slug = null,
+  page = 1,
+  pageName = null,
 }) {
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const postsRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: `
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const postsRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
 			query GetPosts(
 				$page: Int!
 				${slug && '$slug: String'}
@@ -192,9 +211,9 @@ export async function getPosts({
 				posts(
 					pagination: {page: $page, pageSize: 10}
 					${
-						(pageName === 'category' || pageName === 'author') &&
-						'filters: {or: [{categories: {slug: {containsi: $slug}}}, {authors: {slug: {containsi: $slug}}}]  }'
-					}
+            (pageName === 'category' || pageName === 'author') &&
+            'filters: {or: [{categories: {slug: {containsi: $slug}}}, {authors: {slug: {containsi: $slug}}}]  }'
+          }
 					${!pageName && 'filters: {slug: {eq: $slug}}'}
           locale: $locale
 				) {
@@ -267,17 +286,17 @@ export async function getPosts({
 				}
 			}
 			`,
-			variables: {
-				locale,
-				slug,
-				page,
-			},
-		}),
-	})
+      variables: {
+        locale,
+        slug,
+        page,
+      },
+    }),
+  });
 
-	const { data, errors } = await postsRes.json()
+  const { data, errors } = await postsRes.json();
 
-	return { data, errors }
+  return { data, errors };
 }
 
 /**
@@ -287,15 +306,15 @@ export async function getPosts({
  * @param {string} options.locale The current locale specified in router.locale
  */
 export async function getPostsBySlug({ slug, locale = null }) {
-	// Find the pages that match this slug
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const pagesRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: `
+  // Find the pages that match this slug
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const pagesRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
         query GetPosts(
           $slug: String!
           ${locale ? '$locale: I18NLocaleCode!' : ''}
@@ -415,17 +434,17 @@ export async function getPostsBySlug({ slug, locale = null }) {
 					}
         }      
       `,
-			variables: {
-				slug,
-				locale,
-			},
-		}),
-	})
+      variables: {
+        slug,
+        locale,
+      },
+    }),
+  });
 
-	const { data, errors } = await pagesRes.json()
+  const { data, errors } = await pagesRes.json();
 
-	// Return the first item since there should only be one result per slug
-	return { data, errors }
+  // Return the first item since there should only be one result per slug
+  return { data, errors };
 }
 
 /**
@@ -434,15 +453,15 @@ export async function getPostsBySlug({ slug, locale = null }) {
  * @param {string} options.slug The category's slug
  */
 export async function getPostsByCategory({ slug, locale = null, page = 1 }) {
-	// Find the pages that match this slug
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const categoriesRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: `
+  // Find the pages that match this slug
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const categoriesRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
 			query GetCategoryPosts(
 				$slug: String!
         $page: Int!
@@ -577,33 +596,33 @@ export async function getPostsByCategory({ slug, locale = null, page = 1 }) {
 				}
 			}      
       `,
-			variables: {
-				slug,
-				locale,
-				page,
-			},
-		}),
-	})
+      variables: {
+        slug,
+        locale,
+        page,
+      },
+    }),
+  });
 
-	const { data } = await categoriesRes.json()
-	// Make sure we found something, otherwise return null
-	if (data.posts === null) {
-		return null
-	}
+  const { data } = await categoriesRes.json();
+  // Make sure we found something, otherwise return null
+  if (data.posts === null) {
+    return null;
+  }
 
-	// Return the first item since there should only be one result per slug
-	return { data }
+  // Return the first item since there should only be one result per slug
+  return { data };
 }
 
 export async function getPostsByAuthor({ slug, locale, page = 1 }) {
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const authorsRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			query: `
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const authorsRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
 			query GetAuthorPosts(
 				$slug: String!
 				$locale: I18NLocaleCode!
@@ -696,53 +715,53 @@ export async function getPostsByAuthor({ slug, locale, page = 1 }) {
 				}
 			}
 			`,
-			variables: {
-				slug,
-				locale,
-			},
-		}),
-	})
+      variables: {
+        slug,
+        locale,
+      },
+    }),
+  });
 
-	const { data } = await authorsRes.json()
-	// Make sure we found something, otherwise return null
-	if (data.posts === null) {
-		return null
-	}
+  const { data } = await authorsRes.json();
+  // Make sure we found something, otherwise return null
+  if (data.posts === null) {
+    return null;
+  }
 
-	// Return the first item since there should only be one result per slug
-	return { data }
+  // Return the first item since there should only be one result per slug
+  return { data };
 }
 
 export async function getHomePageData(locale) {
-	const { data } = await fetchAPI('/posts', false, {
-		locale: locale,
-		sort: 'published:desc',
-		pagination: {
-			page: 1,
-			pageSize: 10,
-			withCount: true,
-		},
-		populate: {
-			authors: { populate: ['picture'] },
-			image: '*',
-			categories: '*',
-			meta: '*',
-		},
-	})
+  const { data } = await fetchAPI('/posts', false, {
+    locale: locale,
+    sort: 'published:desc',
+    pagination: {
+      page: 1,
+      pageSize: 10,
+      withCount: true,
+    },
+    populate: {
+      authors: { populate: ['picture'] },
+      image: '*',
+      categories: '*',
+      meta: '*',
+    },
+  });
 
-	return data
+  return data;
 }
 
 export async function getAllThings(locale) {
-	const gqlEndpoint = getStrapiURL('/graphql')
-	const authorsRes = await fetch(gqlEndpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${getApiToken()}`,
-		},
-		body: JSON.stringify({
-			query: `
+  const gqlEndpoint = getStrapiURL('/graphql');
+  const authorsRes = await fetch(gqlEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getApiToken()}`,
+    },
+    body: JSON.stringify({
+      query: `
 			query GetAllThings(
 				$locale: I18NLocaleCode!
 			) {
@@ -859,13 +878,13 @@ export async function getAllThings(locale) {
 				}
 			}
 			`,
-			variables: {
-				locale,
-			},
-		}),
-	})
+      variables: {
+        locale,
+      },
+    }),
+  });
 
-	const { data, errors } = await authorsRes.json()
+  const { data, errors } = await authorsRes.json();
 
-	return { data, errors: errors || null }
+  return { data, errors: errors || null };
 }
