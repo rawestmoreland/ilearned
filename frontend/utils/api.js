@@ -6,10 +6,16 @@ export function getStrapiURL(path) {
   }${path}`;
 }
 
-export function getApiToken() {
+export function getNextURL(path) {
+  return `${
+    process.env.NEXT_PUBLIC_ILEARNED_URL || 'http://localhost:3000'
+  }${path}`;
+}
+
+export function getApiToken(token) {
   return process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_DEV_API_TOKEN
-    : process.env.NEXT_PUBLIC_ADMIN_API_TOKEN;
+    ? token || process.env.NEXT_PUBLIC_DEV_API_TOKEN
+    : token || process.env.NEXT_PUBLIC_ADMIN_API_TOKEN;
 }
 
 export async function signIn({ email, password }) {
@@ -29,6 +35,42 @@ export async function signIn({ email, password }) {
   // {jwt, data, error}
 
   return data;
+}
+
+/**
+ * Helper to make GET requests to Strapi API endpoints
+ * @param {string} path Path of the API route
+ * @param {Object} urlParamsObject URL params object, will be stringified
+ * @param {RequestInit} options Options passed to fetch
+ * @returns Parsed API call response
+ */
+export async function fetchAPIWithToken({
+  path,
+  urlParamsObject = {},
+  options = {},
+  token = null,
+}) {
+  // Merge default and user options
+  const mergedOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getApiToken(token)}`,
+    },
+    ...options,
+  };
+
+  // Build request URL
+  const queryString = qs.stringify(urlParamsObject, { encodeValuesOnly: true });
+  const requestUrl = `${getStrapiURL(
+    `/api${path}${queryString ? `?${queryString}` : ''}`
+  )}`;
+
+  // Trigger API call
+  const response = await fetch(requestUrl, mergedOptions);
+
+  const { data, error } = await response.json();
+
+  return { data, error };
 }
 
 // Helper to make GET requests to Strapi
@@ -71,13 +113,22 @@ export async function fetchAPI(
   return { data, error: error || null, meta: meta || null };
 }
 
-export async function getAdminSettings() {
+export async function getAdminSettingsFetch(token = null) {
+  const adminRes = await fetchAPIWithToken({
+    path: '/admin-setting',
+    urlParamsObject: { fields: ['live', 'showSignup'] },
+    token,
+  });
+  return adminRes;
+}
+
+export async function getAdminSettings(token = null) {
   const gqlEndpoint = getStrapiURL('/graphql');
   const adminRes = await fetch(gqlEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${getApiToken()}`,
+      Authorization: `Bearer ${getApiToken(token)}`,
     },
     body: JSON.stringify({
       query: `
@@ -180,7 +231,7 @@ export async function getGlobalData({ locale }) {
     }),
   });
 
-  const { data, errors } = await globalRes.json();
+  const { data, error } = await globalRes.json();
 
   if (!data) {
     return null;

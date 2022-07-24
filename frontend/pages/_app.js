@@ -10,11 +10,13 @@ import { createContext } from 'react';
 import { getAdminSettings, getGlobalData } from '../utils/api';
 import { getStrapiMedia } from '../utils/media';
 
+import { useSession } from 'next-auth/react';
+
 import '../styles/globals.css';
 
 export const GlobalContext = createContext({});
 
-function MyApp({ Component, pageProps: {session, ...pageProps} }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const { global, locale } = pageProps;
   if (global == null) {
     return <ErrorPage statusCode={404} />;
@@ -62,11 +64,28 @@ function MyApp({ Component, pageProps: {session, ...pageProps} }) {
       />
       <SessionProvider session={session}>
         <GlobalContext.Provider value={{ global: global.attributes, locale }}>
-          <Component {...pageProps} />
+          {Component.auth ? (
+            <Auth>
+              <Component {...pageProps} />
+            </Auth>
+          ) : (
+            <Component {...pageProps} />
+          )}
         </GlobalContext.Provider>
       </SessionProvider>
     </>
   );
+}
+
+function Auth({ children }) {
+  // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
+  const { status } = useSession({ required: true });
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  return children;
 }
 
 MyApp.getInitialProps = async (ctx) => {
@@ -81,7 +100,7 @@ MyApp.getInitialProps = async (ctx) => {
     ...appProps,
     pageProps: {
       global: globalLocale.data.global.data,
-      adminSettings: adminSettings.data.adminSetting.data,
+      adminSettings: adminSettings?.data?.adminSetting.data,
       locale: ctx.router.locale,
     },
   };
