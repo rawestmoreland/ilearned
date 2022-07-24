@@ -4,7 +4,8 @@
   "info": {
     "singularName": "admin-setting",
     "pluralName": "admin-settings",
-    "displayName": "Admin Settings"
+    "displayName": "Admin Settings",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -14,6 +15,10 @@
     "live": {
       "type": "boolean",
       "default": false
+    },
+    "showSignup": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

@@ -32,7 +32,7 @@ const Layout = ({ children, ...props }) => {
 
   return (
     <div className='relative min-h-screen'>
-      <div className="pb-60">
+      <div className='pb-60'>
         <Navbar navbar={navbar} pageContext={props.pageContext} />
         <Loading loading={loading} />
         <div className={`${loading ? 'hidden' : 'container pt-16'}`}>
