@@ -1,17 +1,17 @@
 {
-	"name": "sbb_nextjs_strapi",
-	"private": true,
-	"scripts": {
-		"develop": "lerna run dev --parallel",
-		"dev": "lerna run dev --parallel",
-		"dev-backend": "cd backend/app && npm run dev",
-		"postinstall": "lerna bootstrap"
-	},
-	"devDependencies": {
-		"lerna": "^4.0.0"
-	},
-	"dependencies": {
-		"dotenv": "^16.0.1",
-		"slugify": "^1.6.1"
-	}
+  "name": "sbb_nextjs_strapi",
+  "private": true,
+  "scripts": {
+    "develop": "lerna run dev --parallel",
+    "dev": "lerna run dev --parallel",
+    "dev-backend": "cd backend/app && npm run dev",
+    "postinstall": "lerna bootstrap"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "slugify": "^1.6.1"
+  }
 }

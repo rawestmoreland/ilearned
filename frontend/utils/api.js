@@ -123,12 +123,13 @@ export async function getAdminSettingsFetch(token = null) {
 }
 
 export async function getAdminSettings(token = null) {
+  const apiToken = getApiToken(token);
   const gqlEndpoint = getStrapiURL('/graphql');
   const adminRes = await fetch(gqlEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${getApiToken(token)}`,
+      Authorization: `Bearer ${apiToken}`,
     },
     body: JSON.stringify({
       query: `
@@ -137,6 +138,7 @@ export async function getAdminSettings(token = null) {
 					data {
 						attributes {
 							live
+              showSignup
 						}
 					}
 				}
@@ -144,6 +146,7 @@ export async function getAdminSettings(token = null) {
 			`,
     }),
   });
+
   const { data, errors } = await adminRes.json();
 
   return { data, errors };
@@ -231,7 +234,7 @@ export async function getGlobalData({ locale }) {
     }),
   });
 
-  const { data, error } = await globalRes.json();
+  const { data, errors } = await globalRes.json();
 
   if (!data) {
     return null;

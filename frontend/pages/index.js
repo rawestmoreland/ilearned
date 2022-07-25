@@ -12,7 +12,7 @@ import { getLocalizedPaths } from '../utils/localize';
 export default function Home({ posts, pageContext, ...pageProps }) {
   const [postsData, setPostsData] = useState(posts.data);
   const [postsMeta, setPostsMeta] = useState(posts.meta.pagination);
-  const { live } = pageProps.adminSettings.attributes;
+  const { live } = pageProps?.adminSettings?.attributes;
   const { locale } = pageContext;
 
   async function getMorePosts() {
