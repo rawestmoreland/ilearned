@@ -31,7 +31,7 @@ const options = {
       const isSignIn = user ? true : false;
       if (isSignIn) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/${account.provider}/callback?access_token=${account?.access_token}`
+          `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/auth/${account.provider}/callback?access_token=${account?.access_token}`
         );
         const resData = await response.json();
         token.jwt = resData.jwt;
