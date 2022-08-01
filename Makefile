@@ -17,8 +17,7 @@ refresh-local-db:
 	rm latest.dump
 	heroku pg:backups:capture -a ilearned-staging
 	heroku pg:backups:download -a ilearned-staging
-	pg_restore --verbose --clean --no-acl --no-owner -h localhost -U strapi -d strapi latest.dump
-	rm latest.dump
+	pg_restore --verbose --clean --no-acl --no-owner -h 0.0.0.0 -U strapi -d strapi latest.dump
 
 db-to-heroku:
 	$(eval PRESIGNED_URL=$(shell aws s3 presign s3://ilearned/db-backups/ilearned.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)))
