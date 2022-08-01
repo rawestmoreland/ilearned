@@ -37,6 +37,17 @@ export async function signIn({ email, password }) {
   return data;
 }
 
+export async function getMe(token) {
+  const userRes = await fetch(`${getStrapiURL('/api/users/me')}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const userJson = await userRes.json();
+  return userJson;
+}
+
 /**
  * Helper to make GET requests to Strapi API endpoints
  * @param {string} path Path of the API route
