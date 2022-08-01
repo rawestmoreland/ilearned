@@ -2,6 +2,7 @@
 	base = "frontend/"
 	publish = ".next"
 	command = "yarn build"
+  ignore = "/bin/false"
 
 [dev]
 	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-prod.herokuapp.com"}
