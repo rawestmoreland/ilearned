@@ -19,13 +19,13 @@ export default function AdminDashboard({ pageContext, ...pageProps }) {
     const getAdminSettings = async () => {
       setLoading(true);
       try {
-        const nextUrl = getNextURL('/api/admin-settings');
-        const adminSettingsRes = await fetch(nextUrl);
-        const { data, error } = await adminSettingsRes.json();
-        if (error) {
-          setError(error);
+        const nextUrlAdminSettings = getNextURL('/api/admin-settings');
+        const adminRes = await fetch(nextUrlAdminSettings);
+        const adminJson = await adminRes.json();
+        if (adminJson.error) {
+          setError(adminJson.error);
         } else {
-          setAdminSettings(data.attributes);
+          setAdminSettings(adminJson.data.attributes);
         }
         setLoading(false);
       } catch (error) {
