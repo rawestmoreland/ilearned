@@ -19,13 +19,14 @@ export function getApiToken(token) {
 }
 
 export async function signIn({ email, password }) {
-  const signInRes = await fetch(`${getStrapiURL('/auth/local')}`, {
+  console.log({ email, password });
+  const signInRes = await fetch(`${getStrapiURL('/api/auth/local')}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      email,
+      identifier: email,
       password,
     }),
   });
