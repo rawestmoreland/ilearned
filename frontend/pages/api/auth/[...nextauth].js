@@ -18,7 +18,6 @@ const options = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        console.log({ credentials });
         try {
           const { user, jwt, error } = await signIn({
             email: credentials.email,
