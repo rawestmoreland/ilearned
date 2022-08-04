@@ -37,9 +37,9 @@ export default function AdminDashboard({ pageContext, ...pageProps }) {
     if (session) {
       getAdminSettings();
     } else return;
-  }, []);
+  }, [session]);
 
-  const handleUpdate = async (data) => {
+  const handleUpdate = async data => {
     try {
       const nextUrl = getNextURL('/api/admin-settings');
       const updateRes = fetch(nextUrl, {
@@ -57,7 +57,7 @@ export default function AdminDashboard({ pageContext, ...pageProps }) {
     }
   };
 
-  const toggleSetting = async (setting) => {
+  const toggleSetting = async setting => {
     const newAdminSettings = {
       ...adminSettings,
       [setting]: !adminSettings[setting],
@@ -71,34 +71,28 @@ export default function AdminDashboard({ pageContext, ...pageProps }) {
   };
 
   const ErrorText = ({ error }) => {
-    return (
-      <div className='text-white'>
-        {error === 'Forbidden' ? 'Sorry, this is for admins only.' : error}
-      </div>
-    );
+    return <div className="text-white">{error === 'Forbidden' ? 'Sorry, this is for admins only.' : error}</div>;
   };
 
   return (
     <Layout live={true} pageContext={pageContext}>
       {!loading && (
-        <div className='flex h-screen w-full items-center justify-center'>
+        <div className="flex h-screen w-full items-center justify-center">
           {error ? (
             <ErrorText error={error} />
           ) : (
             <>
-              <div className='text-white'>
-                <table className='bg-gray-500 rounded p-4'>
+              <div className="flex items-center justify-center text-black bg-off-white rounded p-4">
+                <table className="w-full">
                   <thead>
                     <th colSpan={2}>Admin Settings</th>
                   </thead>
                   <tbody>
-                    {Object.keys(adminSettings).map((setting) => {
+                    {Object.keys(adminSettings).map(setting => {
                       return (
                         <tr key={setting}>
-                          <td className='text-right p-2'>
-                            {startCase(setting)}
-                          </td>
-                          <td className='text-right p-2'>
+                          <td className="text-left p-2">{startCase(setting)}</td>
+                          <td className="flex justify-end p-2">
                             <CustomSwitch
                               setting={setting}
                               enabled={adminSettings[setting]}
