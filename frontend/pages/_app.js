@@ -25,10 +25,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <>
       <Head>
-        <link
-          rel='shortcut icon'
-          href={getStrapiMedia(favicon.data.attributes.url)}
-        />
+        <link rel="shortcut icon" href={getStrapiMedia(favicon.data.attributes.url)} />
       </Head>
       <DefaultSeo
         titleTemplate={`%s | ${metaTitleSuffix}`}
@@ -37,9 +34,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         openGraph={{
           ...(metadata.shareImage && metadata.shareImage.data.attributes.formats
             ? {
-                images: Object.values(
-                  metadata.shareImage.data.attributes.formats
-                ).map((image) => {
+                images: Object.values(metadata.shareImage.data.attributes.formats).map(image => {
                   return {
                     url: getStrapiMedia(image.url),
                     width: image.width,
@@ -88,7 +83,7 @@ function Auth({ children }) {
   return children;
 }
 
-MyApp.getInitialProps = async (ctx) => {
+MyApp.getInitialProps = async ctx => {
   const appProps = await App.getInitialProps(ctx);
   const [globalLocale, adminSettings] = await Promise.all([
     getGlobalData({
