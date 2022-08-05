@@ -36,7 +36,7 @@ jobs:
 
             Heroku App: 'https://${{ secrets.HEROKU_STAGING_APP_NAME }}.herokuapp.com'
       - name: Deploy to netlify
-        if: github.event.pull_request.merged == true || github.event.push == true
+        if: github.event.pull_request.merged == true || github.event_name == 'push'
         run: |
           npm --version && node --version
 
@@ -49,7 +49,7 @@ jobs:
           netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context staging
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v2
-        if: github.event.pull_request.merged == true
+        if: github.event.pull_request.merged == true || github.event_name == 'push'
         with:
           issue-number: ${{github.event.number}}
           body: |
