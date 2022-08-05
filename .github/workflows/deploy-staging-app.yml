@@ -36,7 +36,7 @@ jobs:
 
             Heroku App: 'https://${{ secrets.HEROKU_STAGING_APP_NAME }}.herokuapp.com'
       - name: Deploy to netlify
-        if: github.event.pull_request.merged == true
+        if: github.event.pull_request.merged == true || github.event.push == true
         run: |
           npm --version && node --version
 
