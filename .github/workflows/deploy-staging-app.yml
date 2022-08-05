@@ -1,0 +1,55 @@
+name: Deploy Heroku and Netlify Staging Apps
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'staging'
+
+jobs:
+  automate-review-app:
+    runs-on: ubuntu-latest
+    name: Update the staging app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Deploy Heroku Staging App
+        uses: akhileshns/heroku-deploy@v3.12.12
+        id: deploy
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{ secrets.HEROKU_STAGING_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      - name: Comment on commit
+        if: github.event.pull_request.merged == true
+        uses: phulsechinmay/rewritable-pr-comment@v0.2.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_IDENTIFIER: 'Deploy'
+          message: |
+            Your staging app has been deployed 👇🏽
+
+            Heroku App: ${{ steps.deploy.outputs.url }}
+      - name: Deploy to netlify
+        if: github.event.pull_request.merged == true
+        run: |
+          npm --version && node --version
+
+          cd frontend && npm install
+
+          cd ../
+
+          npm i -D netlify-cli
+
+          netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --alias staging-deploy-$(echo ${{ github.event.number }}) --context staging
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v2
+        if: github.event.pull_request.merged == true
+        with:
+          issue-number: ${{github.event.number}}
+          body: |
+            :sparkles: Netlify Staging Deploy Successfully Created :sparkles:
+            Visit your deploy [on netlify][1]
+
+            [1]: https://staging--ilearnedathing.netlify.app
