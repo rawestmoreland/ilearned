@@ -8,10 +8,16 @@
     "postinstall": "lerna bootstrap"
   },
   "devDependencies": {
+    "cz-conventional-changelog": "3.3.0",
     "lerna": "^4.0.0"
   },
   "dependencies": {
     "dotenv": "^16.0.1",
     "slugify": "^1.6.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
