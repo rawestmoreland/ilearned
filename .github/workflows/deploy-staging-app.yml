@@ -47,13 +47,3 @@ jobs:
           npm i -D netlify-cli
 
           netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context staging
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
-        if: github.event.pull_request.merged == true || github.event_name == 'push'
-        with:
-          issue-number: ${{github.event.number}}
-          body: |
-            :sparkles: Netlify Staging Deploy Successfully Created :sparkles:
-            Visit your deploy [on netlify][1]
-
-            [1]: https://staging--ilearnedathing.netlify.app
