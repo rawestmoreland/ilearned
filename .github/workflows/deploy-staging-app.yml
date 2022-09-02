@@ -1,0 +1,49 @@
+name: Deploy Heroku and Netlify Staging Apps
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'staging'
+
+  push:
+    branches:
+      - 'staging'
+
+jobs:
+  automate-review-app:
+    runs-on: ubuntu-latest
+    name: Update the staging app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Deploy Heroku Staging App
+        uses: akhileshns/heroku-deploy@v3.12.12
+        id: deploy
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{ secrets.HEROKU_STAGING_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      - name: Comment on commit
+        if: github.event.pull_request.merged == true
+        uses: phulsechinmay/rewritable-pr-comment@v0.2.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_IDENTIFIER: 'Deploy'
+          message: |
+            Your staging app has been deployed 👇🏽
+
+            Heroku App: 'https://${{ secrets.HEROKU_STAGING_APP_NAME }}.herokuapp.com'
+      - name: Deploy to netlify
+        if: github.event.pull_request.merged == true || github.event_name == 'push'
+        run: |
+          npm --version && node --version
+
+          cd frontend && npm install
+
+          cd ../
+
+          npm i -D netlify-cli
+
+          netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context staging

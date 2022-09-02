@@ -8,7 +8,7 @@ export function getStrapiURL(path) {
 
 export function getNextURL(path) {
   return `${
-    process.env.NEXT_PUBLIC_ILEARNED_URL || 'http://localhost:3000'
+    process.env.NEXT_PUBLIC_ILEARNED_URL || 'http://localhost:3002'
   }${path}`;
 }
 
@@ -19,13 +19,13 @@ export function getApiToken(token) {
 }
 
 export async function signIn({ email, password }) {
-  const signInRes = await fetch(`${getStrapiURL('/auth/local')}`, {
+  const signInRes = await fetch(`${getStrapiURL('/api/auth/local')}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      email,
+      identifier: email,
       password,
     }),
   });

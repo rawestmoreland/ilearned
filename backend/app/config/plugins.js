@@ -1,15 +1,16 @@
 module.exports = ({ env }) => ({
+  chartbrew: true,
   upload: {
     config: {
-      provider: "cloudinary",
+      provider: 'cloudinary',
       providerOptions: {
-        cloud_name: env("CLOUDINARY_NAME"),
-        api_key: env("CLOUDINARY_KEY"),
-        api_secret: env("CLOUDINARY_SECRET"),
+        cloud_name: env('CLOUDINARY_NAME'),
+        api_key: env('CLOUDINARY_KEY'),
+        api_secret: env('CLOUDINARY_SECRET'),
       },
       actionOptions: {
         uploadStream: {
-          folder: env("CLOUDINARY_FOLDER"),
+          folder: env('CLOUDINARY_FOLDER'),
         },
         delete: {},
       },
@@ -17,24 +18,24 @@ module.exports = ({ env }) => ({
   },
   email: {
     config: {
-      provider: env("EMAIL_PROVIDER"),
+      provider: env('EMAIL_PROVIDER'),
       providerOptions: {
-        host: env("EMAIL_SMTP_HOST"),
-        port: env("EMAIL_SMTP_PORT"),
+        host: env('EMAIL_SMTP_HOST'),
+        port: env('EMAIL_SMTP_PORT'),
         auth: {
-          user: env("EMAIL_SMTP_USER"),
-          pass: env("EMAIL_SMTP_PASS"),
+          user: env('EMAIL_SMTP_USER'),
+          pass: env('EMAIL_SMTP_PASS'),
         },
       },
       settings: {
-        defaultFrom: env("EMAIL_ADDRESS_FROM"),
-        defaultReplyTo: env("EMAIL_ADDRESS_REPLY"),
+        defaultFrom: env('EMAIL_ADDRESS_FROM'),
+        defaultReplyTo: env('EMAIL_ADDRESS_REPLY'),
       },
     },
   },
   graphql: {
     config: {
-      endpoint: "/graphql",
+      endpoint: '/graphql',
       shadowCRUD: true,
       playgroundAlways: true,
       depthLimit: 15,
@@ -44,10 +45,10 @@ module.exports = ({ env }) => ({
       },
     },
   },
-  "users-permissions": {
+  'users-permissions': {
     config: {
       jwt: {
-        expiresIn: "7d",
+        expiresIn: '7d',
       },
     },
   },
