@@ -10,4 +10,6 @@ NextJS
 
 ## Backend
 
+Adding something to the readme
+
 Strapi
