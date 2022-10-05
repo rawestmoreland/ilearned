@@ -5,7 +5,7 @@ name: 'deploy'
 on:
   push:
     branches:
-      - master
+      - staging
   workflow_dispatch:
 
 jobs:
@@ -33,8 +33,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: backend/app
-          file: Dockerfile.prod
+          context: ./backend/app
+          file: ./backend/app/Dockerfile.prod
           tags: ${{ github.repository }}:${{ github.sha }}
 
       - name: Push to dokku
