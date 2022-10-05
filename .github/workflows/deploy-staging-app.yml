@@ -18,13 +18,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Deploy Heroku Staging App
-        uses: akhileshns/heroku-deploy@v3.12.12
-        id: deploy
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{ secrets.HEROKU_STAGING_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
       - name: Comment on commit
         if: github.event.pull_request.merged == true
         uses: phulsechinmay/rewritable-pr-comment@v0.2.1
@@ -34,7 +27,7 @@ jobs:
           message: |
             Your staging app has been deployed 👇🏽
 
-            Heroku App: 'https://${{ secrets.HEROKU_STAGING_APP_NAME }}.herokuapp.com'
+            Heroku App: 'https://ilearned-staging.ilearnedathing.com'
       - name: Deploy to netlify
         if: github.event.pull_request.merged == true || github.event_name == 'push'
         run: |
