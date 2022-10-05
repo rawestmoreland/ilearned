@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./backend/app
+          context: backend/app
           file: Dockerfile.prod
           tags: ${{ github.repository }}:${{ github.sha }}
 
