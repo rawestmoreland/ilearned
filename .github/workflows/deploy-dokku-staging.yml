@@ -20,5 +20,5 @@ jobs:
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@ilearned-staging.ilearnedathing.com:ilearned-staging'
+          git_remote_url: 'ssh://dokku@ilearned-staging.ilearnedathing.com:22/ilearned-staging'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
