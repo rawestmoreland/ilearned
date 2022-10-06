@@ -31,14 +31,14 @@ jobs:
         with:
           fetch-depth: 0
       - name: Deploy to netlify
-          if: github.event.pull_request.merged == true || github.event_name == 'push'
-          run: |
-            npm --version && node --version
+        if: github.event.pull_request.merged == true || github.event_name == 'push'
+        run: |
+          npm --version && node --version
 
-            cd frontend && npm install
+          cd frontend && npm install
 
-            cd ../
+          cd ../
 
-            npm i -D netlify-cli
+          npm i -D netlify-cli
 
-            netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context staging
+          netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context staging
