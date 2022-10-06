@@ -29,6 +29,7 @@
     "nodemailer": "^6.7.3",
     "pg": "^8.8.0",
     "pg-connection-string": "^2.5.0",
+    "strapi-plugin-comments": "^2.1.8",
     "strapi-plugin-email-designer": "^2.1.1"
   },
   "author": {
