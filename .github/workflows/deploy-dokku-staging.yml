@@ -50,7 +50,7 @@ name: 'deploy'
 on:
   push:
     branches:
-      - master
+      - staging
 
 jobs:
   deploy:
