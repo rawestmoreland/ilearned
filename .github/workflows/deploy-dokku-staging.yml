@@ -76,6 +76,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
+          path: ./backend/app
+          dockerfile: ./backend/app/Dockerfile.prod
           push: true
           tags: ${{ github.repository }}:${{ github.sha }}
 
