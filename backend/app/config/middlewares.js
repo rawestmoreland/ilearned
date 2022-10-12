@@ -6,11 +6,13 @@ module.exports = [
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          'script-src': ["'self'", 'editor.unlayer.com'],
+          'script-src': ["'self'", 'editor.unlayer.com', '*.tinymce.com', '*.tiny.cloud', 'https:'],
           'frame-src': ["'self'", 'editor.unlayer.com'],
-          'connect-src': ["'self'", 'https:'],
+          'connect-src': ["'self'", 'https:', '*.tinymce.com', '*.tiny.cloud', 'blob:'],
           'img-src': [
             "'self'",
+            '*.tinymce.com',
+            '*.tiny.cloud',
             'data:',
             'blob:',
             'res.cloudinary.com',
@@ -18,7 +20,16 @@ module.exports = [
             'strapi.io',
             's3.amazonaws.com',
           ],
-          'media-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com'],
+          'media-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'res.cloudinary.com',
+            "'unsafe-inline'",
+            '*.tinymce.com',
+            '*.tiny.cloud',
+          ],
+          'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud'],
           upgradeInsecureRequests: null,
         },
       },

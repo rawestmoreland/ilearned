@@ -18,7 +18,6 @@ export default function Home({ posts, pageContext, ...pageProps }) {
   async function getMorePosts() {
     const morePostsRes = await fetchAPI('/posts', false, {
       locale,
-      sort: 'published:desc',
       populate: {
         authors: { populate: ['picture'] },
         image: '*',
@@ -62,7 +61,6 @@ export async function getStaticProps(ctx) {
   const [postsRes, homepageRes] = await Promise.all([
     fetchAPI('/posts', false, {
       locale: ctx.locale,
-      sort: 'published:desc',
       pagination: {
         page: 1,
         pageSize: 10,

@@ -30,11 +30,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <DefaultSeo
         titleTemplate={`%s | ${metaTitleSuffix}`}
         title={metadata.metaTitle}
-        description={metadata.metaDescription}
+        description={metadata.metaDesription}
         openGraph={{
-          ...(metadata.shareImage && metadata.shareImage.data.attributes.formats
+          ...(metadata.image && metadata.metaImage.data.attributes.formats
             ? {
-                images: Object.values(metadata.shareImage.data.attributes.formats).map(image => {
+                images: Object.values(metadata.metaImage.data.attributes.formats).map(image => {
                   return {
                     url: getStrapiMedia(image.url),
                     width: image.width,
@@ -45,16 +45,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             : {
                 images: [
                   {
-                    url: metadata.shareImage.data.attributes.url,
-                    width: metadata.shareImage.data.attributes.width,
-                    height: metadata.shareImage.data.attributes.height,
+                    url: metadata.metaImage.data.attributes.url,
+                    width: metadata.metaImage.data.attributes.width,
+                    height: metadata.metaImage.data.attributes.height,
                   },
                 ],
               }),
-        }}
-        twitter={{
-          cardType: metadata.twitterCardType,
-          handle: metadata.twitterUsername,
         }}
       />
       <SessionProvider session={session}>
@@ -96,7 +92,6 @@ MyApp.getInitialProps = async ctx => {
     pageProps: {
       global: globalLocale.data.global.data,
       adminSettings: adminSettings?.data?.adminSetting.data,
-      locale: ctx.router.locale,
     },
   };
 };

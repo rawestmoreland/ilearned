@@ -16,16 +16,6 @@
     }
   },
   "attributes": {
-    "seo": {
-      "type": "component",
-      "repeatable": false,
-      "component": "shared.metadata",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "Hero": {
       "displayName": "hero",
       "type": "component",
@@ -36,6 +26,16 @@
           "localized": true
         }
       }
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
     }
   }
 }

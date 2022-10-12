@@ -43,15 +43,6 @@
         }
       }
     },
-    "published": {
-      "type": "datetime",
-      "required": true,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "image": {
       "type": "media",
       "multiple": false,
@@ -59,15 +50,6 @@
       "allowedTypes": [
         "images"
       ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "auto_publish": {
-      "type": "boolean",
-      "default": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -94,6 +76,16 @@
       },
       "type": "uid",
       "targetField": "title"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
     }
   }
 }
