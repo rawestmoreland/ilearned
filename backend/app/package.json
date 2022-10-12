@@ -46,7 +46,7 @@
     "template": "https://github.com/rawestmoreland/strapi-template-blog"
   },
   "engines": {
-    "node": "16.x",
+    "node": "16.15.1",
     "npm": ">=6.0.0"
   },
   "license": "MIT"
