@@ -7,8 +7,6 @@ import Layout from '../../components/Layout';
 import PostGrid from '../../components/PostGrid';
 import Seo from '../../components/Seo';
 
-import { getLocalizedPaths } from '../../utils/localize';
-
 const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
   // const { live } = pageProps?.adminSettings?.attributes;
   const { name, slug } = author.attributes;

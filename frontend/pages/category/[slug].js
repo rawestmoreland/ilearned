@@ -10,7 +10,6 @@ import { getLocalizedPaths } from '../../utils/localize';
 import { fetchAPI, getPostsByCategory } from '../../utils/api';
 
 const Category = ({ posts, category, meta, pageContext, ...pageProps }) => {
-  const { live } = pageProps?.adminSettings?.attributes;
   const { name, slug } = category?.attributes;
   const [postsMeta, setPostsMeta] = useState(meta);
   const [postsData, setPostsData] = useState(posts);

@@ -10,9 +10,9 @@ import { fetchAPI } from '../utils/api';
 import { getLocalizedPaths } from '../utils/localize';
 
 export default function Home({ posts, pageContext, ...pageProps }) {
+  pageProps.adminSettings;
   const [postsData, setPostsData] = useState(posts.data);
   const [postsMeta, setPostsMeta] = useState(posts.meta.pagination);
-  const { live } = pageProps?.adminSettings?.attributes;
   const { locale } = pageContext;
 
   async function getMorePosts() {
@@ -41,7 +41,7 @@ export default function Home({ posts, pageContext, ...pageProps }) {
   }, [posts]);
 
   return (
-    <Layout live={live} pageContext={pageContext}>
+    <Layout pageContext={pageContext}>
       <Seo seo={pageContext.seo} />
       <InfininiteScroll
         dataLength={postsData.length}
