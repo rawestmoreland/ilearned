@@ -6,7 +6,6 @@ import { fetchAPI, getPostsBySlug } from '../../utils/api';
 import Custom404 from '../404';
 
 const Post = ({ post, error, pageContext, ...pageProps }) => {
-  const { live } = pageProps?.adminSettings?.attributes;
   const { metaTitle, metaDescription, metaImage } = post?.attributes.seo || {};
   const seo = {
     metaTitle,

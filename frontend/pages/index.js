@@ -7,10 +7,8 @@ import Seo from '../components/Seo';
 import PostGrid from '../components/PostGrid';
 
 import { fetchAPI } from '../utils/api';
-import { getLocalizedPaths } from '../utils/localize';
 
-export default function Home({ posts, pageContext, ...pageProps }) {
-  pageProps.adminSettings;
+export default function Home({ posts, pageContext }) {
   const [postsData, setPostsData] = useState(posts.data);
   const [postsMeta, setPostsMeta] = useState(posts.meta.pagination);
   const { locale } = pageContext;
@@ -60,7 +58,7 @@ export async function getStaticProps(ctx) {
   // Run API calls in parallel
   const [postsRes, homepageRes] = await Promise.all([
     fetchAPI('/posts', false, {
-      locale: ctx.locale,
+      sort: 'publishedAt:desc',
       pagination: {
         page: 1,
         pageSize: 10,
@@ -74,10 +72,11 @@ export async function getStaticProps(ctx) {
       },
     }),
     fetchAPI('/homepage', false, {
-      locale: ctx.locale,
       populate: '*',
     }),
   ]);
+
+  console.log(postsRes);
 
   const pageContext = {
     locale,
@@ -87,15 +86,10 @@ export async function getStaticProps(ctx) {
     seo: homepageRes.data.attributes.seo,
   };
 
-  const localizedPaths = getLocalizedPaths(pageContext);
-
   return {
     props: {
       posts: postsRes,
-      pageContext: {
-        ...pageContext,
-        localizedPaths,
-      },
+      pageContext,
     },
   };
 }

@@ -1,7 +1,7 @@
 module.exports = ({ env }) => ({
   chartbrew: true,
   ckeditor: {
-    enabled: true,
+    enabled: false,
     config: {
       plugin: {
         // disable data-theme tag setting //

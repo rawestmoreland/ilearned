@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
@@ -17,7 +18,8 @@ const PostContent = ({ post }) => {
       <div className="mt-8">
         <ReactMarkdown
           children={content}
-          className="post-content font-rubik text-cod-gray"
+          rehypePlugins={[rehypeRaw]}
+          className="prose max-w-none font-rubik text-cod-gray"
           components={{
             code({ node, inline, className, children, ...props }) {
               const match = /language-(\w+)/.exec(className || '');
@@ -35,14 +37,14 @@ const PostContent = ({ post }) => {
                 </code>
               );
             },
-            a: ({ node, ...props }) => <a className="text-link-blue underline" {...props} />,
-            p: ({ node, ...props }) => <p className="text-sm mb-2 text-cod-gray" {...props} />,
-            img: ({ node, ...props }) => <img alt="" className="mx-auto my-8 md:max-w-[80%]" {...props} />,
-            ul: ({ node, ordered = false, ...props }) => <ul className="text-sm list-disc ml-2 my-2" {...props} />,
-            h1: ({ node, ...props }) => <h1 className="text-3xl text-cod-gray mb-2" {...props} />,
-            h2: ({ node, ...props }) => <h2 className="text-2xl text-cod-gray my-2" {...props} />,
-            h3: ({ node, ...props }) => <h3 className="text-xl text-cod-gray my-2" {...props} />,
-            h4: ({ node, ...props }) => <h4 className="text-lg text-cod-gray my-2 font-medium" {...props} />,
+            // a: ({ node, ...props }) => <a className="text-link-blue underline" {...props} />,
+            // p: ({ node, ...props }) => <p className="text-normal mb-2 text-cod-gray" {...props} />,
+            // img: ({ node, ...props }) => <img alt="" className="mx-auto my-8 md:max-w-[80%]" {...props} />,
+            // ul: ({ node, ordered = false, ...props }) => <ul className="text-normal list-disc ml-2 my-2" {...props} />,
+            // h1: ({ node, ...props }) => <h1 className="text-3xl text-cod-gray mb-2" {...props} />,
+            // h2: ({ node, ...props }) => <h2 className="text-2xl text-cod-gray my-2" {...props} />,
+            // h3: ({ node, ...props }) => <h3 className="text-xl text-cod-gray my-2" {...props} />,
+            // h4: ({ node, ...props }) => <h4 className="text-lg text-cod-gray my-2 font-medium" {...props} />,
           }}
         />
       </div>

@@ -95,6 +95,8 @@ export async function fetchAPI(path, authRequired = false, urlParamsObject = {})
   const queryString = qs.stringify(urlParamsObject);
   const requestUrl = `${getStrapiURL(`/api${path}${queryString ? `?${queryString}` : ''}`)}`;
 
+  console.log({ requestUrl });
+
   const response = await fetch(requestUrl, mergedOptions);
 
   const { data, error, meta } = await response.json();
@@ -369,6 +371,7 @@ export async function getPostsBySlug({ slug, locale = null }) {
       query GetPosts($slug: String!) {
         posts(
           filters: { slug: { eq: $slug } }
+          sort: "publishedAt:desc"
           pagination: { page: 1, pageSize: 10 }
         ) {
           data {
