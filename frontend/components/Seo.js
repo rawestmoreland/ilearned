@@ -15,9 +15,7 @@ const Seo = ({ seo }) => {
   const fullSeo = {
     ...seoWithDefaults,
     metaTitle: `${
-      seoWithDefaults.metaTitle === siteName
-        ? siteName + ' | ' + metaTitleSuffix
-        : seoWithDefaults.metaTitle + ' | ' + siteName
+      seoWithDefaults.metaTitle === siteName ? siteName + ' | ' + metaTitleSuffix : seoWithDefaults.metaTitle
     }`,
     shareImage: seoWithDefaults.metaImage.data.attributes || null,
   };

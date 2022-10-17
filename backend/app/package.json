@@ -13,9 +13,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@_sh/strapi-plugin-ckeditor": "^1.1.2",
     "@chartbrew/plugin-strapi": "^0.3.0",
-    "@sklinet/strapi-plugin-tinymce": "^1.0.3",
     "@strapi/plugin-graphql": "4.4.3",
     "@strapi/plugin-i18n": "4.4.3",
     "@strapi/plugin-seo": "^1.7.5",
@@ -33,7 +31,6 @@
     "nodemailer": "^6.7.3",
     "pg": "^8.8.0",
     "pg-connection-string": "^2.5.0",
-    "strapi-plugin-comments": "^2.1.8",
     "strapi-plugin-email-designer": "^2.1.1",
     "strapi-plugin-generate-data": "^1.0.19",
     "strapi-plugin-publisher": "^1.1.4"
