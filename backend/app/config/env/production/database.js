@@ -1,10 +1,9 @@
-const parse = require("pg-connection-string").parse;
-const config = parse(
-  process.env.DATABASE_URL || process.env.HEROKU_POSTGRESQL_COPPER
-);
+const parse = require('pg-connection-string').parse;
+const config = parse(process.env.DATABASE_URL);
+
 module.exports = ({ env }) => ({
   connection: {
-    client: "postgres",
+    client: 'postgres',
     connection: {
       host: config.host,
       port: config.port,
@@ -15,6 +14,5 @@ module.exports = ({ env }) => ({
         rejectUnauthorized: false,
       },
     },
-    debug: false,
   },
 });

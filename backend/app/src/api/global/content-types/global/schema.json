@@ -39,16 +39,6 @@
         }
       }
     },
-    "metadata": {
-      "type": "component",
-      "repeatable": false,
-      "component": "shared.metadata",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "navbar": {
       "type": "component",
       "repeatable": false,
@@ -77,6 +67,16 @@
         }
       },
       "component": "layout.footer"
+    },
+    "metadata": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
     }
   }
 }

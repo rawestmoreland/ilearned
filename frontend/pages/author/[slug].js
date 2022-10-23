@@ -7,8 +7,6 @@ import Layout from '../../components/Layout';
 import PostGrid from '../../components/PostGrid';
 import Seo from '../../components/Seo';
 
-import { getLocalizedPaths } from '../../utils/localize';
-
 const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
   // const { live } = pageProps?.adminSettings?.attributes;
   const { name, slug } = author.attributes;
@@ -22,7 +20,6 @@ const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
   async function getMorePosts() {
     const postsRes = await getPostsByAuthor({
       slug,
-      locale,
       page: postsMeta.page + 1,
     });
 
@@ -40,13 +37,11 @@ const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
       <Seo seo={seo} />
       <div>
         <div>
-          <div className='mt-4 md:mt-8'>
-            <span className='text-terracotta font-big-shoulders tracking-widest font-extrabold'>
+          <div className="mt-4 md:mt-8">
+            <span className="text-terracotta font-big-shoulders tracking-widest font-extrabold">
               ARTICLES WRITTEN BY
             </span>
-            <h1 className='text-off-white font-rubik text-5xl'>
-              {name.toUpperCase()}
-            </h1>
+            <h1 className="text-off-white font-rubik text-5xl">{name.toUpperCase()}</h1>
           </div>
           <InfininiteScroll
             dataLength={postsData.length}
@@ -63,31 +58,15 @@ const Author = ({ posts, author, meta, locale, pageContext, ...pageProps }) => {
 };
 
 export async function getStaticPaths(context) {
-  const authors = await context.locales.reduce(
-    async (currentAuthorsPromise, locale) => {
-      const currentAuthors = await currentAuthorsPromise;
-      const authorNames = await fetchAPI('/authors', false, {
-        fields: ['slug'],
-      });
+  const authors = await fetchAPI('/authors', false, {
+    fields: ['slug'],
+  });
 
-      /**
-       * authors aren't localized, but we want paths to
-       * all authors for each locale route.
-       */
-      authorNames.data.forEach((name) => (name.locale = locale));
-
-      return [...currentAuthors, ...authorNames.data];
-    },
-    Promise.resolve([])
-  );
-
-  const paths = authors.map((author) => {
+  const paths = authors.data.map(author => {
     const { slug } = author.attributes;
-    const { locale } = author;
 
     return {
       params: { slug },
-      locale,
     };
   });
 
@@ -101,7 +80,6 @@ export async function getStaticProps(context) {
   const { params, locale, locales, defaultLocale } = context;
   const matchingPosts = await getPostsByAuthor({
     slug: params.slug,
-    locale,
     page: 1,
   });
 
@@ -113,17 +91,12 @@ export async function getStaticProps(context) {
     slug: params.slug,
   };
 
-  const localizedPaths = getLocalizedPaths(pageContext);
-
   return {
     props: {
       posts: matchingPosts.data.posts.data,
       author: matchingPosts.data.authors.data[0],
       meta: matchingPosts.data.posts.meta.pagination,
-      pageContext: {
-        ...pageContext,
-        localizedPaths,
-      },
+      pageContext,
     },
   };
 }

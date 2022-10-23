@@ -1,20 +1,17 @@
+import GiscussComments from '../../components/GiscusComments';
 import Layout from '../../components/Layout';
 import PostContent from '../../components/PostContent';
 import Seo from '../../components/Seo';
 
 import { fetchAPI, getPostsBySlug } from '../../utils/api';
-import { getLocalizedPaths } from '../../utils/localize';
 import Custom404 from '../404';
 
-const Post = ({ posts, error, pageContext, ...pageProps }) => {
-  const { live } = pageProps?.adminSettings?.attributes;
-  const { locale } = pageContext;
-  const post = posts?.find((post) => post?.attributes.locale === locale);
-  const { title, description, image } = post?.attributes || {};
+const Post = ({ post, error, pageContext, ...pageProps }) => {
+  const { metaTitle, metaDescription, metaImage } = post?.attributes.seo || {};
   const seo = {
-    metaTitle: title,
-    metaDescription: description,
-    shareImage: image,
+    metaTitle,
+    metaDescription,
+    shareImage: metaImage,
     article: true,
   };
   if (!error && post) {
@@ -26,25 +23,20 @@ const Post = ({ posts, error, pageContext, ...pageProps }) => {
     );
   }
 
-  return (
-    <Custom404 live={live} pageContext={pageContext} noTranslation={!post} />
-  );
+  return <Custom404 live={live} pageContext={pageContext} noTranslation={!post} />;
 };
 
 export async function getStaticPaths(context) {
-  const posts = await context.locales.reduce(
-    async (currentPostsPromise, locale) => {
-      const currentPosts = await currentPostsPromise;
-      const localePosts = await fetchAPI('/posts', false, {
-        locale,
-        fields: ['slug', 'locale'],
-      });
-      return [...currentPosts, ...localePosts.data];
-    },
-    Promise.resolve([])
-  );
+  const posts = await context.locales.reduce(async (currentPostsPromise, locale) => {
+    const currentPosts = await currentPostsPromise;
+    const localePosts = await fetchAPI('/posts', false, {
+      locale,
+      fields: ['slug', 'locale'],
+    });
+    return [...currentPosts, ...localePosts.data];
+  }, Promise.resolve([]));
 
-  const paths = posts.map((post) => {
+  const paths = posts.map(post => {
     const { slug, locale } = post.attributes;
 
     return {
@@ -73,25 +65,20 @@ export async function getStaticProps(context) {
     slug: params.slug,
   };
 
-  const localizedPaths = getLocalizedPaths(pageContext);
-
   if (!postData.data.posts.data.length || postData.errors) {
     return {
       props: {
         post: null,
         error: true,
-        pageContext: { ...pageContext, localizedPaths },
+        pageContext,
       },
     };
   }
 
   return {
     props: {
-      posts: [
-        postData.data.posts.data[0],
-        ...postData.data.posts.data[0].attributes.localizations.data,
-      ],
-      pageContext: { ...pageContext, localizedPaths },
+      post: [postData.data.posts.data[0]][0],
+      pageContext,
     },
   };
 }

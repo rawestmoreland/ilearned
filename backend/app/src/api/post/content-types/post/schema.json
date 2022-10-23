@@ -43,31 +43,11 @@
         }
       }
     },
-    "published": {
-      "type": "datetime",
-      "required": true,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "image": {
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "images"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "auto_publish": {
-      "type": "boolean",
-      "default": false,
+      "allowedTypes": ["images"],
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -86,6 +66,14 @@
       "target": "api::author.author",
       "inversedBy": "posts"
     },
+    "publish": {
+      "type": "datetime",
+      "required": true
+    },
+    "auto_publish": {
+      "type": "boolean",
+      "default": false
+    },
     "slug": {
       "pluginOptions": {
         "i18n": {
@@ -94,6 +82,16 @@
       },
       "type": "uid",
       "targetField": "title"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
     }
   }
 }

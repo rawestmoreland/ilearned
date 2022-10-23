@@ -9,15 +9,7 @@ import Seo from '../../components/Seo';
 import { getLocalizedPaths } from '../../utils/localize';
 import { fetchAPI, getPostsByCategory } from '../../utils/api';
 
-const Category = ({
-  posts,
-  category,
-  meta,
-  locale,
-  pageContext,
-  ...pageProps
-}) => {
-  const { live } = pageProps?.adminSettings?.attributes;
+const Category = ({ posts, category, meta, pageContext, ...pageProps }) => {
   const { name, slug } = category?.attributes;
   const [postsMeta, setPostsMeta] = useState(meta);
   const [postsData, setPostsData] = useState(posts);
@@ -29,7 +21,6 @@ const Category = ({
   async function getMorePosts() {
     const postsRes = await getPostsByCategory({
       slug,
-      locale,
       page: postsMeta.page + 1,
     });
 
@@ -47,13 +38,9 @@ const Category = ({
       <Seo seo={seo} />
       <div>
         <div>
-          <div className='mt-4 md:mt-8'>
-            <span className='text-terracotta font-big-shoulders tracking-widest font-extrabold'>
-              ARTICLES TAGGED
-            </span>
-            <h1 className='text-off-white font-rubik text-5xl'>
-              {name.toUpperCase()}
-            </h1>
+          <div className="mt-4 md:mt-8">
+            <span className="text-terracotta font-big-shoulders tracking-widest font-extrabold">ARTICLES TAGGED</span>
+            <h1 className="text-off-white font-rubik text-5xl">{name.toUpperCase()}</h1>
           </div>
           <InfininiteScroll
             dataLength={postsData.length}
@@ -70,31 +57,15 @@ const Category = ({
 };
 
 export async function getStaticPaths(context) {
-  const categories = await context.locales.reduce(
-    async (currentCategoriesPromise, locale) => {
-      const currentCategories = await currentCategoriesPromise;
-      const categorySlugs = await fetchAPI('/categories', false, {
-        fields: ['slug'],
-      });
+  const categories = await fetchAPI('/categories', false, {
+    fields: ['slug'],
+  });
 
-      /**
-       * Categories aren't localized, but we want paths to
-       * all categories for each locale route.
-       */
-      categorySlugs.data.forEach((slug) => (slug.locale = locale));
-
-      return [...currentCategories, ...categorySlugs.data];
-    },
-    Promise.resolve([])
-  );
-
-  const paths = categories.map((category) => {
+  const paths = categories.data.map(category => {
     const { slug } = category.attributes;
-    const { locale } = category;
 
     return {
       params: { slug },
-      locale,
     };
   });
 
@@ -108,7 +79,6 @@ export async function getStaticProps(context) {
   const { params, locale, locales, defaultLocale } = context;
   const matchingPosts = await getPostsByCategory({
     slug: params.slug,
-    locale,
     page: 1,
   });
 
@@ -120,17 +90,12 @@ export async function getStaticProps(context) {
     slug: params.slug,
   };
 
-  const localizedPaths = getLocalizedPaths(pageContext);
-
   return {
     props: {
       posts: matchingPosts.data.posts.data,
       category: matchingPosts.data.categories?.data[0] || null,
       meta: matchingPosts.data.posts.meta.pagination,
-      pageContext: {
-        ...pageContext,
-        localizedPaths,
-      },
+      pageContext,
     },
   };
 }

@@ -10,8 +10,7 @@ import Footer from './Footer';
 
 import { GlobalContext } from '../pages/_app';
 
-const Layout = ({ children, ...props }) => {
-  const { live } = props;
+const Layout = ({ children, live = true, ...props }) => {
   const { global } = useContext(GlobalContext);
   const { navbar, footer } = global;
   const [loading, setLoading] = useState(false);
@@ -31,13 +30,11 @@ const Layout = ({ children, ...props }) => {
   }, [router]);
 
   return (
-    <div className='relative min-h-screen'>
-      <div className='pb-60'>
+    <div className="relative min-h-screen">
+      <div className="pb-60">
         <Navbar navbar={navbar} pageContext={props.pageContext} />
         <Loading loading={loading} />
-        <div className={`${loading ? 'hidden' : 'container pt-16'}`}>
-          {live ? children : <ComingSoon />}
-        </div>
+        <div className={`${loading ? 'hidden' : 'container pt-16'}`}>{live ? children : <ComingSoon />}</div>
       </div>
       <Footer footer={footer} />
     </div>

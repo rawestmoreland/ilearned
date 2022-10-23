@@ -7,18 +7,15 @@ import Seo from '../components/Seo';
 import PostGrid from '../components/PostGrid';
 
 import { fetchAPI } from '../utils/api';
-import { getLocalizedPaths } from '../utils/localize';
 
-export default function Home({ posts, pageContext, ...pageProps }) {
+export default function Home({ posts, pageContext }) {
   const [postsData, setPostsData] = useState(posts.data);
   const [postsMeta, setPostsMeta] = useState(posts.meta.pagination);
-  const { live } = pageProps?.adminSettings?.attributes;
   const { locale } = pageContext;
 
   async function getMorePosts() {
     const morePostsRes = await fetchAPI('/posts', false, {
       locale,
-      sort: 'published:desc',
       populate: {
         authors: { populate: ['picture'] },
         image: '*',
@@ -42,7 +39,7 @@ export default function Home({ posts, pageContext, ...pageProps }) {
   }, [posts]);
 
   return (
-    <Layout live={live} pageContext={pageContext}>
+    <Layout pageContext={pageContext}>
       <Seo seo={pageContext.seo} />
       <InfininiteScroll
         dataLength={postsData.length}
@@ -61,8 +58,7 @@ export async function getStaticProps(ctx) {
   // Run API calls in parallel
   const [postsRes, homepageRes] = await Promise.all([
     fetchAPI('/posts', false, {
-      locale: ctx.locale,
-      sort: 'published:desc',
+      sort: 'publishedAt:desc',
       pagination: {
         page: 1,
         pageSize: 10,
@@ -76,7 +72,6 @@ export async function getStaticProps(ctx) {
       },
     }),
     fetchAPI('/homepage', false, {
-      locale: ctx.locale,
       populate: '*',
     }),
   ]);
@@ -89,15 +84,10 @@ export async function getStaticProps(ctx) {
     seo: homepageRes.data.attributes.seo,
   };
 
-  const localizedPaths = getLocalizedPaths(pageContext);
-
   return {
     props: {
       posts: postsRes,
-      pageContext: {
-        ...pageContext,
-        localizedPaths,
-      },
+      pageContext,
     },
   };
 }

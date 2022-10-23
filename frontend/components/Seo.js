@@ -15,11 +15,9 @@ const Seo = ({ seo }) => {
   const fullSeo = {
     ...seoWithDefaults,
     metaTitle: `${
-      seoWithDefaults.metaTitle === siteName
-        ? siteName + ' | ' + metaTitleSuffix
-        : seoWithDefaults.metaTitle + ' | ' + siteName
+      seoWithDefaults.metaTitle === siteName ? siteName + ' | ' + metaTitleSuffix : seoWithDefaults.metaTitle
     }`,
-    shareImage: seoWithDefaults.shareImage.data.attributes || null,
+    shareImage: seoWithDefaults.metaImage.data.attributes || null,
   };
 
   return (
@@ -32,9 +30,9 @@ const Seo = ({ seo }) => {
         description: fullSeo.metaDescription || '',
         // Only include OG image if we have it
         // Careful: if you disable image optimization in Strapi, this will break
-        ...(fullSeo.shareImage && fullSeo.shareImage.formats
+        ...(fullSeo.shareImage && fullSeo.metaImage.formats
           ? {
-              images: Object.values(fullSeo.shareImage.formats).map(image => {
+              images: Object.values(fullSeo.metaImage.formats).map(image => {
                 return {
                   url: getStrapiMedia(image.url),
                   width: image.width,
@@ -45,22 +43,12 @@ const Seo = ({ seo }) => {
           : {
               images: [
                 {
-                  url: fullSeo.shareImage.url,
-                  width: fullSeo.shareImage.width,
-                  height: fullSeo.shareImage.height,
+                  url: fullSeo.metaImage.url,
+                  width: fullSeo.metaImage.width,
+                  height: fullSeo.metaImage.height,
                 },
               ],
             }),
-      }}
-      // Only included Twitter data if we have it
-      twitter={{
-        ...(fullSeo.twitterCardType && {
-          cardType: fullSeo.twitterCardType,
-        }),
-        // Handle is the twitter username of the content creator
-        ...(fullSeo.twitterUsername && {
-          handle: fullSeo.twitterUsername,
-        }),
       }}
     />
   );

@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const { getBaseURL } = require("../../../../utils/helpers");
+const { getBaseURL } = require('../../../../utils/helpers');
 
 const baseURL = getBaseURL();
 
@@ -8,17 +8,17 @@ const baseURL = getBaseURL();
  * post service.
  */
 
-const { createCoreService } = require("@strapi/strapi").factories;
+const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService("api::post.post", ({ strapi }) => ({
+module.exports = createCoreService('api::post.post', ({ strapi }) => ({
   sendPost: async (email, token, post) => {
     try {
-      await strapi.plugins["email"].services.email.send({
+      await strapi.plugins['email'].services.email.send({
         to: email,
-        from: "richard@ilearnedathing.com",
-        replyTo: "richard@ilearnedathing.com",
+        from: 'richard@ilearnedathing.com',
+        replyTo: 'richard@ilearnedathing.com',
         subject: `🧠 [New Post] ${post.title} 🧠`,
-        text: `New post from I Leanred a Thing! ${baseURL}/${post.slug}`,
+        text: `New post from I Learned a Thing! ${baseURL}/${post.slug}`,
         html: `
         <div
           style="max-width:75%; height:100%; margin:0 auto; background-color:whitesmoke; padding:2rem; color:#262626;">

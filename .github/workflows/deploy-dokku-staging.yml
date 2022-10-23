@@ -1,0 +1,44 @@
+name: Deploy Dokku Staging App
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  staging_dokku:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@ilearned-staging.ilearnedathing.com:22/ilearned-staging'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  staging_netlify:
+    needs: staging_dokku
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Deploy to netlify
+        if: github.event.pull_request.merged == true || github.event_name == 'push'
+        run: |
+          npm --version && node --version
+
+          cd frontend && npm install
+
+          cd ../
+
+          npm i -D netlify-cli
+
+          netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context staging
