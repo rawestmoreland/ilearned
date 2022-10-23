@@ -66,6 +66,14 @@
       "target": "api::author.author",
       "inversedBy": "posts"
     },
+    "publish": {
+      "type": "datetime",
+      "required": true
+    },
+    "auto_publish": {
+      "type": "boolean",
+      "default": false
+    },
     "slug": {
       "pluginOptions": {
         "i18n": {

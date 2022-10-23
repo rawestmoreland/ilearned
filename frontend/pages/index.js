@@ -76,8 +76,6 @@ export async function getStaticProps(ctx) {
     }),
   ]);
 
-  console.log(postsRes);
-
   const pageContext = {
     locale,
     locales,

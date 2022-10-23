@@ -48,9 +48,6 @@ module.exports = ({ env }) => ({
       },
     },
   },
-  publisher: {
-    enabled: true,
-  },
   'users-permissions': {
     config: {
       jwt: {

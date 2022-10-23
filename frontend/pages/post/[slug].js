@@ -1,3 +1,4 @@
+import GiscussComments from '../../components/GiscusComments';
 import Layout from '../../components/Layout';
 import PostContent from '../../components/PostContent';
 import Seo from '../../components/Seo';

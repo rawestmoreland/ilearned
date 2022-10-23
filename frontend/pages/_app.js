@@ -2,6 +2,7 @@ import Head from 'next/head';
 import ErrorPage from 'next/error';
 import App from 'next/app';
 import { DefaultSeo } from 'next-seo';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 import { SessionProvider } from 'next-auth/react';
 
@@ -13,6 +14,7 @@ import { getStrapiMedia } from '../utils/media';
 import { useSession } from 'next-auth/react';
 
 import '../styles/globals.css';
+import { ModalProvider } from '../utils/context/modal-context';
 
 export const GlobalContext = createContext({});
 
@@ -54,15 +56,19 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         }}
       />
       <SessionProvider session={session}>
-        <GlobalContext.Provider value={{ global: global.attributes, locale }}>
-          {Component.auth ? (
-            <Auth>
-              <Component {...pageProps} />
-            </Auth>
-          ) : (
-            <Component {...pageProps} />
-          )}
-        </GlobalContext.Provider>
+        <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}>
+          <GlobalContext.Provider value={{ global: global.attributes, locale }}>
+            <ModalProvider>
+              {Component.auth ? (
+                <Auth>
+                  <Component {...pageProps} />
+                </Auth>
+              ) : (
+                <Component {...pageProps} />
+              )}
+            </ModalProvider>
+          </GlobalContext.Provider>
+        </GoogleReCaptchaProvider>
       </SessionProvider>
     </>
   );

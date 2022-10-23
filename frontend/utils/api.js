@@ -63,14 +63,14 @@ export async function fetchAPIWithToken({ path, urlParamsObject = {}, options = 
 
   // Build request URL
   const queryString = qs.stringify(urlParamsObject, { encodeValuesOnly: true });
-  const requestUrl = `${getStrapiURL(`/api${path}${queryString ? `?${queryString}` : ''}`)}`;
+  const requestUrl = `${getStrapiURL(`${path}${queryString ? `?${queryString}` : ''}`)}`;
 
   // Trigger API call
   const response = await fetch(requestUrl, mergedOptions);
 
-  const { data, error } = await response.json();
+  const data = await response.json();
 
-  return { data, error };
+  return data;
 }
 
 // Helper to make GET requests to Strapi
@@ -94,8 +94,6 @@ export async function fetchAPI(path, authRequired = false, urlParamsObject = {})
   // Build request URL
   const queryString = qs.stringify(urlParamsObject);
   const requestUrl = `${getStrapiURL(`/api${path}${queryString ? `?${queryString}` : ''}`)}`;
-
-  console.log({ requestUrl });
 
   const response = await fetch(requestUrl, mergedOptions);
 
