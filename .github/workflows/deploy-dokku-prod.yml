@@ -1,4 +1,4 @@
-name: Deploy Dokku Staging App
+name: Deploy Dokku Prod App
 
 # yamllint disable-line rule:truthy
 on:
