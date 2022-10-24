@@ -6,7 +6,7 @@ module.exports = {
     data.token = Buffer.from(email).toString('base64');
     const userCheck = await strapi.db
       .query('api::subscriber.subscriber')
-      .findOne({ where: $and[({ email }, { verified: true })] });
+      .findOne({ where: $and[({ email }, { verified: false })] });
     if (userCheck !== null) {
       await strapi.service('api::subscriber.subscriber').sendVerify(email, token);
     }
