@@ -7,8 +7,6 @@ on:
       - production
     paths:
       - 'backend/**'
-    paths-ignore:
-      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
