@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - production
+    paths:
+      - 'backend/**'
+    paths-ignore:
+      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
