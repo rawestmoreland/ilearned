@@ -3,23 +3,19 @@ module.exports = {
     const { data } = event.params;
     const { email, token } = data;
     console.log(`Before create: ${email}`);
-    data.token = Buffer.from(email).toString("base64");
+    data.token = Buffer.from(email).toString('base64');
     const userCheck = await strapi.db
-      .query("api::subscriber.subscriber")
-      .findOne({ where: { email } });
+      .query('api::subscriber.subscriber')
+      .findOne({ where: $and[({ email }, { verified: true })] });
     if (userCheck !== null) {
-      await strapi
-        .service("api::subscriber.subscriber")
-        .sendVerify(email, token);
+      await strapi.service('api::subscriber.subscriber').sendVerify(email, token);
     }
   },
   async afterCreate(event) {
     const { result } = event;
     const { email, token } = result;
     if (result) {
-      await strapi
-        .service("api::subscriber.subscriber")
-        .sendVerify(email, token);
+      await strapi.service('api::subscriber.subscriber').sendVerify(email, token);
     }
   },
 };
