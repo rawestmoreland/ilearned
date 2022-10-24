@@ -9,7 +9,7 @@ const { createCoreService } = require('@strapi/strapi').factories;
 module.exports = createCoreService('api::subscriber.subscriber', ({ strapi }) => ({
   sendVerify: async (email, token) => {
     const baseURL = `${
-      process.env.NODE_ENV === 'production' ? process.env.NEXT_SBB_PUBLIC_URL : 'http://localhost:3000'
+      process.env.NODE_ENV === 'production' ? process.env.NEXT_ILEARNED_PUBLIC_URL : 'http://localhost:3000'
     }`;
     try {
       await strapi.plugins['email'].services.email.send({
