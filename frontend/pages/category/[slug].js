@@ -6,7 +6,6 @@ import Layout from '../../components/Layout';
 import PostGrid from '../../components/PostGrid';
 import Seo from '../../components/Seo';
 
-import { getLocalizedPaths } from '../../utils/localize';
 import { fetchAPI, getPostsByCategory } from '../../utils/api';
 
 const Category = ({ posts, category, meta, pageContext, ...pageProps }) => {
