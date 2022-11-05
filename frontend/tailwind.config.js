@@ -61,7 +61,7 @@ module.exports = {
             '--tw-prose-quote-borders': theme('colors.zinc.200'),
             '--tw-prose-captions': theme('colors.zinc.400'),
             '--tw-prose-code': theme('colors.zinc.700'),
-            '--tw-prose-code-bg': theme('colors.zinc.300 / 0.2'),
+            '--tw-prose-code-bg': theme('colors.zinc.100 / 0.2'),
             '--tw-prose-pre-code': theme('colors.zinc.100'),
             '--tw-prose-pre-bg': theme('colors.gray.800'),
             '--tw-prose-pre-border': 'transparent',

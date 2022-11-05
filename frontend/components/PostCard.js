@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import NextImage from './NextImage';
 import Link from 'next/link';
 
 import AuthorRow from './AuthorRow';
@@ -7,21 +7,15 @@ import CategoryRow from './CategoryRow';
 const PostCard = ({ post }) => {
   const { title, image, categories, description, authors, publishedAt, slug } = post.attributes;
   return (
-    <div className="flex flex-col justify-between bg-off-white border rounded-lg h-full">
-      <div className="relative top-0 left-0 w-full bg-white h-[250px] rounded-t-lg cursor-pointer p-4">
+    <div className="grid grid-cols-1 grid-rows-3 bg-off-white border rounded-lg h-full">
+      <div className="relative row-span-1 top-0 left-0 w-full rounded-t-lg cursor-pointer p-4">
         <Link href={`/post/${slug}`}>
           <a>
-            <Image
-              src={image.data.attributes.url}
-              objectFit="cover"
-              layout="fill"
-              className="rounded-t-lg"
-              alt={image.data.attributes?.alternativeText || ''}
-            />
+            <NextImage $className="rounded-lg" cover media={image} alt={image.data.attributes?.alternativeText || ''} />
           </a>
         </Link>
       </div>
-      <div className="flex flex-col h-full mx-4">
+      <div className="row-span-2 flex flex-col h-full mx-4">
         <CategoryRow categories={categories} />
         <Link href={`/post/${slug}`}>
           <h2 className="font-rubik font-bold text-xl mb-4 cursor-pointer">{title}</h2>
