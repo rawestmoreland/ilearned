@@ -6,12 +6,26 @@ on:
     branches:
       - production
     paths:
-      - 'frontend/**'
+      - 'backend/**'
   workflow_dispatch:
 
 jobs:
-  prod_netlify:
-    needs: staging_dokku
+  prod_dokku:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@admin.ilearnedathing.com:22/ilearned-admin'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  staging_netlify:
+    needs: prod_dokku
     runs-on: ubuntu-latest
     steps:
       - name: Cloning repo
@@ -29,4 +43,4 @@ jobs:
 
           npm i -D netlify-cli
 
-          netlify deploy --prod --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed production from github actions"
+          netlify deploy --build --prod --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed production from github actions"

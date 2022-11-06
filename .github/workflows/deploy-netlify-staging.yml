@@ -1,4 +1,4 @@
-name: Deploy Dokku Staging App
+name: Deploy Netlify Staging App
 
 # yamllint disable-line rule:truthy
 on:
@@ -11,7 +11,6 @@ on:
 
 jobs:
   staging_netlify:
-    needs: staging_dokku
     runs-on: ubuntu-latest
     steps:
       - name: Cloning repo

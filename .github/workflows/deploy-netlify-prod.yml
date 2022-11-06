@@ -1,0 +1,31 @@
+name: Deploy Dokku Prod Netlify App
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - production
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  prod_netlify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Deploy to netlify
+        if: github.event.pull_request.merged == true || github.event_name == 'push'
+        run: |
+          npm --version && node --version
+
+          cd frontend && npm install
+
+          cd ../
+
+          npm i -D netlify-cli
+
+          netlify deploy --prod --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed production from github actions"
