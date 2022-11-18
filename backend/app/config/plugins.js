@@ -48,6 +48,26 @@ module.exports = ({ env }) => ({
       },
     },
   },
+  'preview-button': {
+    config: {
+      contentTypes: [
+        {
+          uid: 'api::post.post',
+          draft: {
+            url: `${env('STRAPI_FRONTEND_URL', 'http://localhost:3000')}/api/post-preview`,
+            query: {
+              type: 'post',
+              slug: '{slug}',
+              secret: env('STRAPI_PREVIEW_SECRET'),
+            },
+          },
+          published: {
+            url: `${env('STRAPI_FRONTEND_URL', 'http://localhost:3000')}/post/{slug}`,
+          },
+        },
+      ],
+    },
+  },
   'users-permissions': {
     config: {
       jwt: {

@@ -6,7 +6,7 @@ import Seo from '../../components/Seo';
 import { fetchAPI, getPostsBySlug } from '../../utils/api';
 import Custom404 from '../404';
 
-const Post = ({ post, error, pageContext, ...pageProps }) => {
+const Post = ({ post, error, pageContext, preview, ...pageProps }) => {
   const { metaTitle, metaDescription, metaImage } = post?.attributes.seo || {};
   const seo = {
     metaTitle,
@@ -16,14 +16,14 @@ const Post = ({ post, error, pageContext, ...pageProps }) => {
   };
   if (!error && post) {
     return (
-      <Layout live={true} pageContext={pageContext}>
+      <Layout live={true} pageContext={pageContext} preview={preview}>
         <Seo seo={seo} />
         <PostContent post={post} />
       </Layout>
     );
   }
 
-  return <Custom404 live={live} pageContext={pageContext} noTranslation={!post} />;
+  return <Custom404 pageContext={pageContext} noTranslation={!post} />;
 };
 
 export async function getStaticPaths(context) {
@@ -50,11 +50,12 @@ export async function getStaticPaths(context) {
 }
 
 export async function getStaticProps(context) {
-  const { params, locale, locales, defaultLocale } = context;
+  const { params, locale, locales, defaultLocale, preview = null } = context;
 
   const postData = await getPostsBySlug({
     slug: params.slug,
     locale: 'all',
+    preview,
   });
 
   const pageContext = {
@@ -77,6 +78,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
+      preview,
       post: [postData.data.posts.data[0]][0],
       pageContext,
     },

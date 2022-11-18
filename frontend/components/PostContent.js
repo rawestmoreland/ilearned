@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -8,7 +9,8 @@ import GiscussComments from './GiscusComments';
 import AuthorRow from './AuthorRow';
 import CategoryRow from './CategoryRow';
 
-const PostContent = ({ post }) => {
+const PostContent = ({ post, preview }) => {
+  console.log({ preview });
   const { title, authors, locale, publishedAt, categories, content } = post.attributes;
   return (
     <div className="bg-off-white my-12 rounded-md p-8 md:p-16">
