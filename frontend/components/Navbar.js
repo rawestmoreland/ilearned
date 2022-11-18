@@ -2,11 +2,9 @@ import NextImage from './NextImage';
 
 import Link from 'next/link';
 
-import { signOut, useSession } from 'next-auth/react';
 import SubscribeForm from './SubscribeForm';
 
 const Navbar = ({ navbar, pageContext }) => {
-  const { data: session } = useSession();
   return (
     <nav className="fixed top-0 flex items-center justify-center w-screen h-32 md:h-16 px-2 md:px-6 bg-white border-b z-50">
       <div className="flex flex-col gap-2 md:gap-0 md:flex-row align-center w-full md:justify-between">
@@ -17,12 +15,6 @@ const Navbar = ({ navbar, pageContext }) => {
         </Link>
         <div className="flex items-center justify-center">
           <SubscribeForm />
-          {session && (
-            <div className="flex gap-x-4">
-              {' '}
-              <button onClick={() => signOut()}>Sign Out</button>
-            </div>
-          )}
         </div>
       </div>
     </nav>

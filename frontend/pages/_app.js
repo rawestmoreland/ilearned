@@ -4,14 +4,10 @@ import App from 'next/app';
 import { DefaultSeo } from 'next-seo';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
-import { SessionProvider } from 'next-auth/react';
-
 import { createContext } from 'react';
 
 import { getAdminSettings, getGlobalData } from '../utils/api';
 import { getStrapiMedia } from '../utils/media';
-
-import { useSession } from 'next-auth/react';
 
 import '../styles/globals.css';
 import { ModalProvider } from '../utils/context/modal-context';
@@ -55,34 +51,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
               }),
         }}
       />
-      <SessionProvider session={session}>
-        <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}>
-          <GlobalContext.Provider value={{ global: global.attributes, locale }}>
-            <ModalProvider>
-              {Component.auth ? (
-                <Auth>
-                  <Component {...pageProps} />
-                </Auth>
-              ) : (
-                <Component {...pageProps} />
-              )}
-            </ModalProvider>
-          </GlobalContext.Provider>
-        </GoogleReCaptchaProvider>
-      </SessionProvider>
+      <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}>
+        <GlobalContext.Provider value={{ global: global.attributes, locale }}>
+          <ModalProvider>
+            <Component {...pageProps} />
+          </ModalProvider>
+        </GlobalContext.Provider>
+      </GoogleReCaptchaProvider>
     </>
   );
-}
-
-function Auth({ children }) {
-  // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
-  const { status } = useSession({ required: true });
-
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
-
-  return children;
 }
 
 MyApp.getInitialProps = async ctx => {
