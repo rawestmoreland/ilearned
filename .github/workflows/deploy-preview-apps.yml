@@ -38,11 +38,7 @@ jobs:
         run: |
           npm --version && node --version
 
-          cd frontend && npm install
-
-          cd ../
-
-          npm i -D netlify-cli
+          yarn run install:frontend
 
           sed -i "s~https://ilearned-pr-.*~https://ilearned-pr-$(echo ${{github.event.number}}).herokuapp.com\"~g" netlify.toml
 
