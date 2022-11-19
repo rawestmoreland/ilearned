@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - staging
-    paths:
-      - 'frontend/**'
+    paths-ignore:
+      - 'backend/**'
   workflow_dispatch:
 
 jobs:
