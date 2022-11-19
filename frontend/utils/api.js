@@ -344,7 +344,6 @@ export async function getPosts({ slug = null, page = 1, pageName = null }) {
  * @param {string} options.locale The current locale specified in router.locale
  */
 export async function getPostsBySlug({ slug, locale = null, preview }) {
-  console.log({ slug });
   // Find the pages that match this slug
   const gqlEndpoint = getStrapiURL('/graphql');
   const pagesRes = await fetch(gqlEndpoint, {
@@ -446,8 +445,6 @@ export async function getPostsBySlug({ slug, locale = null, preview }) {
   });
 
   const { data, errors } = await pagesRes.json();
-
-  console.log({ data, errors });
 
   // Return the first item since there should only be one result per slug
   return { data, errors };
