@@ -10,7 +10,6 @@ import AuthorRow from './AuthorRow';
 import CategoryRow from './CategoryRow';
 
 const PostContent = ({ post, preview }) => {
-  console.log({ preview });
   const { title, authors, locale, publishedAt, categories, content } = post.attributes;
   return (
     <div className="bg-off-white my-12 rounded-md p-8 md:p-16">
