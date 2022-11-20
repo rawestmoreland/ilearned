@@ -5,7 +5,7 @@ module.exports = {
     const { data } = event.params;
     const { email, token } = data;
     console.log(`Before create: ${email}`);
-    data.token = jwt.sign(email, process.env.JWT_SEECRET, {
+    data.token = jwt.sign({ email }, process.env.JWT_SEECRET, {
       expiresIn: '3h',
     });
     const userCheck = await strapi.db
