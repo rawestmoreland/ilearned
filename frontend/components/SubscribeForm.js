@@ -18,6 +18,7 @@ const SubscribeForm = () => {
 
   const handleSubmitForm = useCallback(
     async data => {
+      console.log(process.env.NEXT_PUBLIC_ADMIN_API_TOKEN);
       if (!executeRecaptcha) {
         console.log('Execute recaptcha not yet available');
         return;
