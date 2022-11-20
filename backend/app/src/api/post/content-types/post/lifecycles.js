@@ -2,7 +2,7 @@ module.exports = {
   async beforeUpdate(event) {
     const { params } = event;
     const { data } = params;
-    if (data.publishedAt !== null) {
+    if (data.publishedAt) {
       const { id } = params.where;
       const previousData = await strapi.db.query('api::post.post').findOne({ where: { id } });
       const previousPublishedAt = previousData.publishedAt;
