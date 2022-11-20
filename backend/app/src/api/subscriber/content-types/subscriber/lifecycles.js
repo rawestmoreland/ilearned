@@ -1,9 +1,13 @@
+const jwt = require('jsonwebtoken');
+
 module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
     const { email, token } = data;
     console.log(`Before create: ${email}`);
-    data.token = Buffer.from(email).toString('base64');
+    data.token = jwt.sign(email, process.env.JWT_SEECRET, {
+      expiresIn: '3h',
+    });
     const userCheck = await strapi.db
       .query('api::subscriber.subscriber')
       .findOne({ where: { email, verified: false } });
