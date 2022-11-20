@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+  db:seed:
+    desc: 'Seed staging to local'
+    cmds:
+      - PGPASSWORD=strapi dropdb --if-exists -h localhost -p 5433 -U postgres strapi
+      - PGPASSWORD=strapi createdb -h 0.0.0.0 -p 5433 -U postgres strapi
+      - ssh ocean "dokku postgres:export ilearned-staging-db" | PGPASSWORD=strapi pg_restore -h localhost -p 5433 -U postgres -d strapi

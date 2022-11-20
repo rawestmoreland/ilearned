@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const { token } = req.body;
   const updatedUser = await fetchAPIWithToken({
     path: `/api/confirm-subscription/${token}`,
-    token: process.env.NEXT_PUBLIC_DEV_API_TOKEN,
+    token: process.env.NEXT_PUBLIC_ADMIN_API_TOKEN,
   });
   return res.status(200).json({ data: updatedUser });
 }

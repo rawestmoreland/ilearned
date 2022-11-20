@@ -8,8 +8,7 @@ const ConfirmPage = () => {
   const [activated, setActivated] = useState(false);
   const [validating, setValidating] = useState(true);
   const verifyEmail = async token => {
-    const requestUrl = process.env.NEXT_PUBLIC_ILEARNED_URL || 'http://localhost:3000';
-    const res = await fetch(`${requestUrl}/api/verifyemail`, {
+    const res = await fetch(`/api/verifyemail`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -22,7 +21,7 @@ const ConfirmPage = () => {
 
     setValidating(false);
 
-    if (data && data.activated) {
+    if (data && data.verified) {
       setActivated(true);
     }
   };

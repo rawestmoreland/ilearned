@@ -13,7 +13,7 @@ module.exports = createCoreController('api::subscriber.subscriber', ({ strapi })
     if (user) {
       const updatedUser = await strapi.db
         .query('api::subscriber.subscriber')
-        .update({ where: { token }, data: { activated: false } });
+        .update({ where: { token }, data: { verified: false } });
       return updatedUser;
     }
   },
@@ -23,7 +23,7 @@ module.exports = createCoreController('api::subscriber.subscriber', ({ strapi })
     if (user) {
       const updatedUser = await strapi.db
         .query('api::subscriber.subscriber')
-        .update({ where: { token }, data: { activated: true } });
+        .update({ where: { token }, data: { verified: true } });
       return updatedUser;
     }
   },

@@ -4,19 +4,13 @@ module.exports = {
     const { data } = params;
     if (data.publishedAt !== null) {
       const { id } = params.where;
-      const previousData = await strapi.db
-        .query("api::post.post")
-        .findOne({ where: { id } });
+      const previousData = await strapi.db.query('api::post.post').findOne({ where: { id } });
       const previousPublishedAt = previousData.publishedAt;
       const currentPublishedAt = data.pubslishedAt;
-      const subList = await strapi.db
-        .query("api::subscriber.subscriber")
-        .findMany({ where: { activated: true } });
+      const subList = await strapi.db.query('api::subscriber.subscriber').findMany({ where: { verified: true } });
       if (currentPublishedAt !== previousPublishedAt) {
         for (sub of subList) {
-          await strapi
-            .service("api::post.post")
-            .sendPost(sub.email, sub.token, previousData);
+          await strapi.service('api::post.post').sendPost(sub.email, sub.token, previousData);
         }
       }
     }

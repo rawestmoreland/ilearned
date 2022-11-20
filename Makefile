@@ -14,10 +14,9 @@ presigned-url:
 	aws s3 presign s3://ilearned/db-backups/ilearned.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)
 
 refresh-local-db:
-	rm latest.dump
-	heroku pg:backups:capture -a ilearned-staging
-	heroku pg:backups:download -a ilearned-staging
-	pg_restore --verbose --clean --no-acl --no-owner -h 0.0.0.0 -p 5433 -U strapi -d strapi latest.dump
+  PGPASSWORD=strapi dropdb --if-exists -h localhost -p 5433 -U postgres strapi
+	PGPASSWORD=strapi createdb -h 0.0.0.0 -p 5433 -U postgres strapi
+	ssh ocean "dokku postgres:export ilearned-staging-db" | PGPASSWORD=strapi pg_restore -h localhost -p 5433 -U strapi -d strapi
 
 db-to-heroku:
 	$(eval PRESIGNED_URL=$(shell aws s3 presign s3://ilearned/db-backups/ilearned.dump --endpoint-url=https://$(ILEARNED_BUCKET_URL)))
