@@ -24,7 +24,7 @@ jobs:
           git_remote_url: 'ssh://dokku@admin.ilearnedathing.com:22/ilearned-admin'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-  staging_netlify:
+  production_netlify:
     needs: prod_dokku
     runs-on: ubuntu-latest
     steps:
