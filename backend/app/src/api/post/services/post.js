@@ -39,7 +39,7 @@ module.exports = createCoreService('api::post.post', ({ strapi }) => ({
                 <h3>
                   ${post.title}
                 </h3>
-                <span>by: ${post.author.name}</span>
+                <span>by: ${post.authors[0].name}</span>
               </td>
             </tr>
             <tr>
