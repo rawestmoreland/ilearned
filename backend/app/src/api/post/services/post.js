@@ -12,6 +12,7 @@ const { createCoreService } = require('@strapi/strapi').factories;
 
 module.exports = createCoreService('api::post.post', ({ strapi }) => ({
   sendPost: async (email, token, post) => {
+    console.log({ email, token, baseURL });
     try {
       await strapi.plugins['email'].services.email.send({
         to: email,
@@ -59,7 +60,7 @@ module.exports = createCoreService('api::post.post', ({ strapi }) => ({
         </div>`,
       });
     } catch (error) {
-      console.warn(error[0].messages);
+      console.warn(error);
     }
   },
 }));
