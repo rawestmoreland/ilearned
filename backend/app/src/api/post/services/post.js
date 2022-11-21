@@ -12,7 +12,7 @@ const { createCoreService } = require('@strapi/strapi').factories;
 
 module.exports = createCoreService('api::post.post', ({ strapi }) => ({
   sendPost: async (email, token, post) => {
-    console.log({ email, token, baseURL });
+    console.log({ email, token, baseURL, post });
     try {
       await strapi.plugins['email'].services.email.send({
         to: email,
@@ -39,7 +39,7 @@ module.exports = createCoreService('api::post.post', ({ strapi }) => ({
                 <h3>
                   ${post.title}
                 </h3>
-                <span>by: ${post.authors[0].name}</span>
+                <span>by: ${post.authors.data[0].name}</span>
               </td>
             </tr>
             <tr>
