@@ -12,7 +12,6 @@ const { createCoreService } = require('@strapi/strapi').factories;
 
 module.exports = createCoreService('api::post.post', ({ strapi }) => ({
   sendPost: async (email, token, post) => {
-    console.log({ email, token, baseURL, post, author: post.authors[0] });
     try {
       await strapi.plugins['email'].services.email.send({
         to: email,
