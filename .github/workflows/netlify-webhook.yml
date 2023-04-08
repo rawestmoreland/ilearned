@@ -26,12 +26,6 @@ jobs:
         run: |
           npm --version && node --version
 
-          cd frontend && npm install
+          yarn run install:frontend
 
-          cd ../
-
-          npm i -D netlify-cli
-
-          cat netlify.toml
-
-          netlify deploy --build --prod --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "I Learned a Thing deployed from github actions"
+          netlify deploy --prod --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed production from github actions"
