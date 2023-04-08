@@ -1,5 +1,4 @@
 module.exports = ({ env }) => ({
-  chartbrew: true,
   upload: {
     config: {
       provider: 'cloudinary',

@@ -13,10 +13,9 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@chartbrew/plugin-strapi": "^0.3.0",
     "@strapi/plugin-graphql": "4.9.0",
     "@strapi/plugin-i18n": "4.9.0",
-    "@strapi/plugin-seo": "^1.7.5",
+    "@strapi/plugin-seo": "^1.8.0",
     "@strapi/plugin-users-permissions": "4.9.0",
     "@strapi/provider-email-nodemailer": "4.9.0",
     "@strapi/provider-upload-cloudinary": "4.9.0",
@@ -31,9 +30,8 @@
     "nodemailer": "^6.7.3",
     "pg": "^8.8.0",
     "pg-connection-string": "^2.5.0",
-    "strapi-plugin-email-designer": "^2.1.1",
-    "strapi-plugin-generate-data": "^1.0.19",
-    "strapi-plugin-preview-button": "^1.0.0"
+    "strapi-plugin-email-designer": "^2.1.2",
+    "strapi-plugin-preview-button": "^1.1.2"
   },
   "author": {
     "name": "A Strapi developer"
