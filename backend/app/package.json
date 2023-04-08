@@ -14,14 +14,14 @@
   "devDependencies": {},
   "dependencies": {
     "@chartbrew/plugin-strapi": "^0.3.0",
-    "@strapi/plugin-graphql": "4.4.3",
-    "@strapi/plugin-i18n": "4.4.3",
+    "@strapi/plugin-graphql": "4.9.0",
+    "@strapi/plugin-i18n": "4.9.0",
     "@strapi/plugin-seo": "^1.7.5",
-    "@strapi/plugin-users-permissions": "4.4.3",
-    "@strapi/provider-email-nodemailer": "4.4.3",
-    "@strapi/provider-upload-cloudinary": "4.4.3",
-    "@strapi/strapi": "4.4.3",
-    "@strapi/utils": "4.4.3",
+    "@strapi/plugin-users-permissions": "4.9.0",
+    "@strapi/provider-email-nodemailer": "4.9.0",
+    "@strapi/provider-upload-cloudinary": "4.9.0",
+    "@strapi/strapi": "^4.9.0",
+    "@strapi/utils": "4.9.0",
     "dotenv": "^16.0.1",
     "googleapis": "^100.0.0",
     "jsonwebtoken": "^8.5.1",
@@ -43,8 +43,7 @@
     "template": "https://github.com/rawestmoreland/strapi-template-blog"
   },
   "engines": {
-    "node": ">=14.19.1 <=18.x.x",
-    "npm": ">=6.0.0"
+    "node": ">=14.19.1 <=18.x.x"
   },
   "license": "MIT"
 }
