@@ -6,7 +6,7 @@ import { localeMap } from '../utils/localize';
 const AuthorRow = ({ author, publishedAt, locale }) => {
   const { picture, name, slug } = author.attributes;
   return (
-    <Link href={`/author/${slug}`}>
+    <Link href={`/author/${slug}`} legacyBehavior>
       <div className="grid grid-cols-[40px_1fr] gap-x-2 items-center font-merriweather text-sm mb-4 [margin-block-start:auto] cursor-pointer">
         <div>
           <NextImage media={picture} $className="rounded-full" alt={picture.data.attributes?.alternativeText || ''} />

@@ -41,7 +41,7 @@ const ConfirmPage = () => {
       {activated && !validating && (
         <div className="relative text-white text-center w-full h-full flex flex-col items-center gap-y-4 top-[20vh]">
           <span>🧠 thank you! you email has been verified 🧠</span>
-          <Link href="/">
+          <Link href="/" legacyBehavior>
             <span className="text-blue-400 cursor-pointer underline">check out the home page to browse posts</span>
           </Link>
         </div>

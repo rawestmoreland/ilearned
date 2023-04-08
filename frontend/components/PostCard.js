@@ -10,14 +10,14 @@ const PostCard = ({ post }) => {
     <div className="grid grid-cols-1 grid-rows-3 bg-off-white border rounded-lg h-full">
       <div className="relative row-span-1 top-0 left-0 w-full rounded-t-lg cursor-pointer p-4">
         <Link href={`/post/${slug}`}>
-          <a>
-            <NextImage $className="rounded-lg" cover media={image} alt={image.data.attributes?.alternativeText || ''} />
-          </a>
+
+          <NextImage $className="rounded-lg" cover media={image} alt={image.data.attributes?.alternativeText || ''} />
+
         </Link>
       </div>
       <div className="row-span-2 flex flex-col h-full mx-4">
         <CategoryRow categories={categories} />
-        <Link href={`/post/${slug}`}>
+        <Link href={`/post/${slug}`} legacyBehavior>
           <h2 className="font-rubik font-bold text-xl mb-4 cursor-pointer">{title}</h2>
         </Link>
         <div className="font-merriweather text-sm leading-loose mb-4">

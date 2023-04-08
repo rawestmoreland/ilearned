@@ -11,11 +11,11 @@ const CategoryRow = ({ categories }) => {
       {categories.data.map(cat => {
         const { name, slug } = cat.attributes;
         return (
-          <Link key={slug} href={`/category/${slug}`}>
-            <a className="cursor-pointer">
-              <span key={cat.id}>{name}</span>
-            </a>
-          </Link>
+          (<Link key={slug} href={`/category/${slug}`} className="cursor-pointer">
+
+            <span key={cat.id}>{name}</span>
+
+          </Link>)
         );
       })}
     </div>
