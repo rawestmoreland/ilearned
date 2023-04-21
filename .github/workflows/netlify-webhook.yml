@@ -1,4 +1,4 @@
-name: Build and Deploy to Netlify
+name: Netlify webhook
 on:
   push:
     branches:
