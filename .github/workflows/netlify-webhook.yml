@@ -1,4 +1,5 @@
 name: Build and Deploy to Netlify
+
 on:
   push:
     branches:
@@ -25,7 +26,7 @@ jobs:
       - name: 'Deploy to Netlify Prod'
         run: |
           npm --version && node --version
-
+          
           yarn run install:frontend
 
           netlify deploy --prod --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed production from github actions"
