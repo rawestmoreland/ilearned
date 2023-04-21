@@ -35,8 +35,4 @@ jobs:
       - name: Deploy to netlify
         if: github.event.pull_request.merged == true || github.event_name == 'push'
         run: |
-          npm --version && node --version
-
-          yarn run install:frontend
-
-          netlify deploy --build --auth ${{secrets.NETLIFY_AUTH_TOKEN}} --site ${{secrets.NETLIFY_SITE_ID}} --message "Deployed staging from github actions" --context branch-deploy --alias staging
+          curl -X POST -d {} https://api.netlify.com/build_hooks/${{ secrets.NETLIFY_BUILD_HOOK_ID_STAGING }}
