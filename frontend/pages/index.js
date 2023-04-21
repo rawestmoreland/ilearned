@@ -89,5 +89,6 @@ export async function getStaticProps(ctx) {
       posts: postsRes,
       pageContext,
     },
+    revalidate: 90,
   };
 }
