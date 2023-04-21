@@ -3,28 +3,3 @@
 	publish = ".next"
 	command = "yarn build"
   ignore = "/bin/false"
-
-[dev]
-	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://admin.ilearnedathing.com"}
-
-[context.production]
-	environment = {NEXT_PUBLIC_STRAPI_API_URL = "https://admin.ilearnedathing.com"}
-
-[context.branch-deploy]
-  command = "yarn run noIndex"
-[context.branch-deploy.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.ilearnedathing.com"
-
-[context.deploy-preview]
-	command = "yarn run noIndex"
-[context.deploy-preview.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-pr-72.ilearnedathing.com"
-
-[context.master]
-	command = "yarn run noIndex"
-[context.master.environment]
-	NEXT_PUBLIC_STRAPI_API_URL = "https://ilearned-staging.ilearnedathing.com"
-
-
-[[plugins]]
-	package = "@netlify/plugin-nextjs"
