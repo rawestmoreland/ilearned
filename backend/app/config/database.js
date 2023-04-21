@@ -1,18 +1,13 @@
-const parse = require("pg-connection-string").parse;
-const config = process.env.DATABASE_URL || process.env.HEROKU_POSTGRESQL_COPPER ? parse(
-  process.env.DATABASE_URL || process.env.HEROKU_POSTGRESQL_COPPER
-) : null;
 module.exports = ({ env }) => ({
   connection: {
-    client: "postgres",
+    client: 'postgres',
     connection: {
-      host: config?.host || "127.0.0.1",
-      port: config?.post || 5432,
-      database: config?.database || "strapi",
-      user: config?.user || "strapi",
-      password: config?.password || "strapi",
-      ssl: !config ? false : { rejectUnauthorized: false },
+      host: env('DATABASE_HOST', 'localhost'),
+      port: env.int('DATABASE_PORT', 5433),
+      database: env('DATABASE_NAME', 'strapi'),
+      user: env('DATABASE_USERNAME', 'strapi'),
+      password: env('DATABASE_PASSWORD', 'strapi'),
+      ssl: env.bool('DATABASE_SSL', false),
     },
-    debug: false,
   },
 });

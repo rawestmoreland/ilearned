@@ -96,6 +96,7 @@ export async function getStaticProps(context) {
       meta: matchingPosts.data.posts.meta.pagination,
       pageContext,
     },
+    revalidate: 90,
   };
 }
 

@@ -73,6 +73,7 @@ export async function getStaticProps(context) {
         error: true,
         pageContext,
       },
+      revalidate: 90,
     };
   }
 
@@ -82,6 +83,7 @@ export async function getStaticProps(context) {
       post: [postData.data.posts.data[0]][0],
       pageContext,
     },
+    revalidate: 90,
   };
 }
 
