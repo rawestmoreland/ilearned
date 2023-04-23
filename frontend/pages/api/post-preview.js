@@ -13,7 +13,7 @@ const postPreview = async (req, res) => {
   // Fetch the headless CMS to check if the provided `slug` exists
   const postData = await getPostsBySlug({
     locale: 'all',
-    slug: 'kubernetes-series-part-1-build-an-express-api',
+    slug,
     preview: true,
   });
 
