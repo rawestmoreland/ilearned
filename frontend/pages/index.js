@@ -7,8 +7,10 @@ import Seo from '../components/Seo';
 import PostGrid from '../components/PostGrid';
 
 import { fetchAPI } from '../utils/api';
+import request from 'graphql-request';
+import { GET_POSTS } from '../hashnode/queries/getPosts';
 
-export default function Home({ posts, pageContext }) {
+export default function Home({ posts, hashnodePosts, pageContext }) {
   const [postsData, setPostsData] = useState(posts.data);
   const [postsMeta, setPostsMeta] = useState(posts.meta.pagination);
   const { locale } = pageContext;
@@ -55,8 +57,9 @@ export default function Home({ posts, pageContext }) {
 
 export async function getStaticProps(ctx) {
   const { locale, locales, defaultLocale } = ctx;
+
   // Run API calls in parallel
-  const [postsRes, homepageRes] = await Promise.all([
+  const [postsRes, homepageRes, hashnodePosts] = await Promise.all([
     fetchAPI('/posts', false, {
       sort: 'publishedAt:desc',
       pagination: {
@@ -74,6 +77,7 @@ export async function getStaticProps(ctx) {
     fetchAPI('/homepage', false, {
       populate: '*',
     }),
+    await request(process.env.NEXT_PUBLIC_HASHNODE_GQL_URL, GET_POSTS, { limit: 20 }),
   ]);
 
   const pageContext = {
@@ -84,9 +88,12 @@ export async function getStaticProps(ctx) {
     seo: homepageRes.data.attributes.seo,
   };
 
+  console.log(postsRes);
+
   return {
     props: {
       posts: postsRes,
+      hashnodePosts,
       pageContext,
     },
     revalidate: 90,
